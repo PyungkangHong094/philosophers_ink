@@ -1,0 +1,24 @@
+{
+  "meta": {
+    "id": 1,
+    "name": "첫 획",
+    "chapter": 1,
+    "difficulty": 1,
+    "teaches": ["chalk", "prima"],
+    "tags": ["tutorial"],
+    "optimal_ink": { "chalk": 40 },
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#1D1418",
+  "emitters": [
+    { "x": 74, "y": 2, "width": 13, "material": "PRIMA", "rate": 1, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 100, "y": 280, "w": 20, "h": 20, "goal": 30, "material": null, "state": null, "pure": false }
+  ],
+  "terrain": [],
+  "gimmicks": [],
+  "ink_budget": { "chalk": 100, "heat": 0, "frost": 0 },
+  "star_thresholds": null
+}

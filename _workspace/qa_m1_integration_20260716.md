@@ -102,6 +102,36 @@ transitions_test.dart(화염/서리 가열·냉각 체인, 불활성 불변, 전
   상승하나 예산 내([4]). M0 기준선 해시(0x2115a458)는 PRIMA 방출 씬 전용이라 이번 WATER 씬
   기준선(0x21374561)과 별개 — 각 씬 독립 추적.
 
+## 재검증 애드덤 (코드 드리프트 대응, 2026-07-16 후속)
+
+2차 QA 최초 보고 직후 gameplay-engineer가 리더 확정을 반영해 **all-or-nothing 경로(tryCharge)를
+코드에서 제거**(내 권고1 수용)하고 sim 스트로크 계약 테스트(stroke_api_test.dart)를 추가했다.
+최초 GO는 tryCharge가 남아있던 62테스트 상태 기준이었으므로, 변경된 현재 코드로 게이트를 재실행:
+
+- **정적 확인**: `grep tryCharge` → lib/·test/ 전부 0건(완전 제거). ink_budget.dart는 cap 프리미티브
+  `chargeAvailable` + 부작용 없는 질의 `canAfford`만 남음. ink_controller.dart는 `chargePlaced`(cap) +
+  `selectedRemaining` + `canDraw`만 남음. 주석 모두 "부분 배치 cap(팀 확정 2026-07-16)"로 정합.
+- **dart analyze**: 이슈 0 재확인.
+- **flutter test**: 61/61 통과(tryCharge 단위테스트 제거로 62→61, 신규 stroke_api_test 6개 포함).
+  P0 게이트 재충족(pubspec 2형제 + generated_plugins.cmake 복구, git status clean).
+- **경계면 계약(행동 기준, 리더 뉘앙스 반영)**: stroke_api_test.dart가 `extendStroke 반환=새로 칠한
+  셀 수`, `maxCells 상한에서 배치 정지`, `maxCells=0 미배치`, `deleteStroke 미반환`을 직접 고정.
+  main `_chargedExtend`는 selectedRemaining<=0이면 미배치 → **드래그 중 잔량 소진 시 선이 그 지점에서
+  멈추고, 잔량>0인 동안 계속 그려짐** = cap 모델 행동 기준 충족. all-or-nothing 경로가 아예 사라져
+  구현이 확정 모델 하나로 수렴함. PASS.
+- **결정성·성능**: sim 코어(game_state·rules·materials·constants) 무변경 → 최초 측정
+  (해시 0x21374561, A/B/C 0.942/0.732/1.354ms) 그대로 유효. 재측정 불필요.
+
+**재검증 결론: 현재 코드(61테스트, cap 단일 모델)로도 M1 게이트 GO 유지.** 최초 권고1(데드코드)도
+gameplay 측에서 해소됨.
+
+### 신규 권고 (재검증 발견)
+3. **잔존 구 문구(sim 소유)**: game_state.dart:141 `previewStrokeCells` 주석이
+   "all-or-nothing 예산 사전검사용 (GDD 4.2)"로 남아있다. GDD 4.2는 이제 부분 배치 cap이므로 이
+   문구는 스테일. gameplay-engineer의 권고1 grep은 "전부 아니면 전무"만 봐서 이 "all-or-nothing"
+   표현을 놓쳤다. previewStrokeCells 자체는 sim이 제공하는 유효 API(stroke_api_test가 검증)이나 main
+   미사용이며, 주석의 GDD 인용만 cap 기준으로 수정 권고. 소유: sim-engineer. 비차단.
+
 ## 산출물
-- 리포트: _workspace/qa_m1_integration_20260716.md
+- 리포트: _workspace/qa_m1_integration_20260716.md (본문 + 재검증 애드덤)
 - 벤치 방식: 독립 dart 스크립트(임시, 검증 후 삭제) — 결정성 씬 + A/B/C 시나리오 직접 구성.

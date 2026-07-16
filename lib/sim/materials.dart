@@ -197,3 +197,22 @@ MaterialProps propsOf(int id) => kMaterialTable[id];
 
 /// 셀 ID → 카테고리. rules에서 분기 대신 테이블 조회로 쓴다.
 MaterialCategory categoryOf(int id) => kMaterialTable[id].category;
+
+/// 물질의 상(相) — 상태 플라스크(물방울/눈꽃/김) 판정용 (GDD 5.1).
+enum Phase { solid, liquid, gas }
+
+/// 셀 ID → 상. 입자=고체, 액체=액체, 기체=기체. EMPTY·정적(벽/룬선)은 null.
+/// "입자는 고체로 카운트"라는 결정을 한 곳에 모은다.
+Phase? phaseOf(int id) {
+  switch (categoryOf(id)) {
+    case MaterialCategory.particle:
+      return Phase.solid;
+    case MaterialCategory.liquid:
+      return Phase.liquid;
+    case MaterialCategory.gas:
+      return Phase.gas;
+    case MaterialCategory.none:
+    case MaterialCategory.staticSolid:
+      return null;
+  }
+}

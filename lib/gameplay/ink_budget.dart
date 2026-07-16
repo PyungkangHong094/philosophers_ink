@@ -47,6 +47,17 @@ class InkBudget {
   /// 이 잉크의 현재 잔량.
   int remaining(InkType type) => _remaining[type]!;
 
+  /// 전 종류 초기 예산 합.
+  int get totalInitial =>
+      _initial.values.fold<int>(0, (a, b) => a + b);
+
+  /// 전 종류 잔량 합.
+  int get totalRemaining =>
+      _remaining.values.fold<int>(0, (a, b) => a + b);
+
+  /// 전 종류 소비량 합 (초기 − 잔량). 별점 계산의 "사용량".
+  int get totalUsed => totalInitial - totalRemaining;
+
   /// 초기 예산이 0 → 병을 숨긴다 (GDD 4.2, 튜토리얼 단순화).
   /// 잔량이 0이어도 초기 예산이 있었으면 숨기지 않는다(고갈은 [isDepleted]).
   bool isHidden(InkType type) => _initial[type]! == 0;

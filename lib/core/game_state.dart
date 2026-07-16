@@ -1,3 +1,4 @@
+import '../sim/emitter.dart';
 import '../sim/grid.dart';
 import '../sim/materials.dart';
 import '../sim/rasterize.dart';
@@ -24,8 +25,9 @@ class GameState {
   final Grid grid;
   final DeterministicRng rng;
 
-  /// 방출구가 쏟는 물질 ID. M2 레벨 로더 전까지 데모 파라미터.
-  final int emitMaterial;
+  /// 방출구 목록 (GDD 5.2·10.6). 다중·유한·물질별·재혼합. reset이 각 잔량을 복원.
+  /// 레벨 로더(M2-C)가 JSON에서 이 리스트를 구성한다.
+  final List<EmitterConfig> emitters;
 
   /// Rules는 GameState의 rng 인스턴스를 공유한다. reset()이 rng를 초기화하면
   /// 규칙의 무작위성도 함께 되감겨 재시작 결정성이 성립한다.
@@ -36,14 +38,36 @@ class GameState {
   final Map<int, _Stroke> _strokes = {};
   int _nextStrokeId = 1;
 
+  /// [emitters]를 주면 그 목록을, 없으면 [emitMaterial](기본 WATER)로 상단 중앙
+  /// 단일 무한 방출구를 만든다(데모·M0/M1 호환).
   GameState({
     this.seed = SimConstants.defaultSeed,
     int? emitMaterial,
-  })  : emitMaterial = emitMaterial ?? Material.water.index,
+    List<EmitterConfig>? emitters,
+  })  : emitters =
+            emitters ?? [_defaultEmitter(emitMaterial ?? Material.water.index)],
         grid = Grid(SimConstants.gridWidth, SimConstants.gridHeight),
         rng = DeterministicRng(seed) {
     rules = Rules(rng);
   }
+
+  /// 상단 중앙 밴드 단일 무한 방출구 (기본 데모 씬).
+  static EmitterConfig _defaultEmitter(int material) {
+    final cx = SimConstants.gridWidth ~/ 2;
+    return EmitterConfig(
+      x: cx - SimConstants.emitterHalfWidth,
+      y: SimConstants.emitterRow,
+      width: SimConstants.emitterHalfWidth * 2 + 1,
+      materialId: material,
+      intervalTicks: SimConstants.emitIntervalTicks,
+    );
+  }
+
+  /// 방출구 수.
+  int get emitterCount => emitters.length;
+
+  /// i번 방출구의 남은 방출 셀 수 (무한이면 null). 유한 방출 UI·실패 판정용.
+  int? emitterRemaining(int i) => emitters[i].remaining;
 
   /// 활성 셀 수 — EMPTY도 정적(WALL/룬 선)도 아닌 셀. 디버그 오버레이·오디오(M5)용.
   int get activeCellCount {
@@ -66,6 +90,9 @@ class GameState {
     tickCount = 0;
     _strokes.clear();
     _nextStrokeId = 1;
+    for (final e in emitters) {
+      e.resetRuntime();
+    }
   }
 
   /// 한 틱: 방출 → 상전이·이동. 순서 고정(결정성).
@@ -75,18 +102,36 @@ class GameState {
     tickCount++;
   }
 
-  /// 방출구: emitIntervalTicks마다 상단 밴드를 emitMaterial로 채운다 (빈 칸만).
+  /// 방출: 각 방출구가 intervalTicks마다 밴드의 빈 칸을 자기 물질로 채운다.
+  /// ashRatio>0이면 결정성 RNG로 일부 셀을 ASH로 치환(재 방출구). 유한 방출구는
+  /// 배치한 셀 수만큼 잔량을 깎고 소진되면 멈춘다 (GDD 5.2·6).
   void _emit() {
-    if (tickCount % SimConstants.emitIntervalTicks != 0) return;
-    final cx = grid.width ~/ 2;
-    final row = SimConstants.emitterRow;
-    final half = SimConstants.emitterHalfWidth;
-    for (var x = cx - half; x <= cx + half; x++) {
-      if (!grid.inBounds(x, row)) continue;
-      if (grid.get(x, row) == Material.empty.index) {
-        grid.set(x, row, emitMaterial);
+    for (final e in emitters) {
+      if (e.exhausted) continue;
+      if (tickCount % e.intervalTicks != 0) continue;
+      for (var i = 0; i < e.width; i++) {
+        if (e.exhausted) break;
+        final x = e.x + i;
+        if (!grid.inBounds(x, e.y)) continue;
+        if (grid.get(x, e.y) != Material.empty.index) continue;
+        final id = (e.ashRatio > 0 && rng.nextDouble() < e.ashRatio)
+            ? Material.ash.index
+            : e.materialId;
+        grid.set(x, e.y, id);
+        if (!e.isInfinite) e.remaining = e.remaining! - 1;
       }
     }
+  }
+
+  /// (x, y)를 EMPTY로 비우고 비어진 물질 ID를 반환한다. 이미 EMPTY거나 범위 밖이면
+  /// 0(EMPTY.index). RNG 미사용 = 결정적. 플라스크 착수 소비용 (M2 gameplay 계약).
+  /// 무엇을 소비할지(매칭/통과)의 판정은 호출자 책임 — 여기선 무조건 비운다.
+  int consumeCell(int x, int y) {
+    if (!grid.inBounds(x, y)) return Material.empty.index;
+    final id = grid.get(x, y);
+    if (id == Material.empty.index) return Material.empty.index;
+    grid.set(x, y, Material.empty.index);
+    return id;
   }
 
   // --- 드로잉 스트로크 API (gameplay-engineer 잉크 예산과의 계약) ---
@@ -103,8 +148,8 @@ class GameState {
   /// **반환값 = 이번에 새로 칠해진 셀 수** (잉크 예산 차감 근거). 이미 무언가 있는
   /// 셀은 덮지 않으므로 반환값이 곧 실제 소모량이다.
   ///
-  /// [maxCells]: 이번 호출에서 배치할 EMPTY 셀 수 상한. 잔량보다 많이 칠하는 누수를
-  /// 막아 "예산 부족 시 부분 배치 금지"(GDD 4.2)를 세그먼트 단위로 지킨다.
+  /// [maxCells]: 이번 호출에서 배치할 EMPTY 셀 수 상한. 잔량까지만 칠하고 멈춘다
+  /// (부분 배치 cap — 잉크 부족 시 잔량 소진 지점에서 선이 멈추는 GDD 4.2 청구 모델).
   /// 음수(기본 -1)면 무제한.
   int extendStroke(
     int strokeId,
@@ -138,8 +183,8 @@ class GameState {
   }
 
   /// 그리드를 바꾸지 않고, 이 세그먼트가 새로 칠할 EMPTY 셀 수를 미리 센다.
-  /// all-or-nothing 예산 사전검사용 (GDD 4.2). 직후 [extendStroke]가 같은 좌표로
-  /// 칠하면 (그 사이 그리드 변화가 없는 한) 이 값만큼 배치된다.
+  /// 예산 cap 사전 계산·사후 검증용. 직후 [extendStroke]가 같은 좌표로 칠하면
+  /// (그 사이 그리드 변화가 없는 한) 이 값(또는 maxCells cap)만큼 배치된다.
   int previewStrokeCells(int x0, int y0, int x1, int y1) {
     final cells = rasterizeStroke(
       x0,
