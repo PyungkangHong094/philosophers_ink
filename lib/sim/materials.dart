@@ -1,0 +1,170 @@
+/// 물질 ID와 속성 중앙 테이블 (GDD 3.1).
+///
+/// 순수 Dart. flutter/dart:ui import 금지 — 색은 0xAARRGGBB 정수로만 들고,
+/// 렌더 시점의 RGBA 룩업 버퍼 생성은 render/palette.dart가 담당한다.
+///
+/// 물질을 추가할 때 고쳐야 하는 곳은 이 파일의 [kMaterialTable] 한 곳뿐이다.
+/// 카테고리별 이동/전이 처리에서 switch문을 산개시키지 않는다 (스킬 규칙).
+library;
+
+/// 카테고리별 이동 규칙의 분류 (GDD 3.3).
+enum MaterialCategory {
+  /// 이동 없음 (EMPTY 포함, WALL/룬 선).
+  none,
+
+  /// 정적 고체 — 벽·룬 선. 이동 없음.
+  staticSolid,
+
+  /// 입자 — 아래 → 아래대각.
+  particle,
+
+  /// 액체 — 아래 → 아래대각 → 수평 확산.
+  liquid,
+
+  /// 기체 — 위 → 위대각 → 수평 (액체의 상하 미러).
+  gas,
+}
+
+/// 물질 ID. enum 인덱스가 곧 그리드 셀에 저장되는 1바이트 ID다.
+/// **순서 고정** (GDD 3.1 테이블): EMPTY=0 … STONE=10.
+enum Material {
+  empty, // 0
+  wall, // 1
+  heatLine, // 2
+  coldLine, // 3
+  prima, // 4
+  ice, // 5
+  water, // 6
+  steam, // 7
+  ash, // 8
+  lava, // 9
+  stone, // 10
+}
+
+/// 물질 하나의 속성. 카테고리 + 가열/냉각 전이 대상 + 팔레트 색.
+class MaterialProps {
+  final Material id;
+  final String name;
+  final MaterialCategory category;
+
+  /// 가열 시 전이 대상. null이면 불변.
+  final Material? heatTo;
+
+  /// 냉각 시 전이 대상. null이면 불변.
+  final Material? coolTo;
+
+  /// 팔레트 색 0xAARRGGBB. render/palette.dart가 RGBA LUT로 변환한다.
+  final int argb;
+
+  const MaterialProps({
+    required this.id,
+    required this.name,
+    required this.category,
+    required this.heatTo,
+    required this.coolTo,
+    required this.argb,
+  });
+}
+
+/// 중앙 물질 테이블. 인덱스 == Material.index == 셀 ID.
+///
+/// 색 근거 (GDD 8.2): 챕터 1 배경 #1D1418 위에서 물질 간 명도 차 20% 이상.
+/// M0에서 실사용하는 것은 EMPTY/WALL/PRIMA뿐이나 테이블 구조는 전체를 잡는다.
+const List<MaterialProps> kMaterialTable = [
+  MaterialProps(
+    id: Material.empty,
+    name: 'EMPTY',
+    category: MaterialCategory.none,
+    heatTo: null,
+    coolTo: null,
+    // EMPTY = 챕터 1 배경색. 버퍼 자체가 배경을 칠한다.
+    argb: 0xFF1D1418,
+  ),
+  MaterialProps(
+    id: Material.wall,
+    name: 'WALL',
+    category: MaterialCategory.staticSolid,
+    heatTo: null,
+    coolTo: null,
+    // 석필: 배경 대비 밝은 양피지 톤.
+    argb: 0xFFCDBFA0,
+  ),
+  MaterialProps(
+    id: Material.heatLine,
+    name: 'HEAT_LINE',
+    category: MaterialCategory.staticSolid,
+    heatTo: null,
+    coolTo: null,
+    argb: 0xFFE0603C, // 주홍
+  ),
+  MaterialProps(
+    id: Material.coldLine,
+    name: 'COLD_LINE',
+    category: MaterialCategory.staticSolid,
+    heatTo: null,
+    coolTo: null,
+    argb: 0xFFBFE3F2, // 청백
+  ),
+  MaterialProps(
+    id: Material.prima,
+    name: 'PRIMA',
+    category: MaterialCategory.particle,
+    heatTo: null, // 불활성 — 불변
+    coolTo: null,
+    argb: 0xFFB79A6A, // 제1질료: 온화한 황토, 배경 대비 명도 확보
+  ),
+  MaterialProps(
+    id: Material.ice,
+    name: 'ICE',
+    category: MaterialCategory.particle,
+    heatTo: Material.water,
+    coolTo: null,
+    argb: 0xFFCFE8F5,
+  ),
+  MaterialProps(
+    id: Material.water,
+    name: 'WATER',
+    category: MaterialCategory.liquid,
+    heatTo: Material.steam,
+    coolTo: Material.ice,
+    argb: 0xFF3F7BD6,
+  ),
+  MaterialProps(
+    id: Material.steam,
+    name: 'STEAM',
+    category: MaterialCategory.gas,
+    heatTo: null,
+    coolTo: Material.water,
+    argb: 0xFFD8E4EC,
+  ),
+  MaterialProps(
+    id: Material.ash,
+    name: 'ASH',
+    category: MaterialCategory.particle,
+    heatTo: null,
+    coolTo: null,
+    argb: 0xFF5A5048,
+  ),
+  MaterialProps(
+    id: Material.lava,
+    name: 'LAVA',
+    category: MaterialCategory.liquid,
+    heatTo: null,
+    coolTo: Material.stone,
+    argb: 0xFFE0642A,
+  ),
+  MaterialProps(
+    id: Material.stone,
+    name: 'STONE',
+    category: MaterialCategory.particle,
+    heatTo: null, // 재가열(→LAVA)은 런칭 범위 제외 (GDD 3.1 각주)
+    coolTo: null,
+    argb: 0xFF6E6A63,
+  ),
+];
+
+/// 셀 ID → 속성. 핫패스에서 쓰이므로 인덱스 접근.
+MaterialProps propsOf(int id) => kMaterialTable[id];
+
+/// 셀 ID → 카테고리. rules에서 분기 대신 테이블 조회로 쓴다.
+MaterialCategory categoryOf(int id) => kMaterialTable[id].category;

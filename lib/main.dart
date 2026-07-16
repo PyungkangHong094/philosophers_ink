@@ -1,122 +1,287 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+import 'core/constants.dart';
+import 'core/game_loop.dart';
+import 'core/game_state.dart';
+import 'render/palette.dart';
+import 'render/world_painter.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+void main() => runApp(const PhilosophersInkApp());
 
-  // This widget is the root of your application.
+class PhilosophersInkApp extends StatelessWidget {
+  const PhilosophersInkApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+    return const MaterialApp(
+      title: "Philosopher's Ink — M0",
+      debugShowCheckedModeBanner: false,
+      home: SimSpikeScreen(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+/// M0 데모 씬 (GDD 11장 M0): 상단 방출구에서 PRIMA가 낙하하고, 드래그로 석필 선을
+/// 그으면 그 위에 입자가 쌓인다. 탭으로 스트로크 삭제. 디버그 오버레이로 계측 표시.
+class SimSpikeScreen extends StatefulWidget {
+  const SimSpikeScreen({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<SimSpikeScreen> createState() => _SimSpikeScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _SimSpikeScreenState extends State<SimSpikeScreen>
+    with SingleTickerProviderStateMixin {
+  late final GameState _game;
+  late final GameLoop _loop;
+  late final Palette _palette;
+  late final WorldImageSource _imageSource;
+  late final Uint8List _rgba;
+  late final Ticker _ticker;
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  final ValueNotifier<_DebugStats> _stats =
+      ValueNotifier<_DebugStats>(_DebugStats.zero);
+
+  // 드로잉 상태
+  int? _activeStrokeId;
+  (int, int)? _lastCell;
+  Size _viewSize = Size.zero;
+
+  @override
+  void initState() {
+    super.initState();
+    _game = GameState();
+    _palette = Palette();
+    _rgba = Uint8List(_game.grid.cells.length * 4);
+    _imageSource = WorldImageSource(
+      width: _game.grid.width,
+      height: _game.grid.height,
+    );
+    _loop = GameLoop(onTick: _game.tick);
+    _ticker = createTicker(_onFrame)..start();
+  }
+
+  @override
+  void dispose() {
+    _ticker.dispose();
+    _imageSource.dispose();
+    _stats.dispose();
+    super.dispose();
+  }
+
+  void _onFrame(Duration elapsed) {
+    final frameSw = Stopwatch()..start();
+
+    final simSw = Stopwatch()..start();
+    final ticks = _loop.advance(elapsed);
+    simSw.stop();
+
+    final convertSw = Stopwatch()..start();
+    _palette.writeRgba(_game.grid.cells, _rgba);
+    convertSw.stop();
+
+    // 그리드 → ui.Image 변환은 비동기. 발사 후 잊기(in-flight 가드는 소스 내부).
+    _imageSource.update(_rgba);
+
+    final activeParticles = _game.activeCellCount;
+    frameSw.stop();
+
+    final simMs = simSw.elapsedMicroseconds / 1000.0;
+    _stats.value = _DebugStats(
+      simMsFrame: simMs,
+      perTickMs: ticks > 0 ? simMs / ticks : 0,
+      ticksThisFrame: ticks,
+      convertMs: convertSw.elapsedMicroseconds / 1000.0,
+      frameMs: frameSw.elapsedMicroseconds / 1000.0,
+      activeParticles: activeParticles,
+    );
+  }
+
+  (int, int)? _cellAt(Offset local) {
+    if (_viewSize == Size.zero) return null;
+    final vp = GridViewport.fit(_viewSize, _game.grid.width, _game.grid.height);
+    return vp.toGrid(local);
+  }
+
+  void _onPanStart(DragStartDetails d) {
+    final cell = _cellAt(d.localPosition);
+    if (cell == null) return;
+    _activeStrokeId = _game.beginStroke(cell.$1, cell.$2);
+    _lastCell = cell;
+  }
+
+  void _onPanUpdate(DragUpdateDetails d) {
+    final cell = _cellAt(d.localPosition);
+    if (cell == null) return;
+    if (_activeStrokeId == null) {
+      _activeStrokeId = _game.beginStroke(cell.$1, cell.$2);
+      _lastCell = cell;
+      return;
+    }
+    final last = _lastCell;
+    if (last != null) {
+      _game.extendStroke(_activeStrokeId!, last.$1, last.$2, cell.$1, cell.$2);
+    }
+    _lastCell = cell;
+  }
+
+  void _onPanEnd(DragEndDetails d) {
+    _activeStrokeId = null;
+    _lastCell = null;
+  }
+
+  void _onTapUp(TapUpDetails d) {
+    final cell = _cellAt(d.localPosition);
+    if (cell != null) _game.deleteStrokeAt(cell.$1, cell.$2);
+  }
+
+  void _reset() {
+    _game.reset();
+    _loop.reset();
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    final topPad = MediaQuery.paddingOf(context).top;
     return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: .center,
-          children: [
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+      // EMPTY 색과 동일 — 그리드가 화면을 다 못 채워도 배경이 이어진다.
+      backgroundColor: const Color(0xFF1D1418),
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                _viewSize = Size(constraints.maxWidth, constraints.maxHeight);
+                return GestureDetector(
+                  onPanStart: _onPanStart,
+                  onPanUpdate: _onPanUpdate,
+                  onPanEnd: _onPanEnd,
+                  onTapUp: _onTapUp,
+                  child: CustomPaint(
+                    size: Size.infinite,
+                    painter: WorldPainter(_imageSource),
+                  ),
+                );
+              },
             ),
-          ],
+          ),
+          Positioned(
+            top: topPad + 8,
+            left: 8,
+            child: _DebugOverlay(stats: _stats),
+          ),
+          Positioned(
+            top: topPad + 8,
+            right: 8,
+            child: _ResetButton(onPressed: _reset),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 디버그 오버레이. QA가 이 수치(틱 시간·프레임 시간·활성 입자 수)를 읽는다.
+class _DebugOverlay extends StatelessWidget {
+  final ValueListenable<_DebugStats> stats;
+  const _DebugOverlay({required this.stats});
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<_DebugStats>(
+      valueListenable: stats,
+      builder: (context, s, _) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+          decoration: BoxDecoration(
+            color: const Color(0xCC000000),
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: DefaultTextStyle(
+            style: const TextStyle(
+              color: Color(0xFFB79A6A),
+              fontSize: 11,
+              fontFeatures: [FontFeature.tabularFigures()],
+              height: 1.35,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'grid ${SimConstants.gridWidth}x${SimConstants.gridHeight}'
+                  ' @${SimConstants.tickRateHz}Hz',
+                ),
+                Text(
+                  'sim  ${s.simMsFrame.toStringAsFixed(2)} ms/frame'
+                  '  (${s.ticksThisFrame} tick,'
+                  ' ${s.perTickMs.toStringAsFixed(2)} ms/tick)',
+                ),
+                Text('conv ${s.convertMs.toStringAsFixed(2)} ms'),
+                Text('frame ${s.frameMs.toStringAsFixed(2)} ms'),
+                Text('active ${s.activeParticles}'),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _ResetButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  const _ResetButton({required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: const Color(0xCC000000),
+      borderRadius: BorderRadius.circular(4),
+      child: InkWell(
+        onTap: onPressed,
+        borderRadius: BorderRadius.circular(4),
+        child: const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          child: Text(
+            'RESET',
+            style: TextStyle(
+              color: Color(0xFFCDBFA0),
+              fontSize: 12,
+              letterSpacing: 1.5,
+            ),
+          ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
     );
   }
+}
+
+/// 오버레이 표시용 불변 계측 스냅샷.
+class _DebugStats {
+  final double simMsFrame;
+  final double perTickMs;
+  final int ticksThisFrame;
+  final double convertMs;
+  final double frameMs;
+  final int activeParticles;
+
+  const _DebugStats({
+    required this.simMsFrame,
+    required this.perTickMs,
+    required this.ticksThisFrame,
+    required this.convertMs,
+    required this.frameMs,
+    required this.activeParticles,
+  });
+
+  static const _DebugStats zero = _DebugStats(
+    simMsFrame: 0,
+    perTickMs: 0,
+    ticksThisFrame: 0,
+    convertMs: 0,
+    frameMs: 0,
+    activeParticles: 0,
+  );
 }
