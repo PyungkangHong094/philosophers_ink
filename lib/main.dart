@@ -5,6 +5,10 @@ import 'package:flutter/scheduler.dart';
 import 'core/constants.dart';
 import 'core/game_loop.dart';
 import 'core/game_state.dart';
+import 'gameplay/debug_hud.dart';
+import 'gameplay/gameplay_constants.dart';
+import 'gameplay/ink_budget.dart';
+import 'gameplay/ink_controller.dart';
 import 'render/palette.dart';
 import 'render/world_painter.dart';
 
@@ -16,15 +20,16 @@ class PhilosophersInkApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      title: "Philosopher's Ink — M0",
+      title: "Philosopher's Ink — M1",
       debugShowCheckedModeBanner: false,
       home: SimSpikeScreen(),
     );
   }
 }
 
-/// M0 데모 씬 (GDD 11장 M0): 상단 방출구에서 PRIMA가 낙하하고, 드래그로 석필 선을
-/// 그으면 그 위에 입자가 쌓인다. 탭으로 스트로크 삭제. 디버그 오버레이로 계측 표시.
+/// M1 데모 씬 (GDD 11장 M1-A): 상단 방출구에서 WATER가 낙하한다. 잉크를 골라 드래그하면
+/// 석필(WALL)로 물을 가두고, 서리 룬 위에 고인 물이 ICE로 얼어 쌓이며, 화염 룬이 물을
+/// STEAM으로 증발시켜 상승시킨다. 탭으로 스트로크 삭제. 디버그 오버레이로 계측 표시.
 class SimSpikeScreen extends StatefulWidget {
   const SimSpikeScreen({super.key});
 
@@ -45,6 +50,7 @@ class _SimSpikeScreenState extends State<SimSpikeScreen>
       ValueNotifier<_DebugStats>(_DebugStats.zero);
 
   // 드로잉 상태
+  late final InkController _ink;
   int? _activeStrokeId;
   (int, int)? _lastCell;
   Size _viewSize = Size.zero;
@@ -53,6 +59,12 @@ class _SimSpikeScreenState extends State<SimSpikeScreen>
   void initState() {
     super.initState();
     _game = GameState();
+    // M1 데모 예산 주입 (M2부터 레벨 JSON이 대체). 셋 다 노출해 병 3개·게이지·선택·숨김 검증.
+    _ink = InkController(InkBudget(
+      chalk: GameplayConstants.demoChalkBudget,
+      heat: GameplayConstants.demoHeatBudget,
+      frost: GameplayConstants.demoFrostBudget,
+    ));
     _palette = Palette();
     _rgba = Uint8List(_game.grid.cells.length * 4);
     _imageSource = WorldImageSource(
@@ -68,6 +80,7 @@ class _SimSpikeScreenState extends State<SimSpikeScreen>
     _ticker.dispose();
     _imageSource.dispose();
     _stats.dispose();
+    _ink.dispose();
     super.dispose();
   }
 
@@ -105,10 +118,26 @@ class _SimSpikeScreenState extends State<SimSpikeScreen>
     return vp.toGrid(local);
   }
 
+  /// 잉크 예산 한도 내에서만 세그먼트를 배치하고 실제 배치 셀 수를 차감한다.
+  /// 잔량을 maxCells 상한으로 넘겨 잔량만큼만 칠하므로 배치량과 차감량이 정확히
+  /// 일치한다 (부분 배치 cap 모델, GDD 4.2). 잔량이 소진되면 선이 그 지점에서
+  /// 멈춘다. 삭제 시 미반환은 sim이 보장.
+  void _chargedExtend(int strokeId, int x0, int y0, int x1, int y1) {
+    final budget = _ink.selectedRemaining;
+    if (budget <= 0) return;
+    final placed =
+        _game.extendStroke(strokeId, x0, y0, x1, y1, maxCells: budget);
+    _ink.chargePlaced(placed);
+  }
+
   void _onPanStart(DragStartDetails d) {
     final cell = _cellAt(d.localPosition);
     if (cell == null) return;
-    _activeStrokeId = _game.beginStroke(cell.$1, cell.$2);
+    final ink = _ink.selected;
+    if (ink == null || !_ink.canDraw) return; // 선택 없거나 예산 0 → 거부
+    final id = _game.beginStroke(ink);
+    _chargedExtend(id, cell.$1, cell.$2, cell.$1, cell.$2);
+    _activeStrokeId = id;
     _lastCell = cell;
   }
 
@@ -116,13 +145,17 @@ class _SimSpikeScreenState extends State<SimSpikeScreen>
     final cell = _cellAt(d.localPosition);
     if (cell == null) return;
     if (_activeStrokeId == null) {
-      _activeStrokeId = _game.beginStroke(cell.$1, cell.$2);
+      final ink = _ink.selected;
+      if (ink == null || !_ink.canDraw) return;
+      final id = _game.beginStroke(ink);
+      _chargedExtend(id, cell.$1, cell.$2, cell.$1, cell.$2);
+      _activeStrokeId = id;
       _lastCell = cell;
       return;
     }
     final last = _lastCell;
     if (last != null) {
-      _game.extendStroke(_activeStrokeId!, last.$1, last.$2, cell.$1, cell.$2);
+      _chargedExtend(_activeStrokeId!, last.$1, last.$2, cell.$1, cell.$2);
     }
     _lastCell = cell;
   }
@@ -140,6 +173,7 @@ class _SimSpikeScreenState extends State<SimSpikeScreen>
   void _reset() {
     _game.reset();
     _loop.reset();
+    _ink.reset(); // 예산·선택 복원 (재시작 안전, GDD 10.5)
   }
 
   @override
@@ -176,6 +210,12 @@ class _SimSpikeScreenState extends State<SimSpikeScreen>
             top: topPad + 8,
             right: 8,
             child: _ResetButton(onPressed: _reset),
+          ),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: MediaQuery.paddingOf(context).bottom + 16,
+            child: Center(child: InkHud(controller: _ink)),
           ),
         ],
       ),

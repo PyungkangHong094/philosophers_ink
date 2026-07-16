@@ -9,8 +9,8 @@ import 'package:philosophers_ink/sim/rules.dart';
 /// 같은 시드 + 같은 입력 시퀀스로 N틱 돌리고 그리드 해시를 낸다.
 int _runAndHash(int seed) {
   final game = GameState(seed: seed);
-  // 결정적 입력: 대각 석필 선 하나.
-  final stroke = game.beginStroke(10, 200);
+  // 결정적 입력: 대각 석필 선 하나 (물을 가두는 벽).
+  final stroke = game.beginStroke(InkType.chalk);
   game.extendStroke(stroke, 10, 200, 150, 260);
   for (var i = 0; i < 300; i++) {
     game.tick();
@@ -33,7 +33,7 @@ void main() {
   test('reset 후 같은 입력을 재현하면 해시가 동일 (재시작 결정성)', () {
     final game = GameState();
     void playInput() {
-      final s = game.beginStroke(10, 200);
+      final s = game.beginStroke(InkType.chalk);
       game.extendStroke(s, 10, 200, 150, 260);
       for (var i = 0; i < 200; i++) {
         game.tick();

@@ -5,7 +5,11 @@
 ///
 /// 물질을 추가할 때 고쳐야 하는 곳은 이 파일의 [kMaterialTable] 한 곳뿐이다.
 /// 카테고리별 이동/전이 처리에서 switch문을 산개시키지 않는다 (스킬 규칙).
+///
+/// core/constants.dart(순수 Dart)만 import한다 — 확산 밸런스 값의 단일 소스.
 library;
+
+import '../core/constants.dart';
 
 /// 카테고리별 이동 규칙의 분류 (GDD 3.3).
 enum MaterialCategory {
@@ -41,7 +45,7 @@ enum Material {
   stone, // 10
 }
 
-/// 물질 하나의 속성. 카테고리 + 가열/냉각 전이 대상 + 팔레트 색.
+/// 물질 하나의 속성. 카테고리 + 가열/냉각 전이 대상 + 확산 거동 + 팔레트 색.
 class MaterialProps {
   final Material id;
   final String name;
@@ -53,6 +57,14 @@ class MaterialProps {
   /// 냉각 시 전이 대상. null이면 불변.
   final Material? coolTo;
 
+  /// 한 틱 수평 확산 최대 셀 수 (액체/기체). 입자·정적은 0.
+  /// 실제 밸런스 값은 constants에서 온다 — 테이블은 어떤 상수를 쓸지만 배선한다.
+  final int dispersion;
+
+  /// 입자가 낮은 안식각으로 옆으로 미끄러지는가 (ICE 전용 구조 플래그).
+  /// 미끄러짐 확률 값은 SimConstants.iceSlipChance.
+  final bool granularSlip;
+
   /// 팔레트 색 0xAARRGGBB. render/palette.dart가 RGBA LUT로 변환한다.
   final int argb;
 
@@ -63,8 +75,21 @@ class MaterialProps {
     required this.heatTo,
     required this.coolTo,
     required this.argb,
+    this.dispersion = 0,
+    this.granularSlip = false,
   });
 }
+
+/// 잉크 3종 (GDD 4.1). 스트로크가 배치하는 물질과 1:1 대응.
+/// gameplay-engineer의 잉크 예산이 이 타입 위에서 차감한다 (계약).
+enum InkType { chalk, heat, frost }
+
+/// 잉크 → 배치 물질. chalk=석필(WALL), heat=화염 룬(HEAT_LINE), frost=서리 룬(COLD_LINE).
+Material materialForInk(InkType ink) => switch (ink) {
+      InkType.chalk => Material.wall,
+      InkType.heat => Material.heatLine,
+      InkType.frost => Material.coldLine,
+    };
 
 /// 중앙 물질 테이블. 인덱스 == Material.index == 셀 ID.
 ///
@@ -119,7 +144,8 @@ const List<MaterialProps> kMaterialTable = [
     category: MaterialCategory.particle,
     heatTo: Material.water,
     coolTo: null,
-    argb: 0xFFCFE8F5,
+    granularSlip: true, // 안식각 낮음 — 잘 퍼진다 (GDD 3.1)
+    argb: 0xFF9CD2EA, // 물보다 밝고 채도 낮은 청백 — 물과 명도로 구분
   ),
   MaterialProps(
     id: Material.water,
@@ -127,6 +153,7 @@ const List<MaterialProps> kMaterialTable = [
     category: MaterialCategory.liquid,
     heatTo: Material.steam,
     coolTo: Material.ice,
+    dispersion: SimConstants.liquidDispersion,
     argb: 0xFF3F7BD6,
   ),
   MaterialProps(
@@ -135,7 +162,8 @@ const List<MaterialProps> kMaterialTable = [
     category: MaterialCategory.gas,
     heatTo: null,
     coolTo: Material.water,
-    argb: 0xFFD8E4EC,
+    dispersion: SimConstants.gasDispersion,
+    argb: 0xFFE4EEF4, // 가장 밝은 톤 — 상승 물질 가독성
   ),
   MaterialProps(
     id: Material.ash,
@@ -151,6 +179,7 @@ const List<MaterialProps> kMaterialTable = [
     category: MaterialCategory.liquid,
     heatTo: null,
     coolTo: Material.stone,
+    dispersion: SimConstants.liquidDispersion,
     argb: 0xFFE0642A,
   ),
   MaterialProps(

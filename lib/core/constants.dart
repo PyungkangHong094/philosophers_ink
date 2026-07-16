@@ -40,13 +40,24 @@ class SimConstants {
   /// 석필 선의 두께(셀). 브레젠험 래스터라이즈 시 이 두께로 확장.
   static const int strokeThicknessCells = 2;
 
-  // --- 상전이 (M1, GDD 4.1·10.2) — 테이블 구조 확보용, M0 미사용 ---
-  /// 화염 룬 선의 매 틱 가열 전이 확률.
-  static const double pHeat = 0.12; // M1
+  // --- 상전이·확산 (M1, GDD 3.3·4.1·10.2) ---
+  // 아래 값들은 전부 체감 튜닝 대상(오픈 이슈 #1·#2). 밸런스는 여기서만 바꾼다.
 
-  /// 서리 룬 선의 매 틱 냉각 전이 확률.
-  static const double pCold = 0.12; // M1
+  /// 화염 룬 선(HEAT_LINE)이 인접 4방향 셀을 매 틱 +1단계 가열할 확률 (오픈 이슈 #1).
+  static const double pHeat = 0.12;
 
-  /// 액체 수평 확산 폭(셀). 손맛 튜닝 대상.
-  static const int liquidDispersion = 4; // M1
+  /// 서리 룬 선(COLD_LINE)이 인접 4방향 셀을 매 틱 −1단계 냉각할 확률 (오픈 이슈 #1).
+  static const double pCold = 0.12;
+
+  /// 액체(WATER/LAVA) 한 틱 수평 확산 최대 셀 수. 클수록 잘 퍼진다(손맛의 절반, GDD 13장).
+  static const int liquidDispersion = 4;
+
+  /// 기체(STEAM) 한 틱 수평 확산 최대 셀 수. 액체보다 조금 덜 퍼지게.
+  static const int gasDispersion = 3;
+
+  /// 얼음(ICE) 안식각 노브 (오픈 이슈 #2). 낙하가 막힌 얼음이 매 틱 이 확률로 옆으로
+  /// 한 칸 미끄러진다. 높을수록 더미가 평평해진다(안식각↓, "미끄러워 잘 퍼짐" GDD 3.1).
+  static const double iceSlipChance = 0.45;
+
+  // --- M0 데모 방출구 물질 override는 GameState 생성자 파라미터로 (레벨은 M2) ---
 }
