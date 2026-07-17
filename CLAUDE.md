@@ -3,12 +3,11 @@
 Flutter 상전이 물리 퍼즐 게임. 설계 SSOT: `docs/PHILOSOPHERS_INK_DESIGN.md` + `docs/PHILOSOPHERS_INK_LEVELS.md`.
 설계 변경은 문서에 먼저 반영한 뒤 구현한다.
 
-## 빌드 환경 (이 PC)
+## 빌드 환경 (이 PC — macOS)
 
-- Flutter SDK: `C:\flutter` (3.44.6 stable). User PATH 등록됨 — 현 셸에서 안 잡히면 `export PATH=/c/flutter/bin:$PATH`.
-- `TMP`/`TEMP`=`C:\flutter-tmp`, `PUB_CACHE`=`C:\pub-cache` (`.claude/settings.json`이 자동 적용).
-  한글 TEMP 경로에서 네이티브 flutter_tester가 무음 실패하므로 이 설정을 제거하지 말 것.
-- Windows 데스크톱 실행(`flutter run -d windows`)은 개발자 모드(심링크) 필요 — 미설정 시 플러그인 빌드 실패.
+- 2026-07-18 윈도우 PC → 맥으로 이전 완료. Flutter SDK: `~/develop/flutter` (3.44.6 stable).
+- 구 윈도우용 env 오버라이드(`PUB_CACHE=C:\pub-cache` 등)는 `.claude/settings.json`에서 제거됨 — 다시 넣지 말 것 (맥에서 pub 경로가 깨져 native assets 빌드 실패).
+- Xcode 26.1 / Android SDK 36 설치됨 — iOS·Android·macOS·웹 타깃 모두 가능.
 
 ## 하네스: Philosopher Ink 게임 개발
 
