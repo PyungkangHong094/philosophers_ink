@@ -1,4 +1,5 @@
 import '../sim/emitter.dart';
+import '../sim/gimmicks.dart';
 import '../sim/grid.dart';
 import '../sim/materials.dart';
 import '../sim/rasterize.dart';
@@ -29,6 +30,15 @@ class GameState {
   /// 레벨 로더(M2-C)가 JSON에서 이 리스트를 구성한다.
   final List<EmitterConfig> emitters;
 
+  /// 변성 게이트 목록 (GDD 6). 레벨 데이터(불변). 매 틱 이동 전에 존의 물질을 변환한다.
+  final List<TransmutationGate> gates;
+
+  /// 포탈 목록 (GDD 6). 레벨 데이터(불변). 매 틱 이동 후 입구→출구 텔레포트.
+  final List<Portal> portals;
+
+  /// 온도 존 목록 (GDD 6). 레벨 데이터(불변). 매 틱 존 셀을 가열/냉각(룬 없는 상전이).
+  final List<TemperatureZone> temperatureZones;
+
   /// Rules는 GameState의 rng 인스턴스를 공유한다. reset()이 rng를 초기화하면
   /// 규칙의 무작위성도 함께 되감겨 재시작 결정성이 성립한다.
   late final Rules rules;
@@ -44,8 +54,14 @@ class GameState {
     this.seed = SimConstants.defaultSeed,
     int? emitMaterial,
     List<EmitterConfig>? emitters,
+    List<TransmutationGate>? gates,
+    List<Portal>? portals,
+    List<TemperatureZone>? temperatureZones,
   })  : emitters =
             emitters ?? [_defaultEmitter(emitMaterial ?? Material.water.index)],
+        gates = gates ?? const [],
+        portals = portals ?? const [],
+        temperatureZones = temperatureZones ?? const [],
         grid = Grid(SimConstants.gridWidth, SimConstants.gridHeight),
         rng = DeterministicRng(seed) {
     rules = Rules(rng);
@@ -95,10 +111,17 @@ class GameState {
     }
   }
 
-  /// 한 틱: 방출 → 상전이·이동. 순서 고정(결정성).
+  /// 중력이 반전(위 방향)되어 있는가 (GDD 6).
+  bool get gravityInverted => rules.gravityInverted;
+
+  /// 전역 중력 반전 토글 (GDD 6). gameplay의 중력 반전 버튼이 호출한다. 입력 시퀀스의
+  /// 일부이므로 결정성 로그에 기록되어야 한다(계약). reset()은 기본(아래)으로 되돌린다.
+  void setGravityInverted(bool inverted) => rules.setGravityInverted(inverted);
+
+  /// 한 틱: 방출 → 상전이(룬·온도 존) → 게이트 → 이동 → 포탈. 순서 고정(결정성).
   void tick() {
     _emit();
-    rules.step(grid);
+    rules.step(grid, gates: gates, portals: portals, zones: temperatureZones);
     tickCount++;
   }
 

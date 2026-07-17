@@ -208,6 +208,16 @@ class _LevelPlayerState extends State<LevelPlayer>
                 if (widget.onExit != null)
                   _MiniButton(label: 'EXIT', onTap: widget.onExit!),
                 if (widget.onExit != null) const SizedBox(width: 6),
+                // 중력 반전 버튼은 기믹이 있는 레벨에서만 노출 (GDD 6). 폴리시는 M4+ 셸.
+                if (_session.hasGravityFlip) ...[
+                  _MiniButton(
+                    label: 'GRAV',
+                    onTap: () {
+                      if (_canDraw) _session.toggleGravity();
+                    },
+                  ),
+                  const SizedBox(width: 6),
+                ],
                 _MiniButton(label: 'RESET', onTap: _retry),
               ],
             ),

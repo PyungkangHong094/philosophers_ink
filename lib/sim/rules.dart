@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import '../core/constants.dart';
 import '../core/rng.dart';
+import 'gimmicks.dart';
 import 'grid.dart';
 import 'materials.dart';
 
@@ -20,24 +21,114 @@ class Rules {
   int _tick = 0;
   Int32List _moveStamp = Int32List(0);
 
+  /// 중력 방향 부호: +1 = 아래(기본), -1 = 위(반전). 이동 규칙·스캔 순서를 미러링한다
+  /// (GDD 3.3·6). 런타임 토글이므로 reset()이 기본(+1)으로 되돌린다 → 재시작 결정성.
+  int _gravitySign = 1;
+
   Rules(this.rng);
 
-  /// reset()에서 스캔 방향·틱·스탬프까지 초기화해야 재시작 결정성이 성립한다.
+  /// 중력이 반전(위 방향)되어 있는가.
+  bool get gravityInverted => _gravitySign < 0;
+
+  /// 중력 반전 토글 (GDD 6, 전역 중력 반전 버튼). gameplay가 버튼 입력으로 호출하며,
+  /// 입력 시퀀스의 일부로 결정성 로그에 기록된다(계약).
+  void setGravityInverted(bool inverted) {
+    _gravitySign = inverted ? -1 : 1;
+  }
+
+  /// reset()에서 스캔 방향·틱·스탬프·중력까지 초기화해야 재시작 결정성이 성립한다.
   void reset() {
     _scanLeftToRight = true;
     _tick = 0;
+    _gravitySign = 1;
     _moveStamp.fillRange(0, _moveStamp.length, 0);
   }
 
-  /// 한 틱 진행: 상전이 → 이동.
-  void step(Grid grid) {
+  /// 한 틱 진행: 상전이(룬 → 온도 존) → 변성 게이트 → 이동 → 포탈.
+  ///
+  /// [zones]·[gates]·[portals]는 레벨 데이터(불변). 온도 존은 룬 선과 같은 상전이 패스에서
+  /// 존 셀을 가열/냉각하고, 게이트는 이동 전에 물질을 변환하며, 포탈은 이동 후에
+  /// 입구→출구 텔레포트를 처리한다. 온도 존만 RNG를 소비(확률 전이), 나머지는 결정적.
+  void step(
+    Grid grid, {
+    List<TransmutationGate> gates = const [],
+    List<Portal> portals = const [],
+    List<TemperatureZone> zones = const [],
+  }) {
     if (_moveStamp.length != grid.cells.length) {
       _moveStamp = Int32List(grid.cells.length);
     }
     _tick++;
     _applyLineTransitions(grid);
+    _applyTemperatureZones(grid, zones);
+    _applyGates(grid, gates);
     _applyMovement(grid);
+    _applyPortals(grid, portals);
     _scanLeftToRight = !_scanLeftToRight;
+  }
+
+  // --- 온도 존 패스 (GDD 6, 레벨 고정 화로/빙결) ---
+
+  /// 각 존의 셀을 매 틱 확률 p로 ±1단계 전이. 룬 선의 _radiateCell과 같은 규칙이되
+  /// 인접이 아니라 존 셀 자신에 적용한다. 존·셀 순서 고정 = 결정적.
+  void _applyTemperatureZones(Grid grid, List<TemperatureZone> zones) {
+    if (zones.isEmpty) return;
+    for (final zone in zones) {
+      final heat = zone.kind == TemperatureZoneKind.heat;
+      final p = zone.probability ??
+          (heat ? SimConstants.pHeat : SimConstants.pCold);
+      for (final idx in zone.cellIndices) {
+        final id = grid.cells[idx];
+        final target = heat ? propsOf(id).heatTo : propsOf(id).coolTo;
+        if (target == null) continue; // 전이 불가면 RNG도 소비하지 않는다 (룬과 동일)
+        if (rng.nextDouble() < p) {
+          grid.cells[idx] = target.index;
+        }
+      }
+    }
+  }
+
+  // --- 변성 게이트 패스 (GDD 6) ---
+
+  /// 각 게이트의 존 셀을 검사해 대상 물질을 변환. 게이트·셀 순서 고정 = 결정적.
+  void _applyGates(Grid grid, List<TransmutationGate> gates) {
+    if (gates.isEmpty) return;
+    for (final gate in gates) {
+      final to = gate.toMaterial;
+      final from = gate.fromMaterial;
+      for (final idx in gate.cellIndices) {
+        final id = grid.cells[idx];
+        if (from != null) {
+          if (id != from) continue;
+        } else if (!isMobile(id)) {
+          continue; // fromMaterial=null → 이동 물질만, 벽·룬 선·EMPTY 보존
+        }
+        grid.cells[idx] = to;
+      }
+    }
+  }
+
+  // --- 포탈 패스 (GDD 6) ---
+
+  /// 입구 셀의 이동 물질을 빈 출구 셀로 옮긴다. 출구가 막혔으면 대기(입구 유지).
+  /// 이번 틱에 이동으로 채워진 입구(_moveStamp==_tick)는 건너뛰어 연쇄 이동을 막는다.
+  void _applyPortals(Grid grid, List<Portal> portals) {
+    if (portals.isEmpty) return;
+    for (final portal in portals) {
+      final entry = portal.entryCells;
+      final exit = portal.exitCells;
+      for (var i = 0; i < entry.length; i++) {
+        final e = entry[i];
+        if (_moveStamp[e] == _tick) continue; // 이번 틱에 막 들어온 물질은 대기
+        final id = grid.cells[e];
+        if (!isMobile(id)) continue;
+        final x = exit[i];
+        if (grid.cells[x] != Material.empty.index) continue; // 출구 막힘 → 대기
+        grid.cells[x] = id;
+        grid.cells[e] = Material.empty.index;
+        _moveStamp[x] = _tick;
+      }
+    }
   }
 
   // --- 상전이 패스 (화염/서리 선) ---
@@ -81,15 +172,28 @@ class Rules {
 
   void _applyMovement(Grid grid) {
     final w = grid.width;
-    for (var y = grid.height - 1; y >= 0; y--) {
-      if (_scanLeftToRight) {
-        for (var x = 0; x < w; x++) {
-          _updateCell(grid, x, y);
-        }
-      } else {
-        for (var x = w - 1; x >= 0; x--) {
-          _updateCell(grid, x, y);
-        }
+    final h = grid.height;
+    // 낙하 물질은 목적지 행을 먼저 처리해야 틱당 1칸이 보장된다. 중력이 아래(+1)면
+    // 아래 행(높은 y)부터, 위(-1)면 위 행(낮은 y)부터 스캔한다 — 방향과 함께 미러링.
+    if (_gravitySign > 0) {
+      for (var y = h - 1; y >= 0; y--) {
+        _scanRow(grid, y, w);
+      }
+    } else {
+      for (var y = 0; y < h; y++) {
+        _scanRow(grid, y, w);
+      }
+    }
+  }
+
+  void _scanRow(Grid grid, int y, int w) {
+    if (_scanLeftToRight) {
+      for (var x = 0; x < w; x++) {
+        _updateCell(grid, x, y);
+      }
+    } else {
+      for (var x = w - 1; x >= 0; x--) {
+        _updateCell(grid, x, y);
       }
     }
   }
@@ -111,12 +215,14 @@ class Rules {
     }
   }
 
-  /// 입자: 아래 → 아래대각(좌우 랜덤). granularSlip(ICE)이면 막혔을 때 확률적 옆 미끄러짐.
+  /// 입자: 중력 방향 → 그 대각(좌우 랜덤). granularSlip(ICE)이면 막혔을 때 확률적 옆 미끄러짐.
+  /// [dy]=_gravitySign이라 중력 반전 시 이동 방향 전체가 미러링된다(GDD 3.3·6).
   void _updateParticle(Grid grid, int x, int y, int id) {
-    if (_tryMove(grid, x, y, x, y + 1)) return;
+    final dy = _gravitySign;
+    if (_tryMove(grid, x, y, x, y + dy)) return;
     final firstDx = rng.nextBool() ? -1 : 1;
-    if (_tryMove(grid, x, y, x + firstDx, y + 1)) return;
-    if (_tryMove(grid, x, y, x - firstDx, y + 1)) return;
+    if (_tryMove(grid, x, y, x + firstDx, y + dy)) return;
+    if (_tryMove(grid, x, y, x - firstDx, y + dy)) return;
 
     if (propsOf(id).granularSlip) {
       // 안식각 낮음: 낙하가 막히면 확률적으로 옆 빈칸으로 한 칸 미끄러진다.
@@ -128,21 +234,23 @@ class Rules {
     }
   }
 
-  /// 액체: 아래 → 아래대각 → 수평 확산(dispersion까지).
+  /// 액체: 중력 방향 → 그 대각 → 수평 확산(dispersion까지).
   void _updateLiquid(Grid grid, int x, int y) {
-    if (_tryMove(grid, x, y, x, y + 1)) return;
+    final dy = _gravitySign;
+    if (_tryMove(grid, x, y, x, y + dy)) return;
     final firstDx = rng.nextBool() ? -1 : 1;
-    if (_tryMove(grid, x, y, x + firstDx, y + 1)) return;
-    if (_tryMove(grid, x, y, x - firstDx, y + 1)) return;
+    if (_tryMove(grid, x, y, x + firstDx, y + dy)) return;
+    if (_tryMove(grid, x, y, x - firstDx, y + dy)) return;
     _spreadHorizontal(grid, x, y, propsOf(grid.get(x, y)).dispersion);
   }
 
-  /// 기체: 위 → 위대각 → 수평 확산 (액체의 상하 미러, GDD 3.3).
+  /// 기체: 중력 반대 방향 → 그 대각 → 수평 확산 (액체의 상하 미러, GDD 3.3).
   void _updateGas(Grid grid, int x, int y) {
-    if (_tryMove(grid, x, y, x, y - 1)) return;
+    final dy = -_gravitySign; // 기체는 중력 반대로 뜬다 → 반전 시 가라앉는다
+    if (_tryMove(grid, x, y, x, y + dy)) return;
     final firstDx = rng.nextBool() ? -1 : 1;
-    if (_tryMove(grid, x, y, x + firstDx, y - 1)) return;
-    if (_tryMove(grid, x, y, x - firstDx, y - 1)) return;
+    if (_tryMove(grid, x, y, x + firstDx, y + dy)) return;
+    if (_tryMove(grid, x, y, x - firstDx, y + dy)) return;
     _spreadHorizontal(grid, x, y, propsOf(grid.get(x, y)).dispersion);
   }
 

@@ -128,11 +128,17 @@ class _Parser {
     for (var i = 0; i < gl.length; i++) {
       final m = _obj(gl[i], 'gimmicks[$i]');
       if (m != null) {
+        // params 없음(null) = 마커 기믹(gravity_flip 등) 정상. 있는데 객체가 아니면 오류.
+        final rawParams = m['params'];
+        Map<String, dynamic> params = const {};
+        if (rawParams is Map) {
+          params = rawParams.cast<String, dynamic>();
+        } else if (rawParams != null) {
+          _err('gimmicks[$i].params', '객체가 필요 (got ${rawParams.runtimeType})');
+        }
         gimmicks.add(GimmickSpec(
           type: _str(m['type'], 'gimmicks[$i].type'),
-          params: (m['params'] is Map)
-              ? (m['params'] as Map).cast<String, dynamic>()
-              : const {},
+          params: params,
         ));
       }
     }

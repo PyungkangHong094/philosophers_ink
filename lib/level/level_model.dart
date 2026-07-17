@@ -165,13 +165,69 @@ class TerrainRect {
   });
 }
 
-/// 기믹 (GDD 6장). M3 구현 전까지는 자리만 확보 — type + 파라미터 맵 보존.
+/// 기믹 (GDD 6장). 저장·직렬화는 type + 파라미터 맵의 제네릭 형으로 유지한다
+/// (왕복 무손실·에디터 무수정). 파라미터 의미 검증은 [validator], sim 인스턴스
+/// 변환은 [buildGimmicks](gimmick_builder.dart)가 [GimmickType]/[GimmickParamKey]로
+/// 수행한다 — 매직 스트링 단일 소스.
 class GimmickSpec {
   final String type;
   final Map<String, dynamic> params;
 
   const GimmickSpec({required this.type, this.params = const {}});
 }
+
+/// 기믹 type 식별자 (JSON `type` 필드). GDD 6장 5종.
+/// - [varianceGate] 변성 게이트: 존 통과 물질을 [GimmickParamKey.to]로 변환.
+/// - [gravityFlip] 중력 반전 버튼: 존 없음 — 존재만으로 게임플레이 버튼 활성.
+/// - [portal] 포탈: [GimmickParamKey.entry]→[GimmickParamKey.exit] 순간이동(일방향).
+/// - [tempZone] 온도 존: 레벨 고정 화로/빙결 지대(잉크 룬 없이 상전이).
+/// - [ashEmitter] 재 방출구: 실제 거동은 방출구 `ash_ratio`가 담당하는 마커 태그.
+abstract final class GimmickType {
+  static const String varianceGate = 'variance_gate';
+  static const String gravityFlip = 'gravity_flip';
+  static const String portal = 'portal';
+  static const String tempZone = 'temp_zone';
+  static const String ashEmitter = 'ash_emitter';
+
+  /// 인식되는 모든 기믹 type.
+  static const Set<String> all = {
+    varianceGate,
+    gravityFlip,
+    portal,
+    tempZone,
+    ashEmitter,
+  };
+}
+
+/// 기믹 params 맵의 키 이름 (매직 스트링 단일 소스).
+abstract final class GimmickParamKey {
+  static const String x = 'x';
+  static const String y = 'y';
+  static const String w = 'w';
+  static const String h = 'h';
+
+  /// 변성 게이트: 변환 결과 물질명(필수).
+  static const String to = 'to';
+
+  /// 변성 게이트: 변환 대상 물질명(선택 — 없으면 모든 이동 물질).
+  static const String from = 'from';
+
+  /// 포탈: 입구 rect 객체 {x,y,w,h}.
+  static const String entry = 'entry';
+
+  /// 포탈: 출구 rect 객체 {x,y,w,h}.
+  static const String exit = 'exit';
+
+  /// 온도 존: "heat" | "cool".
+  static const String kind = 'kind';
+
+  /// 온도 존: ±1단계 전이 확률(0~1). 없거나 null이면 룬 기본 강도.
+  static const String probability = 'probability';
+}
+
+/// 온도 존 kind JSON 값.
+const String kTempZoneHeat = 'heat';
+const String kTempZoneCool = 'cool';
 
 /// 별점 임계 (잉크 사용량 총합 기준). null이면 optimalInk에서 공식 파생 (LEVELS 4장).
 class StarThresholds {

@@ -5,7 +5,9 @@
 /// 그리드·RNG·방출 잔량·플라스크·잉크·선택을 전부 초기화하고 지형을 재스탬프한다.
 library;
 
+import '../core/constants.dart';
 import '../core/game_state.dart';
+import '../level/gimmick_builder.dart';
 import '../level/level_model.dart';
 import '../sim/emitter.dart';
 import 'flask.dart';
@@ -13,18 +15,66 @@ import 'ink_budget.dart';
 import 'ink_controller.dart';
 import 'star_rating.dart';
 
+/// 중력 반전 토글 1회의 기록 (결정성/리플레이 로그). 몇 번째 틱에 어떤 값으로
+/// 토글했는지를 담아, 같은 시드+같은 로그로 재생하면 동일 결과가 나온다 (sim 계약 4절).
+class GravityToggle {
+  final int tick;
+  final bool inverted;
+  const GravityToggle(this.tick, this.inverted);
+}
+
 class LevelSession {
   final Level level;
   final GameState game;
   final FlaskSystem flasks;
   final InkController ink;
 
-  LevelSession(this.level, {void Function(SettleEvent event)? onSettle})
-      : game = GameState(emitters: _mapEmitters(level.emitters)),
+  /// 레벨 기믹의 sim 변환 결과 (불변). 중력 반전 버튼 노출 여부도 여기서 읽는다.
+  final GimmickBundle gimmicks;
+
+  /// 중력 반전 입력 로그 (결정성 계약). reset()이 비운다.
+  final List<GravityToggle> gravityLog = [];
+
+  factory LevelSession(Level level,
+      {void Function(SettleEvent event)? onSettle}) {
+    final bundle =
+        buildGimmicks(level.gimmicks, gridWidth: SimConstants.gridWidth);
+    return LevelSession._(level, bundle, onSettle);
+  }
+
+  /// 기믹 번들을 미리 만들어 GameState 배선과 [gimmicks] 필드가 같은 인스턴스를 쓰게 한다.
+  LevelSession._(
+    this.level,
+    this.gimmicks,
+    void Function(SettleEvent event)? onSettle,
+  )   : game = GameState(
+          emitters: _mapEmitters(level.emitters),
+          gates: gimmicks.gates,
+          portals: gimmicks.portals,
+          temperatureZones: gimmicks.zones,
+        ),
         flasks = FlaskSystem(level.flasks, onSettle: onSettle),
         ink = InkController(_budgetFromLevel(level.inkBudget)) {
     _stampTerrain();
   }
+
+  /// 이 레벨에 중력 반전 버튼 기믹이 있는가 (게임플레이가 버튼 노출 판단).
+  bool get hasGravityFlip => gimmicks.hasGravityFlip;
+
+  /// 현재 중력이 반전(위)되어 있는가.
+  bool get gravityInverted => game.gravityInverted;
+
+  /// 중력 반전 버튼 토글 (GDD 6). 기믹이 있는 레벨에서만 동작하며, 실제 변경 시
+  /// [gravityLog]에 (틱, 값)을 기록한다 — 결정성 리플레이 계약(sim API 4절).
+  void setGravityInverted(bool inverted) {
+    if (!hasGravityFlip) return;
+    if (game.gravityInverted == inverted) return;
+    gravityLog.add(GravityToggle(game.tickCount, inverted));
+    game.setGravityInverted(inverted);
+  }
+
+  /// 현재 값의 반대로 토글 (버튼 탭 편의).
+  void toggleGravity() => setGravityInverted(!game.gravityInverted);
 
   /// 레벨 방출구 스펙 → sim EmitterConfig.
   static List<EmitterConfig> _mapEmitters(List<EmitterSpec> specs) => [
@@ -85,6 +135,7 @@ class LevelSession {
     game.reset();
     flasks.reset();
     ink.reset();
+    gravityLog.clear();
     _stampTerrain();
   }
 }
