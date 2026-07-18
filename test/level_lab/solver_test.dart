@@ -15,10 +15,11 @@ void main() {
       final level = _load('level_001.json');
       final res = solveLevel(
         level,
+        // 콘텐츠 갱신에 견고하도록 여유 예산 — 치즈 봉쇄 후 001은 effort ~39.
         const SolverConfig(
-          rolloutBudget: 8,
+          rolloutBudget: 150,
           refineBudget: 0,
-          tickCap: 700,
+          tickCap: 2400,
           stallTicks: 300,
           collectTarget: 4,
         ),

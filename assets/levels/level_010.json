@@ -1,27 +1,10 @@
 {
-  "meta": {
-    "id": 10,
-    "name": "잉크 다이어트",
-    "chapter": 1,
-    "difficulty": 5,
-    "teaches": [],
-    "tags": ["ink_diet", "precision", "terrain"],
-    "optimal_ink": null,
-    "solutions_verified": 2,
-    "hint_stroke": [[58, 130], [70, 166], [72, 280]]
-  },
+  "meta": { "id": 10, "name": "잉크 다이어트", "chapter": 1, "difficulty": 5, "teaches": [], "tags": ["ink_diet","precision"], "optimal_ink": null, "solutions_verified": 2, "hint_stroke": null },
   "background": "#1D1418",
-  "emitters": [
-    { "x": 70, "y": 2, "width": 10, "material": "PRIMA", "rate": 2, "total": null, "ash_ratio": 0 }
-  ],
-  "flasks": [
-    { "x": 60, "y": 290, "w": 24, "h": 26, "goal": 35, "material": null, "state": null, "pure": false }
-  ],
-  "terrain": [
-    { "x": 0, "y": 170, "w": 66, "h": 6, "material": "WALL" },
-    { "x": 74, "y": 170, "w": 86, "h": 6, "material": "WALL" }
-  ],
+  "emitters": [ { "x": 108, "y": 2, "width": 4, "material": "PRIMA", "rate": 5, "total": null, "ash_ratio": 0 } ],
+  "flasks": [ { "x": 24, "y": 288, "w": 8, "h": 26, "goal": 32, "material": null, "state": null, "pure": false } ],
+  "terrain": [],
   "gimmicks": [],
-  "ink_budget": { "chalk": 160, "heat": 0, "frost": 0 },
-  "star_thresholds": { "two_star": 152, "three_star": 109 }
+  "ink_budget": { "chalk": 437, "heat": 0, "frost": 0 },
+  "star_thresholds": { "two_star": 367, "three_star": 296 }
 }

@@ -27,12 +27,14 @@ void main() {
     });
 
     test('applyStroke는 예산을 초과 차감하지 않는다 (부분 배치 cap)', () {
-      final level = _load('level_001.json'); // chalk 예산 250.
+      final level = _load('level_001.json');
+      // 출고 레벨 예산은 콘텐츠라 계속 바뀐다 — 파일에서 동적으로 읽는다.
+      final cap = level.inkBudget[InkType.chalk]!;
       final s = HeadlessSession(level)..reset();
       // 그리드 폭 전체를 가로지르는 거대한 스트로크 — 예산 상한에서 잘린다.
       final placed = s.applyStroke(InkType.chalk, 0, 300, 159, 300);
       expect(placed, s.inkUsed);
-      expect(s.inkUsed, lessThanOrEqualTo(250));
+      expect(s.inkUsed, lessThanOrEqualTo(cap));
       expect(s.inkUsed, greaterThan(0));
     });
 

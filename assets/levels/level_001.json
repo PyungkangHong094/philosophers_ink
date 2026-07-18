@@ -1,24 +1,10 @@
 {
-  "meta": {
-    "id": 1,
-    "name": "첫 획",
-    "chapter": 1,
-    "difficulty": 1,
-    "teaches": ["chalk", "prima"],
-    "tags": ["tutorial", "chalk", "prima"],
-    "optimal_ink": null,
-    "solutions_verified": 2,
-    "hint_stroke": [[46, 180], [62, 240], [74, 272]]
-  },
+  "meta": { "id": 1, "name": "첫 획", "chapter": 1, "difficulty": 1, "teaches": ["chalk","prima"], "tags": ["tutorial","chalk","prima"], "optimal_ink": null, "solutions_verified": 2, "hint_stroke": null },
   "background": "#1D1418",
-  "emitters": [
-    { "x": 40, "y": 2, "width": 8, "material": "PRIMA", "rate": 2, "total": null, "ash_ratio": 0 }
-  ],
-  "flasks": [
-    { "x": 62, "y": 284, "w": 26, "h": 30, "goal": 40, "material": null, "state": null, "pure": false }
-  ],
+  "emitters": [ { "x": 18, "y": 2, "width": 4, "material": "PRIMA", "rate": 5, "total": null, "ash_ratio": 0 } ],
+  "flasks": [ { "x": 108, "y": 290, "w": 20, "h": 22, "goal": 35, "material": null, "state": null, "pure": false } ],
   "terrain": [],
   "gimmicks": [],
-  "ink_budget": { "chalk": 250, "heat": 0, "frost": 0 },
-  "star_thresholds": { "two_star": 160, "three_star": 115 }
+  "ink_budget": { "chalk": 720, "heat": 0, "frost": 0 },
+  "star_thresholds": { "two_star": 461, "three_star": 331 }
 }

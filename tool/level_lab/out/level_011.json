@@ -3,10 +3,10 @@
   "name": "하소",
   "chapter": 1,
   "solvable": true,
-  "min_ink": 73,
+  "min_ink": 101,
   "effort": 155,
-  "rollouts": 629,
-  "elapsed_ms": 158492,
+  "rollouts": 1007,
+  "elapsed_ms": 282433,
   "budget": {
     "chalk": 300,
     "heat": 0,
@@ -14,117 +14,80 @@
   },
   "solutions": [
     {
-      "ink": 73,
-      "ticks": 1,
+      "ink": 101,
+      "ticks": 590,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 26,
-          "y0": 314,
-          "x1": 34,
-          "y1": 308
-        },
+          "x0": 82,
+          "y0": 6,
+          "x1": 116,
+          "y1": 35
+        }
+      ],
+      "gravity_taps": [
+        604
+      ]
+    },
+    {
+      "ink": 101,
+      "ticks": 590,
+      "strokes": [
         {
           "ink": "chalk",
-          "x0": 113,
-          "y0": 36,
-          "x1": 124,
-          "y1": 20
+          "x0": 82,
+          "y0": 6,
+          "x1": 116,
+          "y1": 35
         }
       ],
       "gravity_taps": []
     },
     {
-      "ink": 73,
-      "ticks": 1,
+      "ink": 101,
+      "ticks": 590,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 26,
-          "y0": 314,
-          "x1": 34,
-          "y1": 308
-        },
-        {
-          "ink": "chalk",
-          "x0": 113,
-          "y0": 36,
-          "x1": 124,
-          "y1": 20
+          "x0": 82,
+          "y0": 6,
+          "x1": 116,
+          "y1": 35
         }
       ],
       "gravity_taps": [
-        0
+        600
       ]
     },
     {
-      "ink": 74,
-      "ticks": 1,
+      "ink": 101,
+      "ticks": 590,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 26,
-          "y0": 314,
-          "x1": 34,
-          "y1": 307
-        },
-        {
-          "ink": "chalk",
-          "x0": 113,
-          "y0": 36,
-          "x1": 124,
-          "y1": 20
+          "x0": 82,
+          "y0": 6,
+          "x1": 116,
+          "y1": 35
         }
       ],
       "gravity_taps": [
-        0
+        615
       ]
     },
     {
-      "ink": 76,
-      "ticks": 1,
+      "ink": 102,
+      "ticks": 588,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 26,
-          "y0": 314,
-          "x1": 37,
-          "y1": 311
-        },
-        {
-          "ink": "chalk",
-          "x0": 113,
-          "y0": 36,
-          "x1": 124,
-          "y1": 20
+          "x0": 81,
+          "y0": 7,
+          "x1": 116,
+          "y1": 35
         }
       ],
-      "gravity_taps": [
-        0
-      ]
-    },
-    {
-      "ink": 77,
-      "ticks": 1,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 26,
-          "y0": 314,
-          "x1": 34,
-          "y1": 308
-        },
-        {
-          "ink": "chalk",
-          "x0": 113,
-          "y0": 36,
-          "x1": 124,
-          "y1": 18
-        }
-      ],
-      "gravity_taps": [
-        0
-      ]
+      "gravity_taps": []
     }
   ]
 }

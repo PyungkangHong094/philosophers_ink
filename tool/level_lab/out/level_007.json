@@ -2,86 +2,15 @@
   "level": 7,
   "name": "삼중주",
   "chapter": 1,
-  "solvable": true,
-  "min_ink": 221,
-  "effort": 357,
-  "rollouts": 617,
-  "elapsed_ms": 225886,
+  "solvable": false,
+  "min_ink": null,
+  "effort": null,
+  "rollouts": 2000,
+  "elapsed_ms": 903157,
   "budget": {
     "chalk": 340,
     "heat": 0,
     "frost": 0
   },
-  "solutions": [
-    {
-      "ink": 221,
-      "ticks": 1,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 133,
-          "y0": 294,
-          "x1": 25,
-          "y1": 293
-        }
-      ],
-      "gravity_taps": []
-    },
-    {
-      "ink": 222,
-      "ticks": 1,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 133,
-          "y0": 295,
-          "x1": 25,
-          "y1": 293
-        }
-      ],
-      "gravity_taps": []
-    },
-    {
-      "ink": 222,
-      "ticks": 1,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 134,
-          "y0": 293,
-          "x1": 25,
-          "y1": 293
-        }
-      ],
-      "gravity_taps": []
-    },
-    {
-      "ink": 224,
-      "ticks": 1,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 134,
-          "y0": 295,
-          "x1": 25,
-          "y1": 293
-        }
-      ],
-      "gravity_taps": []
-    },
-    {
-      "ink": 224,
-      "ticks": 1,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 133,
-          "y0": 295,
-          "x1": 24,
-          "y1": 293
-        }
-      ],
-      "gravity_taps": []
-    }
-  ]
+  "solutions": []
 }

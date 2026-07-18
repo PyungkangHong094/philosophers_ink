@@ -1,25 +1,10 @@
 {
-  "meta": {
-    "id": 3,
-    "name": "두 갈래",
-    "chapter": 1,
-    "difficulty": 2,
-    "teaches": [],
-    "tags": ["splitter", "multi_flask"],
-    "optimal_ink": null,
-    "solutions_verified": 2,
-    "hint_stroke": [[58, 196], [80, 150], [102, 196]]
-  },
+  "meta": { "id": 3, "name": "두 갈래", "chapter": 1, "difficulty": 2, "teaches": [], "tags": ["splitter","multi_flask"], "optimal_ink": null, "solutions_verified": 2, "hint_stroke": null },
   "background": "#1D1418",
-  "emitters": [
-    { "x": 74, "y": 2, "width": 12, "material": "PRIMA", "rate": 2, "total": null, "ash_ratio": 0 }
-  ],
-  "flasks": [
-    { "x": 26, "y": 286, "w": 26, "h": 30, "goal": 30, "material": null, "state": null, "pure": false },
-    { "x": 108, "y": 286, "w": 26, "h": 30, "goal": 30, "material": null, "state": null, "pure": false }
-  ],
+  "emitters": [ { "x": 40, "y": 2, "width": 12, "material": "PRIMA", "rate": 3, "total": null, "ash_ratio": 0 } ],
+  "flasks": [ { "x": 30, "y": 290, "w": 22, "h": 22, "goal": 24, "material": null, "state": null, "pure": false }, { "x": 72, "y": 6, "w": 26, "h": 26, "goal": 24, "material": null, "state": null, "pure": false } ],
   "terrain": [],
   "gimmicks": [],
-  "ink_budget": { "chalk": 350, "heat": 0, "frost": 0 },
-  "star_thresholds": { "two_star": 224, "three_star": 161 }
+  "ink_budget": { "chalk": 230, "heat": 0, "frost": 0 },
+  "star_thresholds": { "two_star": 147, "three_star": 106 }
 }

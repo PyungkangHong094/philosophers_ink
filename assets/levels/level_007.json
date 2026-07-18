@@ -22,5 +22,5 @@
   "terrain": [],
   "gimmicks": [],
   "ink_budget": { "chalk": 340, "heat": 0, "frost": 0 },
-  "star_thresholds": { "two_star": 272, "three_star": 196 }
+  "star_thresholds": { "two_star": 297, "three_star": 254 }
 }

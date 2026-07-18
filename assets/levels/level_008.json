@@ -1,26 +1,10 @@
 {
-  "meta": {
-    "id": 8,
-    "name": "뒤집힌 서재",
-    "chapter": 1,
-    "difficulty": 2,
-    "teaches": ["gravity_flip"],
-    "tags": ["gravity_flip"],
-    "optimal_ink": null,
-    "solutions_verified": 2,
-    "hint_stroke": null
-  },
+  "meta": { "id": 8, "name": "뒤집힌 서재", "chapter": 1, "difficulty": 2, "teaches": ["gravity_flip"], "tags": ["gravity_flip","ceiling"], "optimal_ink": null, "solutions_verified": 2, "hint_stroke": null },
   "background": "#1D1418",
-  "emitters": [
-    { "x": 74, "y": 2, "width": 12, "material": "PRIMA", "rate": 2, "total": null, "ash_ratio": 0 }
-  ],
-  "flasks": [
-    { "x": 66, "y": 6, "w": 28, "h": 30, "goal": 30, "material": null, "state": null, "pure": false }
-  ],
+  "emitters": [ { "x": 40, "y": 2, "width": 12, "material": "PRIMA", "rate": 3, "total": null, "ash_ratio": 0 } ],
+  "flasks": [ { "x": 74, "y": 6, "w": 28, "h": 28, "goal": 26, "material": null, "state": null, "pure": false } ],
   "terrain": [],
-  "gimmicks": [
-    { "type": "gravity_flip", "params": {} }
-  ],
-  "ink_budget": { "chalk": 200, "heat": 0, "frost": 0 },
-  "star_thresholds": { "two_star": 128, "three_star": 92 }
+  "gimmicks": [ { "type": "gravity_flip", "params": {} } ],
+  "ink_budget": { "chalk": 175, "heat": 0, "frost": 0 },
+  "star_thresholds": { "two_star": 112, "three_star": 81 }
 }

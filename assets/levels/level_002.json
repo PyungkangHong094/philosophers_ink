@@ -1,24 +1,10 @@
 {
-  "meta": {
-    "id": 2,
-    "name": "건너편",
-    "chapter": 1,
-    "difficulty": 1,
-    "teaches": [],
-    "tags": ["tutorial", "slope"],
-    "optimal_ink": null,
-    "solutions_verified": 2,
-    "hint_stroke": [[14, 60], [70, 170], [132, 270]]
-  },
+  "meta": { "id": 2, "name": "건너편", "chapter": 1, "difficulty": 1, "teaches": [], "tags": ["tutorial","slope"], "optimal_ink": null, "solutions_verified": 2, "hint_stroke": null },
   "background": "#1D1418",
-  "emitters": [
-    { "x": 8, "y": 2, "width": 8, "material": "PRIMA", "rate": 2, "total": null, "ash_ratio": 0 }
-  ],
-  "flasks": [
-    { "x": 120, "y": 286, "w": 28, "h": 30, "goal": 45, "material": null, "state": null, "pure": false }
-  ],
+  "emitters": [ { "x": 6, "y": 2, "width": 4, "material": "PRIMA", "rate": 5, "total": null, "ash_ratio": 0 } ],
+  "flasks": [ { "x": 128, "y": 288, "w": 20, "h": 24, "goal": 40, "material": null, "state": null, "pure": false } ],
   "terrain": [],
   "gimmicks": [],
-  "ink_budget": { "chalk": 450, "heat": 0, "frost": 0 },
-  "star_thresholds": { "two_star": 288, "three_star": 207 }
+  "ink_budget": { "chalk": 938, "heat": 0, "frost": 0 },
+  "star_thresholds": { "two_star": 600, "three_star": 431 }
 }
