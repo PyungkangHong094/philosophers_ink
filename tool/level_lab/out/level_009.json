@@ -1,0 +1,23 @@
+{
+  "level": 9,
+  "name": "왕복 운동",
+  "chapter": 1,
+  "solvable": true,
+  "min_ink": 0,
+  "effort": 1,
+  "rollouts": 25,
+  "elapsed_ms": 10402,
+  "budget": {
+    "chalk": 300,
+    "heat": 0,
+    "frost": 0
+  },
+  "solutions": [
+    {
+      "ink": 0,
+      "ticks": 1739,
+      "strokes": [],
+      "gravity_taps": []
+    }
+  ]
+}

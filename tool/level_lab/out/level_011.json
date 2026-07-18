@@ -1,0 +1,130 @@
+{
+  "level": 11,
+  "name": "하소",
+  "chapter": 1,
+  "solvable": true,
+  "min_ink": 73,
+  "effort": 155,
+  "rollouts": 629,
+  "elapsed_ms": 158492,
+  "budget": {
+    "chalk": 300,
+    "heat": 0,
+    "frost": 0
+  },
+  "solutions": [
+    {
+      "ink": 73,
+      "ticks": 1,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 26,
+          "y0": 314,
+          "x1": 34,
+          "y1": 308
+        },
+        {
+          "ink": "chalk",
+          "x0": 113,
+          "y0": 36,
+          "x1": 124,
+          "y1": 20
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 73,
+      "ticks": 1,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 26,
+          "y0": 314,
+          "x1": 34,
+          "y1": 308
+        },
+        {
+          "ink": "chalk",
+          "x0": 113,
+          "y0": 36,
+          "x1": 124,
+          "y1": 20
+        }
+      ],
+      "gravity_taps": [
+        0
+      ]
+    },
+    {
+      "ink": 74,
+      "ticks": 1,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 26,
+          "y0": 314,
+          "x1": 34,
+          "y1": 307
+        },
+        {
+          "ink": "chalk",
+          "x0": 113,
+          "y0": 36,
+          "x1": 124,
+          "y1": 20
+        }
+      ],
+      "gravity_taps": [
+        0
+      ]
+    },
+    {
+      "ink": 76,
+      "ticks": 1,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 26,
+          "y0": 314,
+          "x1": 37,
+          "y1": 311
+        },
+        {
+          "ink": "chalk",
+          "x0": 113,
+          "y0": 36,
+          "x1": 124,
+          "y1": 20
+        }
+      ],
+      "gravity_taps": [
+        0
+      ]
+    },
+    {
+      "ink": 77,
+      "ticks": 1,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 26,
+          "y0": 314,
+          "x1": 34,
+          "y1": 308
+        },
+        {
+          "ink": "chalk",
+          "x0": 113,
+          "y0": 36,
+          "x1": 124,
+          "y1": 18
+        }
+      ],
+      "gravity_taps": [
+        0
+      ]
+    }
+  ]
+}

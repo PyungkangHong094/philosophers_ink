@@ -1,0 +1,91 @@
+{
+  "level": 8,
+  "name": "뒤집힌 서재",
+  "chapter": 1,
+  "solvable": true,
+  "min_ink": 0,
+  "effort": 1,
+  "rollouts": 15,
+  "elapsed_ms": 31,
+  "budget": {
+    "chalk": 200,
+    "heat": 0,
+    "frost": 0
+  },
+  "solutions": [
+    {
+      "ink": 0,
+      "ticks": 8,
+      "strokes": [],
+      "gravity_taps": []
+    },
+    {
+      "ink": 40,
+      "ticks": 1,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 84,
+          "y0": 4,
+          "x1": 80,
+          "y1": 20
+        }
+      ],
+      "gravity_taps": [
+        60
+      ]
+    },
+    {
+      "ink": 58,
+      "ticks": 6,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 118,
+          "y0": 12,
+          "x1": 112,
+          "y1": 20
+        },
+        {
+          "ink": "chalk",
+          "x0": 76,
+          "y0": 12,
+          "x1": 72,
+          "y1": 0
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 60,
+      "ticks": 10,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 104,
+          "y0": 8,
+          "x1": 80,
+          "y1": 0
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 80,
+      "ticks": 1,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 52,
+          "y0": 32,
+          "x1": 88,
+          "y1": 28
+        }
+      ],
+      "gravity_taps": [
+        600,
+        800
+      ]
+    }
+  ]
+}

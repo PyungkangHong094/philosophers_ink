@@ -1,0 +1,86 @@
+{
+  "level": 10,
+  "name": "잉크 다이어트",
+  "chapter": 1,
+  "solvable": true,
+  "min_ink": 0,
+  "effort": 1,
+  "rollouts": 16,
+  "elapsed_ms": 5366,
+  "budget": {
+    "chalk": 160,
+    "heat": 0,
+    "frost": 0
+  },
+  "solutions": [
+    {
+      "ink": 0,
+      "ticks": 298,
+      "strokes": [],
+      "gravity_taps": []
+    },
+    {
+      "ink": 36,
+      "ticks": 298,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 104,
+          "y0": 20,
+          "x1": 96,
+          "y1": 32
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 120,
+      "ticks": 290,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 84,
+          "y0": 280,
+          "x1": 40,
+          "y1": 308
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 160,
+      "ticks": 296,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 80,
+          "y0": 64,
+          "x1": 72,
+          "y1": 319
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 160,
+      "ticks": 298,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 96,
+          "y0": 68,
+          "x1": 88,
+          "y1": 284
+        },
+        {
+          "ink": "chalk",
+          "x0": 60,
+          "y0": 144,
+          "x1": 92,
+          "y1": 272
+        }
+      ],
+      "gravity_taps": []
+    }
+  ]
+}

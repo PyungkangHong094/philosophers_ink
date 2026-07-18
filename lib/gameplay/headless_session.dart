@@ -17,7 +17,6 @@ import '../core/game_state.dart';
 import '../level/gimmick_builder.dart';
 import '../level/level_model.dart';
 import '../sim/emitter.dart';
-import '../sim/materials.dart';
 import 'flask.dart';
 import 'ink_budget.dart';
 

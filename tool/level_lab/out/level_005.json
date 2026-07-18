@@ -1,0 +1,86 @@
+{
+  "level": 5,
+  "name": "바늘귀",
+  "chapter": 1,
+  "solvable": true,
+  "min_ink": 0,
+  "effort": 1,
+  "rollouts": 16,
+  "elapsed_ms": 4563,
+  "budget": {
+    "chalk": 220,
+    "heat": 0,
+    "frost": 0
+  },
+  "solutions": [
+    {
+      "ink": 0,
+      "ticks": 292,
+      "strokes": [],
+      "gravity_taps": []
+    },
+    {
+      "ink": 32,
+      "ticks": 292,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 52,
+          "y0": 20,
+          "x1": 48,
+          "y1": 32
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 68,
+      "ticks": 292,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 88,
+          "y0": 280,
+          "x1": 96,
+          "y1": 308
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 220,
+      "ticks": 309,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 40,
+          "y0": 224,
+          "x1": 80,
+          "y1": 236
+        },
+        {
+          "ink": "chalk",
+          "x0": 88,
+          "y0": 80,
+          "x1": 72,
+          "y1": 319
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 220,
+      "ticks": 292,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 80,
+          "y0": 64,
+          "x1": 76,
+          "y1": 319
+        }
+      ],
+      "gravity_taps": []
+    }
+  ]
+}
