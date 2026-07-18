@@ -52,6 +52,35 @@ void main() {
       );
     });
 
+    test('no-flip 제약 프로브는 결정적으로 실행된다', () {
+      final level = _load('level_008.json'); // 중력 기믹 레벨.
+      const c = SolverConfig(
+        rolloutBudget: 6,
+        refineBudget: 0,
+        tickCap: 400,
+        stallTicks: 200,
+        allowGravity: false,
+      );
+      final a = solveLevel(level, c);
+      final b = solveLevel(level, c);
+      expect(a.solvable, b.solvable);
+      expect(a.minInk, b.minInk);
+    });
+
+    test('no-ink(chalk 0) 제약은 스트로크 없이 탐색한다', () {
+      final level = _load('level_008.json');
+      const c = SolverConfig(
+        rolloutBudget: 6,
+        refineBudget: 0,
+        tickCap: 400,
+        stallTicks: 200,
+        zeroedInks: {InkType.chalk},
+      );
+      final r = solveLevel(level, c);
+      // chalk 예산 0 → 후보 스트로크 없음 → solvable이면 잉크 0(빈 후보) 해여야 한다.
+      if (r.solvable) expect(r.minInk, 0);
+    });
+
     test('다른 시드 → 탐색 경로가 달라질 수 있다 (결정성 무결성 확인용)', () {
       final level = _load('level_002.json');
       const base = SolverConfig(

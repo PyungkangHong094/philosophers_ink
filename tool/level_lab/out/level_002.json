@@ -3,91 +3,86 @@
   "name": "건너편",
   "chapter": 1,
   "solvable": true,
-  "min_ink": 0,
-  "effort": 1,
-  "rollouts": 25,
-  "elapsed_ms": 10741,
+  "min_ink": 361,
+  "effort": 39,
+  "rollouts": 684,
+  "elapsed_ms": 331655,
   "budget": {
-    "chalk": 450,
+    "chalk": 938,
     "heat": 0,
     "frost": 0
   },
   "solutions": [
     {
-      "ink": 0,
-      "ticks": 2259,
-      "strokes": [],
-      "gravity_taps": []
-    },
-    {
-      "ink": 450,
-      "ticks": 447,
+      "ink": 361,
+      "ticks": 382,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 12,
-          "y0": 92,
-          "x1": 136,
-          "y1": 304
-        },
-        {
-          "ink": "chalk",
-          "x0": 0,
-          "y0": 88,
-          "x1": 136,
-          "y1": 312
+          "x0": 7,
+          "y0": 139,
+          "x1": 126,
+          "y1": 258
         }
       ],
       "gravity_taps": []
     },
     {
-      "ink": 450,
-      "ticks": 1,
+      "ink": 363,
+      "ticks": 382,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 7,
+          "y0": 139,
+          "x1": 126,
+          "y1": 259
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 364,
+      "ticks": 481,
       "strokes": [
         {
           "ink": "chalk",
           "x0": 8,
-          "y0": 148,
-          "x1": 156,
-          "y1": 319
-        },
-        {
-          "ink": "chalk",
-          "x0": 4,
-          "y0": 84,
-          "x1": 120,
-          "y1": 319
-        },
-        {
-          "ink": "chalk",
-          "x0": 36,
-          "y0": 44,
-          "x1": 132,
-          "y1": 296
+          "y0": 138,
+          "x1": 126,
+          "y1": 259
         }
       ],
       "gravity_taps": []
     },
     {
-      "ink": 450,
-      "ticks": 399,
+      "ink": 365,
+      "ticks": 382,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 0,
-          "y0": 152,
-          "x1": 116,
-          "y1": 280
-        },
+          "x0": 7,
+          "y0": 139,
+          "x1": 126,
+          "y1": 260
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 366,
+      "ticks": 421,
+      "strokes": [
         {
           "ink": "chalk",
-          "x0": 36,
-          "y0": 68,
-          "x1": 116,
-          "y1": 300
+          "x0": 5,
+          "y0": 139,
+          "x1": 126,
+          "y1": 259
         }
       ],
       "gravity_taps": []
     }
-  ]
+  ],
+  "probes": {}
 }

@@ -1,0 +1,17 @@
+{
+  "level": 70,
+  "name": "세 방울",
+  "chapter": 4,
+  "solvable": false,
+  "min_ink": null,
+  "effort": null,
+  "rollouts": 2700,
+  "elapsed_ms": 1213829,
+  "budget": {
+    "chalk": 41,
+    "heat": 0,
+    "frost": 0
+  },
+  "solutions": [],
+  "probes": {}
+}

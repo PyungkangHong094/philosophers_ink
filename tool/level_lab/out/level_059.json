@@ -1,0 +1,26 @@
+{
+  "level": 59,
+  "name": "부산물 회수",
+  "chapter": 4,
+  "solvable": false,
+  "min_ink": null,
+  "effort": null,
+  "rollouts": 2700,
+  "elapsed_ms": 1576558,
+  "budget": {
+    "chalk": 17,
+    "heat": 0,
+    "frost": 31
+  },
+  "solutions": [],
+  "probes": {
+    "no_ink_chalk": {
+      "solvable": false,
+      "min_ink": null
+    },
+    "no_ink_frost": {
+      "solvable": false,
+      "min_ink": null
+    }
+  }
+}

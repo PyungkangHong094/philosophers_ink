@@ -1,0 +1,163 @@
+{
+  "level": 64,
+  "name": "종유석",
+  "chapter": 4,
+  "solvable": true,
+  "min_ink": 6,
+  "effort": 47,
+  "rollouts": 576,
+  "elapsed_ms": 320779,
+  "budget": {
+    "chalk": 18,
+    "heat": 0,
+    "frost": 27
+  },
+  "solutions": [
+    {
+      "ink": 6,
+      "ticks": 170,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 104,
+          "y0": 8,
+          "x1": 104,
+          "y1": 12
+        },
+        {
+          "ink": "frost",
+          "x0": 60,
+          "y0": 16,
+          "x1": 52,
+          "y1": 20
+        }
+      ],
+      "gravity_taps": [
+        0,
+        450
+      ]
+    },
+    {
+      "ink": 14,
+      "ticks": 178,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 100,
+          "y0": 16,
+          "x1": 100,
+          "y1": 0
+        },
+        {
+          "ink": "frost",
+          "x0": 104,
+          "y0": 12,
+          "x1": 104,
+          "y1": 24
+        }
+      ],
+      "gravity_taps": [
+        600,
+        0
+      ]
+    },
+    {
+      "ink": 27,
+      "ticks": 373,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 92,
+          "y0": 72,
+          "x1": 20,
+          "y1": 40
+        },
+        {
+          "ink": "chalk",
+          "x0": 88,
+          "y0": 16,
+          "x1": 72,
+          "y1": 24
+        },
+        {
+          "ink": "frost",
+          "x0": 100,
+          "y0": 24,
+          "x1": 48,
+          "y1": 24
+        }
+      ],
+      "gravity_taps": [
+        300
+      ]
+    },
+    {
+      "ink": 27,
+      "ticks": 292,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 104,
+          "y0": 20,
+          "x1": 120,
+          "y1": 16
+        },
+        {
+          "ink": "frost",
+          "x0": 68,
+          "y0": 16,
+          "x1": 68,
+          "y1": 12
+        }
+      ],
+      "gravity_taps": [
+        0,
+        450
+      ]
+    },
+    {
+      "ink": 38,
+      "ticks": 456,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 124,
+          "y0": 104,
+          "x1": 140,
+          "y1": 56
+        },
+        {
+          "ink": "frost",
+          "x0": 96,
+          "y0": 28,
+          "x1": 88,
+          "y1": 28
+        },
+        {
+          "ink": "chalk",
+          "x0": 104,
+          "y0": 48,
+          "x1": 132,
+          "y1": 212
+        }
+      ],
+      "gravity_taps": [
+        300
+      ]
+    }
+  ],
+  "probes": {
+    "no_flip": {
+      "solvable": false,
+      "min_ink": null
+    },
+    "no_ink_chalk": {
+      "solvable": true,
+      "min_ink": 2
+    },
+    "no_ink_frost": {
+      "solvable": false,
+      "min_ink": null
+    }
+  }
+}

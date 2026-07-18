@@ -1,0 +1,97 @@
+{
+  "level": 67,
+  "name": "용암 정원",
+  "chapter": 4,
+  "solvable": true,
+  "min_ink": 4,
+  "effort": 7,
+  "rollouts": 269,
+  "elapsed_ms": 183594,
+  "budget": {
+    "chalk": 10,
+    "heat": 0,
+    "frost": 51
+  },
+  "solutions": [
+    {
+      "ink": 4,
+      "ticks": 724,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 88,
+          "y0": 24,
+          "x1": 88,
+          "y1": 24
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 6,
+      "ticks": 388,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 86,
+          "y0": 261,
+          "x1": 86,
+          "y1": 262
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 6,
+      "ticks": 432,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 82,
+          "y0": 257,
+          "x1": 81,
+          "y1": 257
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 6,
+      "ticks": 424,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 82,
+          "y0": 257,
+          "x1": 83,
+          "y1": 257
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 6,
+      "ticks": 450,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 84,
+          "y0": 257,
+          "x1": 83,
+          "y1": 257
+        }
+      ],
+      "gravity_taps": []
+    }
+  ],
+  "probes": {
+    "no_ink_chalk": {
+      "solvable": true,
+      "min_ink": 6
+    },
+    "no_ink_frost": {
+      "solvable": false,
+      "min_ink": null
+    }
+  }
+}

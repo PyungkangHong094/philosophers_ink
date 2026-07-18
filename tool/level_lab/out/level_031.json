@@ -1,0 +1,17 @@
+{
+  "level": 31,
+  "name": "잉크 기근",
+  "chapter": 2,
+  "solvable": false,
+  "min_ink": null,
+  "effort": null,
+  "rollouts": 2700,
+  "elapsed_ms": 1353502,
+  "budget": {
+    "chalk": 0,
+    "heat": 0,
+    "frost": 50
+  },
+  "solutions": [],
+  "probes": {}
+}

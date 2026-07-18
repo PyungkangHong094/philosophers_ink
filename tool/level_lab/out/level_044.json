@@ -1,0 +1,30 @@
+{
+  "level": 44,
+  "name": "결합",
+  "chapter": 3,
+  "solvable": false,
+  "min_ink": null,
+  "effort": null,
+  "rollouts": 2700,
+  "elapsed_ms": 1417818,
+  "budget": {
+    "chalk": 12,
+    "heat": 42,
+    "frost": 22
+  },
+  "solutions": [],
+  "probes": {
+    "no_ink_chalk": {
+      "solvable": false,
+      "min_ink": null
+    },
+    "no_ink_heat": {
+      "solvable": false,
+      "min_ink": null
+    },
+    "no_ink_frost": {
+      "solvable": false,
+      "min_ink": null
+    }
+  }
+}

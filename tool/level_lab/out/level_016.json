@@ -1,0 +1,101 @@
+{
+  "level": 16,
+  "name": "빙결 지대",
+  "chapter": 2,
+  "solvable": true,
+  "min_ink": 0,
+  "effort": 1,
+  "rollouts": 15,
+  "elapsed_ms": 5303,
+  "budget": {
+    "chalk": 60,
+    "heat": 0,
+    "frost": 0
+  },
+  "solutions": [
+    {
+      "ink": 0,
+      "ticks": 290,
+      "strokes": [],
+      "gravity_taps": []
+    },
+    {
+      "ink": 0,
+      "ticks": 290,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 88,
+          "y0": 64,
+          "x1": 80,
+          "y1": 312
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 0,
+      "ticks": 290,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 80,
+          "y0": 8,
+          "x1": 80,
+          "y1": 296
+        },
+        {
+          "ink": "chalk",
+          "x0": 68,
+          "y0": 112,
+          "x1": 84,
+          "y1": 304
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 20,
+      "ticks": 290,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 128,
+          "y0": 292,
+          "x1": 24,
+          "y1": 276
+        },
+        {
+          "ink": "chalk",
+          "x0": 60,
+          "y0": 148,
+          "x1": 64,
+          "y1": 288
+        },
+        {
+          "ink": "chalk",
+          "x0": 88,
+          "y0": 268,
+          "x1": 88,
+          "y1": 276
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 32,
+      "ticks": 290,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 96,
+          "y0": 144,
+          "x1": 92,
+          "y1": 156
+        }
+      ],
+      "gravity_taps": []
+    }
+  ],
+  "probes": {}
+}

@@ -1,0 +1,30 @@
+{
+  "level": 33,
+  "name": "분리",
+  "chapter": 2,
+  "solvable": false,
+  "min_ink": null,
+  "effort": null,
+  "rollouts": 2700,
+  "elapsed_ms": 1353937,
+  "budget": {
+    "chalk": 80,
+    "heat": 0,
+    "frost": 42
+  },
+  "solutions": [],
+  "probes": {
+    "no_flip": {
+      "solvable": false,
+      "min_ink": null
+    },
+    "no_ink_chalk": {
+      "solvable": false,
+      "min_ink": null
+    },
+    "no_ink_frost": {
+      "solvable": false,
+      "min_ink": null
+    }
+  }
+}

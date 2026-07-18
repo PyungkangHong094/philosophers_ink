@@ -1,0 +1,30 @@
+{
+  "level": 55,
+  "name": "발효",
+  "chapter": 3,
+  "solvable": false,
+  "min_ink": null,
+  "effort": null,
+  "rollouts": 2700,
+  "elapsed_ms": 1382306,
+  "budget": {
+    "chalk": 60,
+    "heat": 27,
+    "frost": 33
+  },
+  "solutions": [],
+  "probes": {
+    "no_ink_chalk": {
+      "solvable": false,
+      "min_ink": null
+    },
+    "no_ink_heat": {
+      "solvable": false,
+      "min_ink": null
+    },
+    "no_ink_frost": {
+      "solvable": false,
+      "min_ink": null
+    }
+  }
+}

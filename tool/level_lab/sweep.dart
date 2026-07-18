@@ -28,8 +28,9 @@ class _Task {
   final int tickCap;
   final int stall;
   final int maxStrokes;
+  final bool probe;
   const _Task(this.path, this.seed, this.rollouts, this.refine, this.tickCap,
-      this.stall, this.maxStrokes);
+      this.stall, this.maxStrokes, this.probe);
 }
 
 Future<Map<String, dynamic>> _solveInIsolate(_Task t) => Isolate.run(() {
@@ -42,7 +43,9 @@ Future<Map<String, dynamic>> _solveInIsolate(_Task t) => Isolate.run(() {
         stallTicks: t.stall,
         maxStrokes: t.maxStrokes,
       );
-      return solveLevel(level, cfg).toJson();
+      final json = solveLevel(level, cfg).toJson();
+      if (t.probe) json['probes'] = runProbes(level, cfg);
+      return json;
     });
 
 Future<void> main(List<String> argv) async {
@@ -73,9 +76,10 @@ Future<void> main(List<String> argv) async {
   final concurrency = args.intOr('concurrency', Platform.numberOfProcessors)
       .clamp(1, paths.length);
 
+  final probe = args.has('probe');
   final tasks = [
     for (final p in paths)
-      _Task(p, seed, rollouts, refine, tickCap, stall, maxStrokes)
+      _Task(p, seed, rollouts, refine, tickCap, stall, maxStrokes, probe)
   ];
 
   stderr.writeln('레벨 랩 sweep: ${paths.length}레벨 · '

@@ -1,0 +1,97 @@
+{
+  "level": 57,
+  "name": "굳히기",
+  "chapter": 4,
+  "solvable": true,
+  "min_ink": 4,
+  "effort": 7,
+  "rollouts": 286,
+  "elapsed_ms": 142481,
+  "budget": {
+    "chalk": 24,
+    "heat": 0,
+    "frost": 38
+  },
+  "solutions": [
+    {
+      "ink": 4,
+      "ticks": 386,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 78,
+          "y0": 240,
+          "x1": 78,
+          "y1": 240
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 6,
+      "ticks": 362,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 78,
+          "y0": 240,
+          "x1": 79,
+          "y1": 240
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 6,
+      "ticks": 358,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 78,
+          "y0": 240,
+          "x1": 78,
+          "y1": 241
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 6,
+      "ticks": 360,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 78,
+          "y0": 240,
+          "x1": 77,
+          "y1": 240
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 6,
+      "ticks": 358,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 78,
+          "y0": 239,
+          "x1": 78,
+          "y1": 240
+        }
+      ],
+      "gravity_taps": []
+    }
+  ],
+  "probes": {
+    "no_ink_chalk": {
+      "solvable": true,
+      "min_ink": 6
+    },
+    "no_ink_frost": {
+      "solvable": false,
+      "min_ink": null
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "level": 18,
+  "name": "얼음 다리",
+  "chapter": 2,
+  "solvable": true,
+  "min_ink": 0,
+  "effort": 1,
+  "rollouts": 25,
+  "elapsed_ms": 14160,
+  "budget": {
+    "chalk": 40,
+    "heat": 0,
+    "frost": 130
+  },
+  "solutions": [
+    {
+      "ink": 0,
+      "ticks": 2110,
+      "strokes": [],
+      "gravity_taps": []
+    }
+  ],
+  "probes": {
+    "no_ink_chalk": {
+      "solvable": true,
+      "min_ink": 0
+    },
+    "no_ink_frost": {
+      "solvable": true,
+      "min_ink": 0
+    }
+  }
+}

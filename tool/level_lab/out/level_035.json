@@ -1,0 +1,97 @@
+{
+  "level": 35,
+  "name": "증발",
+  "chapter": 3,
+  "solvable": true,
+  "min_ink": 28,
+  "effort": 2030,
+  "rollouts": 2180,
+  "elapsed_ms": 1225486,
+  "budget": {
+    "chalk": 16,
+    "heat": 28,
+    "frost": 0
+  },
+  "solutions": [
+    {
+      "ink": 28,
+      "ticks": 828,
+      "strokes": [
+        {
+          "ink": "heat",
+          "x0": 100,
+          "y0": 16,
+          "x1": 137,
+          "y1": 12
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 28,
+      "ticks": 828,
+      "strokes": [
+        {
+          "ink": "heat",
+          "x0": 100,
+          "y0": 16,
+          "x1": 140,
+          "y1": 11
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 28,
+      "ticks": 828,
+      "strokes": [
+        {
+          "ink": "heat",
+          "x0": 100,
+          "y0": 16,
+          "x1": 142,
+          "y1": 11
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 28,
+      "ticks": 1389,
+      "strokes": [
+        {
+          "ink": "heat",
+          "x0": 109,
+          "y0": 176,
+          "x1": 41,
+          "y1": 209
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 28,
+      "ticks": 1201,
+      "strokes": [
+        {
+          "ink": "heat",
+          "x0": 109,
+          "y0": 178,
+          "x1": 41,
+          "y1": 209
+        }
+      ],
+      "gravity_taps": []
+    }
+  ],
+  "probes": {
+    "no_ink_chalk": {
+      "solvable": true,
+      "min_ink": 28
+    },
+    "no_ink_heat": {
+      "solvable": false,
+      "min_ink": null
+    }
+  }
+}

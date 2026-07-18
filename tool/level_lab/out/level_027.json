@@ -1,0 +1,17 @@
+{
+  "level": 27,
+  "name": "물방울 서약",
+  "chapter": 2,
+  "solvable": false,
+  "min_ink": null,
+  "effort": null,
+  "rollouts": 2700,
+  "elapsed_ms": 1337970,
+  "budget": {
+    "chalk": 85,
+    "heat": 0,
+    "frost": 0
+  },
+  "solutions": [],
+  "probes": {}
+}

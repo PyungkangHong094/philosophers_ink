@@ -3,84 +3,128 @@
   "name": "잉크 다이어트",
   "chapter": 1,
   "solvable": true,
-  "min_ink": 0,
-  "effort": 1,
-  "rollouts": 16,
-  "elapsed_ms": 5366,
+  "min_ink": 437,
+  "effort": 11,
+  "rollouts": 626,
+  "elapsed_ms": 306775,
   "budget": {
-    "chalk": 160,
+    "chalk": 437,
     "heat": 0,
     "frost": 0
   },
   "solutions": [
     {
-      "ink": 0,
-      "ticks": 298,
-      "strokes": [],
-      "gravity_taps": []
-    },
-    {
-      "ink": 36,
-      "ticks": 298,
+      "ink": 437,
+      "ticks": 391,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 104,
-          "y0": 20,
-          "x1": 96,
-          "y1": 32
+          "x0": 32,
+          "y0": 264,
+          "x1": 116,
+          "y1": 68
         }
       ],
       "gravity_taps": []
     },
     {
-      "ink": 120,
-      "ticks": 290,
+      "ink": 437,
+      "ticks": 441,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 84,
-          "y0": 280,
-          "x1": 40,
-          "y1": 308
+          "x0": 108,
+          "y0": 88,
+          "x1": 8,
+          "y1": 316
         }
       ],
       "gravity_taps": []
     },
     {
-      "ink": 160,
-      "ticks": 296,
+      "ink": 437,
+      "ticks": 324,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 80,
-          "y0": 64,
-          "x1": 72,
+          "x0": 120,
+          "y0": 116,
+          "x1": 28,
           "y1": 319
-        }
-      ],
-      "gravity_taps": []
-    },
-    {
-      "ink": 160,
-      "ticks": 298,
-      "strokes": [
+        },
+        {
+          "ink": "chalk",
+          "x0": 124,
+          "y0": 116,
+          "x1": 28,
+          "y1": 280
+        },
         {
           "ink": "chalk",
           "x0": 96,
-          "y0": 68,
-          "x1": 88,
+          "y0": 64,
+          "x1": 52,
+          "y1": 319
+        },
+        {
+          "ink": "chalk",
+          "x0": 32,
+          "y0": 192,
+          "x1": 40,
+          "y1": 204
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 437,
+      "ticks": 419,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 120,
+          "y0": 148,
+          "x1": 24,
           "y1": 284
         },
         {
           "ink": "chalk",
-          "x0": 60,
-          "y0": 144,
+          "x0": 112,
+          "y0": 76,
+          "x1": 12,
+          "y1": 304
+        },
+        {
+          "ink": "chalk",
+          "x0": 20,
+          "y0": 60,
           "x1": 92,
-          "y1": 272
+          "y1": 44
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 437,
+      "ticks": 324,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 128,
+          "y0": 116,
+          "x1": 32,
+          "y1": 284
+        },
+        {
+          "ink": "chalk",
+          "x0": 88,
+          "y0": 112,
+          "x1": 32,
+          "y1": 308
         }
       ],
       "gravity_taps": []
     }
-  ]
+  ],
+  "probes": {}
 }

@@ -1,0 +1,73 @@
+{
+  "level": 13,
+  "name": "둑",
+  "chapter": 2,
+  "solvable": true,
+  "min_ink": 0,
+  "effort": 1,
+  "rollouts": 25,
+  "elapsed_ms": 13098,
+  "budget": {
+    "chalk": 80,
+    "heat": 0,
+    "frost": 0
+  },
+  "solutions": [
+    {
+      "ink": 0,
+      "ticks": 473,
+      "strokes": [],
+      "gravity_taps": []
+    },
+    {
+      "ink": 80,
+      "ticks": 470,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 96,
+          "y0": 228,
+          "x1": 148,
+          "y1": 256
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 80,
+      "ticks": 492,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 28,
+          "y0": 64,
+          "x1": 112,
+          "y1": 284
+        },
+        {
+          "ink": "chalk",
+          "x0": 28,
+          "y0": 60,
+          "x1": 108,
+          "y1": 280
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 80,
+      "ticks": 474,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 132,
+          "y0": 244,
+          "x1": 104,
+          "y1": 220
+        }
+      ],
+      "gravity_taps": []
+    }
+  ],
+  "probes": {}
+}

@@ -1,0 +1,17 @@
+{
+  "level": 32,
+  "name": "이중 관문",
+  "chapter": 2,
+  "solvable": false,
+  "min_ink": null,
+  "effort": null,
+  "rollouts": 2700,
+  "elapsed_ms": 1362284,
+  "budget": {
+    "chalk": 75,
+    "heat": 0,
+    "frost": 0
+  },
+  "solutions": [],
+  "probes": {}
+}

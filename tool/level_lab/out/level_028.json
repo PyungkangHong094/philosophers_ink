@@ -1,0 +1,97 @@
+{
+  "level": 28,
+  "name": "갈림길",
+  "chapter": 2,
+  "solvable": true,
+  "min_ink": 11,
+  "effort": 45,
+  "rollouts": 484,
+  "elapsed_ms": 613296,
+  "budget": {
+    "chalk": 48,
+    "heat": 0,
+    "frost": 44
+  },
+  "solutions": [
+    {
+      "ink": 11,
+      "ticks": 1372,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 72,
+          "y0": 104,
+          "x1": 73,
+          "y1": 101
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 12,
+      "ticks": 1235,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 71,
+          "y0": 104,
+          "x1": 73,
+          "y1": 101
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 13,
+      "ticks": 1133,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 70,
+          "y0": 104,
+          "x1": 73,
+          "y1": 101
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 14,
+      "ticks": 1303,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 71,
+          "y0": 105,
+          "x1": 73,
+          "y1": 101
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 15,
+      "ticks": 1243,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 70,
+          "y0": 105,
+          "x1": 73,
+          "y1": 101
+        }
+      ],
+      "gravity_taps": []
+    }
+  ],
+  "probes": {
+    "no_ink_chalk": {
+      "solvable": true,
+      "min_ink": 44
+    },
+    "no_ink_frost": {
+      "solvable": false,
+      "min_ink": null
+    }
+  }
+}

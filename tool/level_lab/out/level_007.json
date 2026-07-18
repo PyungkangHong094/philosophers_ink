@@ -2,15 +2,122 @@
   "level": 7,
   "name": "삼중주",
   "chapter": 1,
-  "solvable": false,
-  "min_ink": null,
-  "effort": null,
-  "rollouts": 2000,
-  "elapsed_ms": 903157,
+  "solvable": true,
+  "min_ink": 252,
+  "effort": 110,
+  "rollouts": 1856,
+  "elapsed_ms": 1693511,
   "budget": {
     "chalk": 340,
     "heat": 0,
     "frost": 0
   },
-  "solutions": []
+  "solutions": [
+    {
+      "ink": 252,
+      "ticks": 485,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 76,
+          "y0": 110,
+          "x1": 28,
+          "y1": 155
+        },
+        {
+          "ink": "chalk",
+          "x0": 84,
+          "y0": 117,
+          "x1": 119,
+          "y1": 150
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 253,
+      "ticks": 487,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 76,
+          "y0": 110,
+          "x1": 28,
+          "y1": 156
+        },
+        {
+          "ink": "chalk",
+          "x0": 84,
+          "y0": 117,
+          "x1": 119,
+          "y1": 150
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 253,
+      "ticks": 481,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 76,
+          "y0": 109,
+          "x1": 28,
+          "y1": 155
+        },
+        {
+          "ink": "chalk",
+          "x0": 84,
+          "y0": 117,
+          "x1": 119,
+          "y1": 150
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 254,
+      "ticks": 421,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 76,
+          "y0": 109,
+          "x1": 28,
+          "y1": 155
+        },
+        {
+          "ink": "chalk",
+          "x0": 85,
+          "y0": 115,
+          "x1": 119,
+          "y1": 150
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 255,
+      "ticks": 481,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 76,
+          "y0": 109,
+          "x1": 32,
+          "y1": 159
+        },
+        {
+          "ink": "chalk",
+          "x0": 84,
+          "y0": 117,
+          "x1": 119,
+          "y1": 150
+        }
+      ],
+      "gravity_taps": []
+    }
+  ],
+  "probes": {}
 }

@@ -1,0 +1,139 @@
+{
+  "level": 75,
+  "name": "여백 없음",
+  "chapter": 4,
+  "solvable": true,
+  "min_ink": 32,
+  "effort": 1940,
+  "rollouts": 2150,
+  "elapsed_ms": 1099266,
+  "budget": {
+    "chalk": 24,
+    "heat": 0,
+    "frost": 8
+  },
+  "solutions": [
+    {
+      "ink": 32,
+      "ticks": 803,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 123,
+          "y0": 125,
+          "x1": 65,
+          "y1": 258
+        },
+        {
+          "ink": "chalk",
+          "x0": 82,
+          "y0": 175,
+          "x1": 27,
+          "y1": 212
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 32,
+      "ticks": 543,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 132,
+          "y0": 124,
+          "x1": 64,
+          "y1": 256
+        },
+        {
+          "ink": "chalk",
+          "x0": 84,
+          "y0": 172,
+          "x1": 20,
+          "y1": 220
+        },
+        {
+          "ink": "frost",
+          "x0": 111,
+          "y0": 4,
+          "x1": 92,
+          "y1": 316
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 32,
+      "ticks": 543,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 132,
+          "y0": 124,
+          "x1": 64,
+          "y1": 256
+        },
+        {
+          "ink": "chalk",
+          "x0": 84,
+          "y0": 172,
+          "x1": 20,
+          "y1": 220
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 32,
+      "ticks": 543,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 132,
+          "y0": 124,
+          "x1": 62,
+          "y1": 257
+        },
+        {
+          "ink": "chalk",
+          "x0": 84,
+          "y0": 172,
+          "x1": 20,
+          "y1": 220
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 32,
+      "ticks": 485,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 132,
+          "y0": 124,
+          "x1": 62,
+          "y1": 257
+        },
+        {
+          "ink": "chalk",
+          "x0": 84,
+          "y0": 173,
+          "x1": 20,
+          "y1": 220
+        }
+      ],
+      "gravity_taps": []
+    }
+  ],
+  "probes": {
+    "no_ink_chalk": {
+      "solvable": false,
+      "min_ink": null
+    },
+    "no_ink_frost": {
+      "solvable": false,
+      "min_ink": null
+    }
+  }
+}

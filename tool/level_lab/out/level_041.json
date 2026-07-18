@@ -1,0 +1,17 @@
+{
+  "level": 41,
+  "name": "유한한 자비",
+  "chapter": 3,
+  "solvable": false,
+  "min_ink": null,
+  "effort": null,
+  "rollouts": 2700,
+  "elapsed_ms": 1286113,
+  "budget": {
+    "chalk": 60,
+    "heat": 0,
+    "frost": 0
+  },
+  "solutions": [],
+  "probes": {}
+}

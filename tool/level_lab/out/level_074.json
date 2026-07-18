@@ -1,0 +1,109 @@
+{
+  "level": 74,
+  "name": "침묵의 잉크",
+  "chapter": 4,
+  "solvable": true,
+  "min_ink": 62,
+  "effort": 412,
+  "rollouts": 2150,
+  "elapsed_ms": 1200344,
+  "budget": {
+    "chalk": 0,
+    "heat": 0,
+    "frost": 62
+  },
+  "solutions": [
+    {
+      "ink": 62,
+      "ticks": 1345,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 6,
+          "y0": 153,
+          "x1": 27,
+          "y1": 184
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 62,
+      "ticks": 1355,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 0,
+          "y0": 172,
+          "x1": 68,
+          "y1": 256
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 62,
+      "ticks": 1364,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 8,
+          "y0": 120,
+          "x1": 12,
+          "y1": 208
+        },
+        {
+          "ink": "frost",
+          "x0": 84,
+          "y0": 36,
+          "x1": 8,
+          "y1": 288
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 62,
+      "ticks": 449,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 8,
+          "y0": 252,
+          "x1": 4,
+          "y1": 252
+        },
+        {
+          "ink": "frost",
+          "x0": 84,
+          "y0": 48,
+          "x1": 52,
+          "y1": 319
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 62,
+      "ticks": 1299,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 6,
+          "y0": 150,
+          "x1": 30,
+          "y1": 182
+        },
+        {
+          "ink": "frost",
+          "x0": 96,
+          "y0": 88,
+          "x1": 28,
+          "y1": 272
+        }
+      ],
+      "gravity_taps": []
+    }
+  ],
+  "probes": {}
+}

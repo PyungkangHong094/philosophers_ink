@@ -1,0 +1,97 @@
+{
+  "level": 69,
+  "name": "순수한 불",
+  "chapter": 4,
+  "solvable": true,
+  "min_ink": 4,
+  "effort": 8,
+  "rollouts": 858,
+  "elapsed_ms": 509983,
+  "budget": {
+    "chalk": 18,
+    "heat": 0,
+    "frost": 36
+  },
+  "solutions": [
+    {
+      "ink": 4,
+      "ticks": 790,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 13,
+          "y0": 255,
+          "x1": 13,
+          "y1": 255
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 6,
+      "ticks": 590,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 13,
+          "y0": 255,
+          "x1": 14,
+          "y1": 255
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 6,
+      "ticks": 649,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 13,
+          "y0": 254,
+          "x1": 13,
+          "y1": 255
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 6,
+      "ticks": 820,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 13,
+          "y0": 255,
+          "x1": 12,
+          "y1": 255
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 6,
+      "ticks": 820,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 12,
+          "y0": 255,
+          "x1": 13,
+          "y1": 255
+        }
+      ],
+      "gravity_taps": []
+    }
+  ],
+  "probes": {
+    "no_ink_chalk": {
+      "solvable": true,
+      "min_ink": 4
+    },
+    "no_ink_frost": {
+      "solvable": false,
+      "min_ink": null
+    }
+  }
+}

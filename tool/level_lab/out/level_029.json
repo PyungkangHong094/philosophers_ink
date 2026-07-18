@@ -1,0 +1,113 @@
+{
+  "level": 29,
+  "name": "쏟아지는 천장",
+  "chapter": 2,
+  "solvable": true,
+  "min_ink": 0,
+  "effort": 2,
+  "rollouts": 25,
+  "elapsed_ms": 14987,
+  "budget": {
+    "chalk": 68,
+    "heat": 0,
+    "frost": 0
+  },
+  "solutions": [
+    {
+      "ink": 0,
+      "ticks": 71,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 88,
+          "y0": 8,
+          "x1": 80,
+          "y1": 20
+        }
+      ],
+      "gravity_taps": [
+        60
+      ]
+    },
+    {
+      "ink": 0,
+      "ticks": 161,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 40,
+          "y0": 28,
+          "x1": 60,
+          "y1": 16
+        }
+      ],
+      "gravity_taps": [
+        150
+      ]
+    },
+    {
+      "ink": 0,
+      "ticks": 311,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 88,
+          "y0": 12,
+          "x1": 120,
+          "y1": 16
+        }
+      ],
+      "gravity_taps": [
+        300,
+        800
+      ]
+    },
+    {
+      "ink": 0,
+      "ticks": 311,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 92,
+          "y0": 12,
+          "x1": 84,
+          "y1": 40
+        }
+      ],
+      "gravity_taps": [
+        450,
+        300
+      ]
+    },
+    {
+      "ink": 0,
+      "ticks": 161,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 68,
+          "y0": 12,
+          "x1": 104,
+          "y1": 0
+        },
+        {
+          "ink": "chalk",
+          "x0": 88,
+          "y0": 12,
+          "x1": 56,
+          "y1": 0
+        }
+      ],
+      "gravity_taps": [
+        150,
+        450
+      ]
+    }
+  ],
+  "probes": {
+    "no_flip": {
+      "solvable": false,
+      "min_ink": null
+    }
+  }
+}

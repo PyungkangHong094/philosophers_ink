@@ -1,0 +1,118 @@
+{
+  "level": 34,
+  "name": "화염 룬",
+  "chapter": 3,
+  "solvable": true,
+  "min_ink": 20,
+  "effort": 5,
+  "rollouts": 192,
+  "elapsed_ms": 95443,
+  "budget": {
+    "chalk": 16,
+    "heat": 20,
+    "frost": 0
+  },
+  "solutions": [
+    {
+      "ink": 20,
+      "ticks": 340,
+      "strokes": [
+        {
+          "ink": "heat",
+          "x0": 87,
+          "y0": 99,
+          "x1": 88,
+          "y1": 265
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 20,
+      "ticks": 331,
+      "strokes": [
+        {
+          "ink": "heat",
+          "x0": 76,
+          "y0": 28,
+          "x1": 80,
+          "y1": 196
+        },
+        {
+          "ink": "heat",
+          "x0": 104,
+          "y0": 16,
+          "x1": 84,
+          "y1": 300
+        },
+        {
+          "ink": "heat",
+          "x0": 96,
+          "y0": 88,
+          "x1": 84,
+          "y1": 284
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 20,
+      "ticks": 600,
+      "strokes": [
+        {
+          "ink": "heat",
+          "x0": 92,
+          "y0": 157,
+          "x1": 96,
+          "y1": 126
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 20,
+      "ticks": 332,
+      "strokes": [
+        {
+          "ink": "heat",
+          "x0": 76,
+          "y0": 176,
+          "x1": 112,
+          "y1": 112
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 20,
+      "ticks": 320,
+      "strokes": [
+        {
+          "ink": "heat",
+          "x0": 88,
+          "y0": 200,
+          "x1": 4,
+          "y1": 116
+        },
+        {
+          "ink": "heat",
+          "x0": 52,
+          "y0": 232,
+          "x1": 84,
+          "y1": 136
+        }
+      ],
+      "gravity_taps": []
+    }
+  ],
+  "probes": {
+    "no_ink_chalk": {
+      "solvable": true,
+      "min_ink": 6
+    },
+    "no_ink_heat": {
+      "solvable": false,
+      "min_ink": null
+    }
+  }
+}

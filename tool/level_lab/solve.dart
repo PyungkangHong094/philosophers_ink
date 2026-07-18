@@ -4,12 +4,15 @@
 ///
 /// 옵션: --seed N --rollouts N --refine N --tick-cap N --stall N --max-strokes N
 ///       --out DIR (결과 JSON 기록) --quiet
+///       --probe no-flip | --probe no-ink=chalk|heat|frost  (제약 프로브 단발)
+///       --probes  (해당 레벨의 프로브 묶음 실행·출력)
 // CLI 도구라 stdout 출력이 정상 — avoid_print 억제.
 // ignore_for_file: avoid_print
 library;
 
 import 'dart:convert';
 
+import 'src/candidate.dart';
 import 'src/cli_args.dart';
 import 'src/level_io.dart';
 import 'src/solver.dart';
@@ -23,7 +26,7 @@ void main(List<String> argv) {
   }
 
   final base = const SolverConfig();
-  final cfg = base.copyWith(
+  var cfg = base.copyWith(
     seed: args.intOr('seed', base.seed),
     rolloutBudget: args.intOr('rollouts', base.rolloutBudget),
     refineBudget: args.intOr('refine', base.refineBudget),
@@ -33,20 +36,45 @@ void main(List<String> argv) {
   );
 
   final level = loadLevelFile(levelPath);
+
+  // 프로브 묶음 모드: no-flip + no-ink 전종을 돌려 필수성 리포트.
+  if (args.has('probes')) {
+    final probes = runProbes(level, cfg);
+    print('L${level.meta.id.toString().padLeft(3, "0")} 프로브: ${jsonEncode(probes)}');
+    return;
+  }
+
+  // 단발 제약 프로브.
+  String? probeLabel;
+  final probe = args.str('probe');
+  if (probe == 'no-flip') {
+    cfg = cfg.copyWith(allowGravity: false);
+    probeLabel = 'no-flip';
+  } else if (probe != null && probe.startsWith('no-ink=')) {
+    final t = inkFromKey(probe.substring('no-ink='.length));
+    if (t != null) {
+      cfg = cfg.copyWith(zeroedInks: {t});
+      probeLabel = 'no-ink:${inkKey(t)}';
+    }
+  }
+
   final result = solveLevel(level, cfg);
 
-  print(_summaryLine(result));
+  print('${_summaryLine(result)}${probeLabel == null ? "" : "  [probe=$probeLabel]"}');
   if (!args.has('quiet') && result.solutions.isNotEmpty) {
     final best = result.solutions.first;
     print('  최소 해: ${best.candidate} (ink=${best.ink}, ticks=${best.ticks})');
   }
 
+  final json = result.toJson();
+  if (probeLabel != null) json['probe'] = probeLabel;
+
   if (args.has('out')) {
     final outDir = args.str('out') ?? kDefaultOutDir;
-    writeResultJson(outDir, result.levelId, result.toJson());
+    writeResultJson(outDir, result.levelId, json);
     print('  → $outDir/level_${result.levelId.toString().padLeft(3, "0")}.json');
   } else if (args.has('json')) {
-    print(const JsonEncoder.withIndent('  ').convert(result.toJson()));
+    print(const JsonEncoder.withIndent('  ').convert(json));
   }
 }
 

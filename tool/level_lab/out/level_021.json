@@ -1,0 +1,97 @@
+{
+  "level": 21,
+  "name": "눈꽃 플라스크",
+  "chapter": 2,
+  "solvable": true,
+  "min_ink": 4,
+  "effort": 7,
+  "rollouts": 363,
+  "elapsed_ms": 155623,
+  "budget": {
+    "chalk": 80,
+    "heat": 0,
+    "frost": 70
+  },
+  "solutions": [
+    {
+      "ink": 4,
+      "ticks": 326,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 83,
+          "y0": 55,
+          "x1": 83,
+          "y1": 55
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 6,
+      "ticks": 319,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 84,
+          "y0": 55,
+          "x1": 83,
+          "y1": 55
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 6,
+      "ticks": 322,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 83,
+          "y0": 55,
+          "x1": 82,
+          "y1": 55
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 6,
+      "ticks": 322,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 82,
+          "y0": 55,
+          "x1": 83,
+          "y1": 55
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 6,
+      "ticks": 314,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 83,
+          "y0": 54,
+          "x1": 83,
+          "y1": 55
+        }
+      ],
+      "gravity_taps": []
+    }
+  ],
+  "probes": {
+    "no_ink_chalk": {
+      "solvable": true,
+      "min_ink": 4
+    },
+    "no_ink_frost": {
+      "solvable": false,
+      "min_ink": null
+    }
+  }
+}

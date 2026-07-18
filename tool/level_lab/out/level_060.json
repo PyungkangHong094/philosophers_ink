@@ -1,0 +1,17 @@
+{
+  "level": 60,
+  "name": "징검다리 공법",
+  "chapter": 4,
+  "solvable": false,
+  "min_ink": null,
+  "effort": null,
+  "rollouts": 2700,
+  "elapsed_ms": 1696284,
+  "budget": {
+    "chalk": 45,
+    "heat": 0,
+    "frost": 0
+  },
+  "solutions": [],
+  "probes": {}
+}

@@ -1,0 +1,88 @@
+{
+  "level": 68,
+  "name": "유리 성",
+  "chapter": 4,
+  "solvable": true,
+  "min_ink": 4,
+  "effort": 10,
+  "rollouts": 423,
+  "elapsed_ms": 263252,
+  "budget": {
+    "chalk": 0,
+    "heat": 0,
+    "frost": 63
+  },
+  "solutions": [
+    {
+      "ink": 4,
+      "ticks": 572,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 88,
+          "y0": 261,
+          "x1": 88,
+          "y1": 261
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 6,
+      "ticks": 496,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 88,
+          "y0": 261,
+          "x1": 88,
+          "y1": 260
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 6,
+      "ticks": 407,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 90,
+          "y0": 264,
+          "x1": 90,
+          "y1": 263
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 6,
+      "ticks": 417,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 90,
+          "y0": 262,
+          "x1": 90,
+          "y1": 263
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 6,
+      "ticks": 406,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 90,
+          "y0": 262,
+          "x1": 90,
+          "y1": 261
+        }
+      ],
+      "gravity_taps": []
+    }
+  ],
+  "probes": {}
+}

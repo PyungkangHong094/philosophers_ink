@@ -1,0 +1,17 @@
+{
+  "level": 42,
+  "name": "배급",
+  "chapter": 3,
+  "solvable": false,
+  "min_ink": null,
+  "effort": null,
+  "rollouts": 2700,
+  "elapsed_ms": 1415133,
+  "budget": {
+    "chalk": 40,
+    "heat": 0,
+    "frost": 0
+  },
+  "solutions": [],
+  "probes": {}
+}

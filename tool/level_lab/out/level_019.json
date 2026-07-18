@@ -1,0 +1,33 @@
+{
+  "level": 19,
+  "name": "미끄럼틀",
+  "chapter": 2,
+  "solvable": true,
+  "min_ink": 0,
+  "effort": 1,
+  "rollouts": 25,
+  "elapsed_ms": 11891,
+  "budget": {
+    "chalk": 60,
+    "heat": 0,
+    "frost": 120
+  },
+  "solutions": [
+    {
+      "ink": 0,
+      "ticks": 481,
+      "strokes": [],
+      "gravity_taps": []
+    }
+  ],
+  "probes": {
+    "no_ink_chalk": {
+      "solvable": true,
+      "min_ink": 0
+    },
+    "no_ink_frost": {
+      "solvable": true,
+      "min_ink": 0
+    }
+  }
+}

@@ -3,21 +3,101 @@
   "name": "왕복 운동",
   "chapter": 1,
   "solvable": true,
-  "min_ink": 0,
-  "effort": 1,
-  "rollouts": 25,
-  "elapsed_ms": 10402,
+  "min_ink": 105,
+  "effort": 56,
+  "rollouts": 1443,
+  "elapsed_ms": 998077,
   "budget": {
-    "chalk": 300,
+    "chalk": 432,
     "heat": 0,
     "frost": 0
   },
   "solutions": [
     {
-      "ink": 0,
-      "ticks": 1739,
-      "strokes": [],
-      "gravity_taps": []
+      "ink": 105,
+      "ticks": 715,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 77,
+          "y0": 87,
+          "x1": 48,
+          "y1": 123
+        }
+      ],
+      "gravity_taps": [
+        423
+      ]
+    },
+    {
+      "ink": 105,
+      "ticks": 699,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 77,
+          "y0": 87,
+          "x1": 48,
+          "y1": 123
+        }
+      ],
+      "gravity_taps": [
+        399
+      ]
+    },
+    {
+      "ink": 105,
+      "ticks": 721,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 77,
+          "y0": 87,
+          "x1": 48,
+          "y1": 123
+        }
+      ],
+      "gravity_taps": [
+        433
+      ]
+    },
+    {
+      "ink": 105,
+      "ticks": 724,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 77,
+          "y0": 87,
+          "x1": 48,
+          "y1": 123
+        }
+      ],
+      "gravity_taps": [
+        438
+      ]
+    },
+    {
+      "ink": 105,
+      "ticks": 721,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 77,
+          "y0": 87,
+          "x1": 48,
+          "y1": 123
+        }
+      ],
+      "gravity_taps": [
+        434
+      ]
     }
-  ]
+  ],
+  "probes": {
+    "no_flip": {
+      "solvable": false,
+      "min_ink": null
+    }
+  }
 }

@@ -1,0 +1,30 @@
+{
+  "level": 37,
+  "name": "응결 지붕",
+  "chapter": 3,
+  "solvable": false,
+  "min_ink": null,
+  "effort": null,
+  "rollouts": 2700,
+  "elapsed_ms": 1327036,
+  "budget": {
+    "chalk": 12,
+    "heat": 24,
+    "frost": 24
+  },
+  "solutions": [],
+  "probes": {
+    "no_ink_chalk": {
+      "solvable": false,
+      "min_ink": null
+    },
+    "no_ink_heat": {
+      "solvable": false,
+      "min_ink": null
+    },
+    "no_ink_frost": {
+      "solvable": false,
+      "min_ink": null
+    }
+  }
+}

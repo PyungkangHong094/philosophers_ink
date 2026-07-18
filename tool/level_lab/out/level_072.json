@@ -1,0 +1,22 @@
+{
+  "level": 72,
+  "name": "역류",
+  "chapter": 4,
+  "solvable": false,
+  "min_ink": null,
+  "effort": null,
+  "rollouts": 2700,
+  "elapsed_ms": 1555026,
+  "budget": {
+    "chalk": 27,
+    "heat": 0,
+    "frost": 0
+  },
+  "solutions": [],
+  "probes": {
+    "no_flip": {
+      "solvable": false,
+      "min_ink": null
+    }
+  }
+}

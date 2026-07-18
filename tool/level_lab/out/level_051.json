@@ -1,0 +1,110 @@
+{
+  "level": 51,
+  "name": "빗물 계단",
+  "chapter": 3,
+  "solvable": true,
+  "min_ink": 0,
+  "effort": 1,
+  "rollouts": 15,
+  "elapsed_ms": 5712,
+  "budget": {
+    "chalk": 36,
+    "heat": 0,
+    "frost": 36
+  },
+  "solutions": [
+    {
+      "ink": 0,
+      "ticks": 306,
+      "strokes": [],
+      "gravity_taps": []
+    },
+    {
+      "ink": 0,
+      "ticks": 306,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 88,
+          "y0": 256,
+          "x1": 136,
+          "y1": 316
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 0,
+      "ticks": 306,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 80,
+          "y0": 228,
+          "x1": 136,
+          "y1": 300
+        },
+        {
+          "ink": "frost",
+          "x0": 68,
+          "y0": 232,
+          "x1": 136,
+          "y1": 308
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 0,
+      "ticks": 306,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 96,
+          "y0": 316,
+          "x1": 148,
+          "y1": 244
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 20,
+      "ticks": 306,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 128,
+          "y0": 300,
+          "x1": 24,
+          "y1": 236
+        },
+        {
+          "ink": "chalk",
+          "x0": 60,
+          "y0": 232,
+          "x1": 120,
+          "y1": 292
+        },
+        {
+          "ink": "chalk",
+          "x0": 96,
+          "y0": 248,
+          "x1": 96,
+          "y1": 256
+        }
+      ],
+      "gravity_taps": []
+    }
+  ],
+  "probes": {
+    "no_ink_chalk": {
+      "solvable": true,
+      "min_ink": 0
+    },
+    "no_ink_frost": {
+      "solvable": true,
+      "min_ink": 0
+    }
+  }
+}

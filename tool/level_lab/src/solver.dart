@@ -39,6 +39,13 @@ class SolverConfig {
   /// 샘플링 중 이만큼 해를 모으면 정련으로 넘어간다 (쉬운 레벨 조기 종료).
   final int collectTarget;
 
+  /// 제약 프로브 — 중력 반전 탭 허용 여부. false면 no-flip 프로브(중력 반전 비필수 검증).
+  final bool allowGravity;
+
+  /// 제약 프로브 — 예산에서 제외(0으로 취급)할 잉크. 특정 잉크 없이 solvable인지 검증
+  /// (챕터 2+ 서리·화염 필수성 검증). 샘플러가 이 잉크를 후보로 삼지 않는다.
+  final Set<InkType> zeroedInks;
+
   const SolverConfig({
     this.seed = 0x5EED1A5,
     this.rolloutBudget = 2000,
@@ -51,6 +58,8 @@ class SolverConfig {
     this.snap = 4,
     this.topK = 5,
     this.collectTarget = 15,
+    this.allowGravity = true,
+    this.zeroedInks = const {},
   });
 
   SolverConfig copyWith({
@@ -60,6 +69,8 @@ class SolverConfig {
     int? tickCap,
     int? stallTicks,
     int? maxStrokes,
+    bool? allowGravity,
+    Set<InkType>? zeroedInks,
   }) =>
       SolverConfig(
         seed: seed ?? this.seed,
@@ -71,6 +82,8 @@ class SolverConfig {
         snap: snap,
         topK: topK,
         collectTarget: collectTarget,
+        allowGravity: allowGravity ?? this.allowGravity,
+        zeroedInks: zeroedInks ?? this.zeroedInks,
       );
 }
 
@@ -220,7 +233,9 @@ SolveResult solveLevel(Level level, SolverConfig cfg) {
       : archive.values.map((s) => s.ink).reduce((a, b) => a < b ? a : b);
 
   // --- (a) 편향 무작위 샘플링: 적합도 풀을 채운다 ---
-  while (rollouts < cfg.rolloutBudget) {
+  // 잉크 후보가 하나도 없으면(no-ink 프로브로 전량 0) 스트로크 탐색은 무의미 — 빈 후보
+  // 결과만으로 solvable 판정. (이 경우 0-잉크 클리어 여부가 곧 프로브 답이다.)
+  while (sampler.inks.isNotEmpty && rollouts < cfg.rolloutBudget) {
     step(sampler.sample(rng));
     // 승리 해를 충분히 모았으면 조기 종료(쉬운 레벨).
     if (archive.length >= cfg.collectTarget) break;
@@ -232,7 +247,11 @@ SolveResult solveLevel(Level level, SolverConfig cfg) {
   // 정련이 의미 있는 경우: 아직 미해결이거나(풀의 근접해를 밀어야 함),
   // 해는 있으나 잉크가 바닥(inkFloor) 위라 줄일 여지가 있을 때.
   final bestInk = minArchiveInk();
-  final worthRefine = pool.isNotEmpty && (archive.isEmpty || bestInk > inkFloor);
+  // 변이 여지가 있어야 정련이 의미 있다: 잉크 후보가 있거나(스트로크 변이) 중력 탭이
+  // 가능해야(빈 후보 + 탭). 둘 다 없으면(no-ink·no-flip 프로브) 빈 후보 결과로 확정.
+  final canVary = sampler.inks.isNotEmpty || sampler.hasGravity;
+  final worthRefine =
+      canVary && pool.isNotEmpty && (archive.isEmpty || bestInk > inkFloor);
   if (worthRefine) {
     // 개선 정체 조기 종료: 이미 승리 해가 있고 [patience]틱 동안 min_ink가 안 줄면 중단.
     // (해가 아직 없으면 계속 근접해를 민다 — 첫 해 발견이 우선.)
@@ -292,6 +311,31 @@ SolveResult solveLevel(Level level, SolverConfig cfg) {
   );
 }
 
+/// 제약 프로브 묶음 (docs/LEVEL_LAB.md L1 확장). 빈-후보 프로브를 "조건 제한 탐색"으로
+/// 일반화한다: 각 프로브는 특정 요소를 금지한 채 solvable 여부만 본다(경량 예산).
+///  - no_flip: 중력 반전 탭 금지 → solvable이면 중력 반전 **비필수**(교육 레벨 의도 검증).
+///  - no_ink_<종류>: 해당 잉크 예산 0 → solvable이면 그 잉크 **비필수**(서리·화염 필수 검증).
+/// 중력 기믹 없는 레벨은 no_flip을, 단일 노출 잉크 레벨은 no_ink를 건너뛴다.
+Map<String, dynamic> runProbes(Level level, SolverConfig base) {
+  final out = <String, dynamic>{};
+  final light = base.copyWith(rolloutBudget: 300, refineBudget: 250);
+  final probe0 = HeadlessSession(level);
+
+  if (probe0.hasGravityFlip) {
+    final r = solveLevel(level, light.copyWith(allowGravity: false));
+    out['no_flip'] = {'solvable': r.solvable, 'min_ink': r.minInk};
+  }
+
+  final vis = probe0.visibleInks;
+  if (vis.length > 1) {
+    for (final t in vis) {
+      final r = solveLevel(level, light.copyWith(zeroedInks: {t}));
+      out['no_ink_${inkKey(t)}'] = {'solvable': r.solvable, 'min_ink': r.minInk};
+    }
+  }
+  return out;
+}
+
 /// 레벨 지오메트리에 편향된 스트로크 샘플러.
 class _Sampler {
   final SolverConfig cfg;
@@ -316,8 +360,11 @@ class _Sampler {
   static const List<int> _tapTicks = [0, 60, 150, 300, 450, 600, 800];
 
   _Sampler(Level level, HeadlessSession session, this.cfg)
-      : inks = session.visibleInks,
-        hasGravity = session.hasGravityFlip {
+      : inks = [
+          for (final t in session.visibleInks)
+            if (!cfg.zeroedInks.contains(t)) t
+        ],
+        hasGravity = session.hasGravityFlip && cfg.allowGravity {
     var minX = _w, maxX = 0, minY = _h, maxY = 0;
     for (final e in level.emitters) {
       final cx = e.x + e.width ~/ 2;
@@ -366,21 +413,45 @@ class _Sampler {
 
   /// 후보 1개 샘플.
   Candidate sample(DeterministicRng rng) {
-    // 다중 플라스크 레벨: 플라스크마다 전용 램프를 배정하는 "커버올" 모드를 자주 쓴다.
-    // 무작위 sink 배정으로는 {좌 램프+우 램프} 조합 확률이 낮아 해를 못 찾는다(텐트형 해).
-    if (sinkX.length > 1 && rng.nextDouble() < 0.55) {
-      final k = sinkX.length > cfg.maxStrokes ? cfg.maxStrokes : sinkX.length;
-      final strokes = <StrokePrimitive>[
-        for (var i = 0; i < k; i++)
-          _directedTo(rng, inks[rng.nextInt(inks.length)], i),
-      ];
-      return Candidate(strokes, gravityTaps: _sampleTaps(rng));
+    // 다중 플라스크 레벨: 스플리터(텐트) / 커버올(플라스크별 램프)을 자주 쓴다.
+    // 무작위 sink 배정으로는 {좌+우} 조합 확률이 낮고, 대칭 스플리터(중앙 방출류를 좌우로
+    // 가르는 텐트)는 방향 램프로는 거의 안 나와서 003(스플리터)·007(3분배)을 못 찾는다.
+    if (sinkX.length > 1) {
+      final r = rng.nextDouble();
+      if (r < 0.38) return _splitter(rng);
+      if (r < 0.68) {
+        final k = sinkX.length > cfg.maxStrokes ? cfg.maxStrokes : sinkX.length;
+        return Candidate([
+          for (var i = 0; i < k; i++)
+            _directedTo(rng, inks[rng.nextInt(inks.length)], i),
+        ], gravityTaps: _sampleTaps(rng));
+      }
+      // else k-기반(전역 모드 포함)로 폴스루.
     }
     final k = _sampleK(rng);
     final strokes = <StrokePrimitive>[
       for (var i = 0; i < k; i++) _sampleStroke(rng),
     ];
     return Candidate(strokes, gravityTaps: _sampleTaps(rng));
+  }
+
+  /// 스플리터(텐트): 방출구 중앙 위의 정점에서 좌우로 갈라지는 두 팔. 중앙 방출류를
+  /// 좌우 플라스크로 가르고, 정점 간극(gap)으로 중앙 플라스크에 새어보낸다(3분배 해).
+  Candidate _splitter(DeterministicRng rng) {
+    final apexX = srcX[rng.nextInt(srcX.length)] + _jit(rng, 8);
+    final apexY = _rand(rng, yLo + 8, (yLo + yHi) ~/ 2);
+    final gap = cfg.snap * _rand(rng, 0, 3); // 정점 간극(중앙 누수량 조절).
+    final drop = _rand(rng, 40, 160); // 팔이 내려가는 세로 길이.
+    final ink = inks[rng.nextInt(inks.length)];
+    // 좌우 팔의 바깥 끝 x — 최외곽 플라스크 방향으로.
+    final leftEnd = _snap(sinkX.reduce((a, b) => a < b ? a : b) + _jit(rng, 16), xLo, xHi);
+    final rightEnd = _snap(sinkX.reduce((a, b) => a > b ? a : b) + _jit(rng, 16), xLo, xHi);
+    final ay = _snap(apexY, 0, _h - 1);
+    final by = _snap(apexY + drop, 0, _h - 1);
+    return Candidate([
+      StrokePrimitive(ink, _snap(apexX - gap, xLo, xHi), ay, leftEnd, by),
+      StrokePrimitive(ink, _snap(apexX + gap, xLo, xHi), ay, rightEnd, by),
+    ], gravityTaps: _sampleTaps(rng));
   }
 
   int _sampleK(DeterministicRng rng) {
@@ -398,9 +469,22 @@ class _Sampler {
   StrokePrimitive _sampleStroke(DeterministicRng rng) {
     final ink = inks[rng.nextInt(inks.length)];
     final mode = rng.nextDouble();
-    if (mode < 0.60) return _directed(rng, ink);
-    if (mode < 0.85) return _free(rng, ink);
+    if (mode < 0.50) return _directed(rng, ink);
+    if (mode < 0.70) return _free(rng, ink);
+    if (mode < 0.88) return _global(rng, ink); // 전역: 플라스크 밴드 밖도 탐색.
     return _deflector(rng, ink);
+  }
+
+  /// 전역 선분: 그리드 전폭 + 방출구~바닥 전 세로 범위에서 무작위. bbox 밴드에 갇히지
+  /// 않아 지형 우회·중앙 방출류 조작 같은 구조를 잡는다(대칭 스플리터 보완).
+  StrokePrimitive _global(DeterministicRng rng, InkType ink) {
+    final gyLo = yLo < 2 ? 2 : yLo;
+    final gyHi = _h - 4;
+    final sx = _snap(_rand(rng, 0, _w - 1), 0, _w - 1);
+    final sy = _snap(_rand(rng, gyLo, gyHi), 0, _h - 1);
+    final ex = _snap(_rand(rng, 0, _w - 1), 0, _w - 1);
+    final ey = _snap(_rand(rng, gyLo, gyHi), 0, _h - 1);
+    return StrokePrimitive(ink, sx, sy, ex, ey);
   }
 
   /// 방향 램프(무작위 싱크). 깔때기 프라이어.

@@ -3,21 +3,86 @@
   "name": "막힌 길",
   "chapter": 1,
   "solvable": true,
-  "min_ink": 0,
-  "effort": 1,
-  "rollouts": 25,
-  "elapsed_ms": 10829,
+  "min_ink": 301,
+  "effort": 39,
+  "rollouts": 481,
+  "elapsed_ms": 222838,
   "budget": {
-    "chalk": 300,
+    "chalk": 760,
     "heat": 0,
     "frost": 0
   },
   "solutions": [
     {
-      "ink": 0,
-      "ticks": 1936,
-      "strokes": [],
+      "ink": 301,
+      "ticks": 373,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 17,
+          "y0": 173,
+          "x1": 116,
+          "y1": 272
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 302,
+      "ticks": 458,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 18,
+          "y0": 172,
+          "x1": 116,
+          "y1": 272
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 304,
+      "ticks": 344,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 16,
+          "y0": 172,
+          "x1": 116,
+          "y1": 272
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 305,
+      "ticks": 373,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 17,
+          "y0": 171,
+          "x1": 116,
+          "y1": 272
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 306,
+      "ticks": 400,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 15,
+          "y0": 172,
+          "x1": 116,
+          "y1": 272
+        }
+      ],
       "gravity_taps": []
     }
-  ]
+  ],
+  "probes": {}
 }

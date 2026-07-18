@@ -3,89 +3,101 @@
   "name": "뒤집힌 서재",
   "chapter": 1,
   "solvable": true,
-  "min_ink": 0,
-  "effort": 1,
-  "rollouts": 15,
-  "elapsed_ms": 31,
+  "min_ink": 34,
+  "effort": 56,
+  "rollouts": 833,
+  "elapsed_ms": 372358,
   "budget": {
-    "chalk": 200,
+    "chalk": 175,
     "heat": 0,
     "frost": 0
   },
   "solutions": [
     {
-      "ink": 0,
-      "ticks": 8,
-      "strokes": [],
-      "gravity_taps": []
+      "ink": 34,
+      "ticks": 380,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 41,
+          "y0": 15,
+          "x1": 51,
+          "y1": 25
+        }
+      ],
+      "gravity_taps": [
+        197
+      ]
+    },
+    {
+      "ink": 34,
+      "ticks": 392,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 41,
+          "y0": 15,
+          "x1": 51,
+          "y1": 25
+        }
+      ],
+      "gravity_taps": [
+        209
+      ]
+    },
+    {
+      "ink": 34,
+      "ticks": 374,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 41,
+          "y0": 15,
+          "x1": 51,
+          "y1": 25
+        }
+      ],
+      "gravity_taps": [
+        190
+      ]
+    },
+    {
+      "ink": 36,
+      "ticks": 395,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 41,
+          "y0": 15,
+          "x1": 53,
+          "y1": 23
+        }
+      ],
+      "gravity_taps": [
+        197
+      ]
     },
     {
       "ink": 40,
-      "ticks": 1,
+      "ticks": 408,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 84,
-          "y0": 4,
-          "x1": 80,
-          "y1": 20
+          "x0": 41,
+          "y0": 15,
+          "x1": 54,
+          "y1": 25
         }
       ],
       "gravity_taps": [
-        60
-      ]
-    },
-    {
-      "ink": 58,
-      "ticks": 6,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 118,
-          "y0": 12,
-          "x1": 112,
-          "y1": 20
-        },
-        {
-          "ink": "chalk",
-          "x0": 76,
-          "y0": 12,
-          "x1": 72,
-          "y1": 0
-        }
-      ],
-      "gravity_taps": []
-    },
-    {
-      "ink": 60,
-      "ticks": 10,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 104,
-          "y0": 8,
-          "x1": 80,
-          "y1": 0
-        }
-      ],
-      "gravity_taps": []
-    },
-    {
-      "ink": 80,
-      "ticks": 1,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 52,
-          "y0": 32,
-          "x1": 88,
-          "y1": 28
-        }
-      ],
-      "gravity_taps": [
-        600,
-        800
+        232
       ]
     }
-  ]
+  ],
+  "probes": {
+    "no_flip": {
+      "solvable": true,
+      "min_ink": 86
+    }
+  }
 }

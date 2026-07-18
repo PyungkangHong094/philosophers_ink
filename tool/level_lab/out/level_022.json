@@ -1,0 +1,104 @@
+{
+  "level": 22,
+  "name": "용해",
+  "chapter": 2,
+  "solvable": true,
+  "min_ink": 60,
+  "effort": 13,
+  "rollouts": 273,
+  "elapsed_ms": 313456,
+  "budget": {
+    "chalk": 95,
+    "heat": 0,
+    "frost": 60
+  },
+  "solutions": [
+    {
+      "ink": 60,
+      "ticks": 756,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 84,
+          "y0": 133,
+          "x1": 30,
+          "y1": 282
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 60,
+      "ticks": 569,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 85,
+          "y0": 40,
+          "x1": 124,
+          "y1": 281
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 60,
+      "ticks": 500,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 84,
+          "y0": 36,
+          "x1": 144,
+          "y1": 288
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 60,
+      "ticks": 783,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 84,
+          "y0": 144,
+          "x1": 36,
+          "y1": 272
+        },
+        {
+          "ink": "frost",
+          "x0": 84,
+          "y0": 144,
+          "x1": 140,
+          "y1": 272
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 60,
+      "ticks": 561,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 85,
+          "y0": 40,
+          "x1": 126,
+          "y1": 283
+        }
+      ],
+      "gravity_taps": []
+    }
+  ],
+  "probes": {
+    "no_ink_chalk": {
+      "solvable": true,
+      "min_ink": 60
+    },
+    "no_ink_frost": {
+      "solvable": true,
+      "min_ink": 95
+    }
+  }
+}

@@ -3,21 +3,86 @@
   "name": "쌓임의 법칙",
   "chapter": 1,
   "solvable": true,
-  "min_ink": 0,
-  "effort": 1,
-  "rollouts": 25,
-  "elapsed_ms": 9365,
+  "min_ink": 292,
+  "effort": 39,
+  "rollouts": 489,
+  "elapsed_ms": 232144,
   "budget": {
-    "chalk": 180,
+    "chalk": 684,
     "heat": 0,
     "frost": 0
   },
   "solutions": [
     {
-      "ink": 0,
-      "ticks": 1286,
-      "strokes": [],
+      "ink": 292,
+      "ticks": 432,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 31,
+          "y0": 153,
+          "x1": 127,
+          "y1": 255
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 293,
+      "ticks": 331,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 27,
+          "y0": 109,
+          "x1": 116,
+          "y1": 209
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 294,
+      "ticks": 444,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 31,
+          "y0": 153,
+          "x1": 127,
+          "y1": 256
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 296,
+      "ticks": 331,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 28,
+          "y0": 107,
+          "x1": 116,
+          "y1": 209
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 296,
+      "ticks": 469,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 31,
+          "y0": 153,
+          "x1": 126,
+          "y1": 258
+        }
+      ],
       "gravity_taps": []
     }
-  ]
+  ],
+  "probes": {}
 }

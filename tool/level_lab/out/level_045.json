@@ -1,0 +1,103 @@
+{
+  "level": 45,
+  "name": "김 서린 오후",
+  "chapter": 3,
+  "solvable": true,
+  "min_ink": 0,
+  "effort": 1,
+  "rollouts": 15,
+  "elapsed_ms": 4390,
+  "budget": {
+    "chalk": 40,
+    "heat": 20,
+    "frost": 0
+  },
+  "solutions": [
+    {
+      "ink": 0,
+      "ticks": 235,
+      "strokes": [],
+      "gravity_taps": []
+    },
+    {
+      "ink": 0,
+      "ticks": 235,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 96,
+          "y0": 8,
+          "x1": 92,
+          "y1": 20
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 0,
+      "ticks": 235,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 88,
+          "y0": 8,
+          "x1": 80,
+          "y1": 32
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 0,
+      "ticks": 235,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 100,
+          "y0": 12,
+          "x1": 96,
+          "y1": 0
+        },
+        {
+          "ink": "heat",
+          "x0": 64,
+          "y0": 8,
+          "x1": 100,
+          "y1": 0
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 0,
+      "ticks": 235,
+      "strokes": [
+        {
+          "ink": "heat",
+          "x0": 80,
+          "y0": 8,
+          "x1": 80,
+          "y1": 16
+        },
+        {
+          "ink": "heat",
+          "x0": 68,
+          "y0": 16,
+          "x1": 84,
+          "y1": 24
+        }
+      ],
+      "gravity_taps": []
+    }
+  ],
+  "probes": {
+    "no_ink_chalk": {
+      "solvable": true,
+      "min_ink": 0
+    },
+    "no_ink_heat": {
+      "solvable": true,
+      "min_ink": 0
+    }
+  }
+}

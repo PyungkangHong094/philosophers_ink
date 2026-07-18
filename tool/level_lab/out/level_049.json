@@ -1,0 +1,30 @@
+{
+  "level": 49,
+  "name": "이중 순수",
+  "chapter": 3,
+  "solvable": false,
+  "min_ink": null,
+  "effort": null,
+  "rollouts": 2700,
+  "elapsed_ms": 1434308,
+  "budget": {
+    "chalk": 66,
+    "heat": 18,
+    "frost": 30
+  },
+  "solutions": [],
+  "probes": {
+    "no_ink_chalk": {
+      "solvable": false,
+      "min_ink": null
+    },
+    "no_ink_heat": {
+      "solvable": false,
+      "min_ink": null
+    },
+    "no_ink_frost": {
+      "solvable": false,
+      "min_ink": null
+    }
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "level": 23,
+  "name": "문",
+  "chapter": 2,
+  "solvable": true,
+  "min_ink": 0,
+  "effort": 1,
+  "rollouts": 16,
+  "elapsed_ms": 8101,
+  "budget": {
+    "chalk": 48,
+    "heat": 0,
+    "frost": 0
+  },
+  "solutions": [
+    {
+      "ink": 0,
+      "ticks": 442,
+      "strokes": [],
+      "gravity_taps": []
+    },
+    {
+      "ink": 0,
+      "ticks": 442,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 88,
+          "y0": 152,
+          "x1": 128,
+          "y1": 316
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 0,
+      "ticks": 442,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 80,
+          "y0": 88,
+          "x1": 132,
+          "y1": 300
+        },
+        {
+          "ink": "chalk",
+          "x0": 68,
+          "y0": 96,
+          "x1": 132,
+          "y1": 308
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 40,
+      "ticks": 442,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 64,
+          "y0": 276,
+          "x1": 60,
+          "y1": 292
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 48,
+      "ticks": 442,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 100,
+          "y0": 28,
+          "x1": 148,
+          "y1": 280
+        },
+        {
+          "ink": "chalk",
+          "x0": 64,
+          "y0": 124,
+          "x1": 152,
+          "y1": 268
+        }
+      ],
+      "gravity_taps": []
+    }
+  ],
+  "probes": {}
+}

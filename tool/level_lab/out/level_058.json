@@ -1,0 +1,17 @@
+{
+  "level": 58,
+  "name": "반응",
+  "chapter": 4,
+  "solvable": false,
+  "min_ink": null,
+  "effort": null,
+  "rollouts": 2700,
+  "elapsed_ms": 1473555,
+  "budget": {
+    "chalk": 37,
+    "heat": 0,
+    "frost": 0
+  },
+  "solutions": [],
+  "probes": {}
+}

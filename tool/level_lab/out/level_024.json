@@ -1,0 +1,17 @@
+{
+  "level": 24,
+  "name": "두 개의 문",
+  "chapter": 2,
+  "solvable": false,
+  "min_ink": null,
+  "effort": null,
+  "rollouts": 2700,
+  "elapsed_ms": 1694754,
+  "budget": {
+    "chalk": 75,
+    "heat": 0,
+    "frost": 0
+  },
+  "solutions": [],
+  "probes": {}
+}
