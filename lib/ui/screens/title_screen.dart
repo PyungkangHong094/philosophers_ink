@@ -79,8 +79,12 @@ class _TitleScreenState extends State<TitleScreen>
         behavior: HitTestBehavior.opaque,
         onTap: _start,
         child: SafeArea(
-          child: Column(
-            children: [
+          // 느슨한 제약에서 Column이 최광 자식 폭으로 수축해 좌측에 붙는 것을
+          // 방지 — 전체 폭을 강제해 수평 중앙 정렬을 성립시킨다.
+          child: SizedBox(
+            width: double.infinity,
+            child: Column(
+              children: [
               const Spacer(flex: 2),
               // 골드 플라스크 (유일한 골드 요소).
               SizedBox(
@@ -106,7 +110,8 @@ class _TitleScreenState extends State<TitleScreen>
               // 시작 펄스.
               _StartPulse(animate: !reduced, listenable: _breath),
               const SizedBox(height: InkSpace.xl),
-            ],
+              ],
+            ),
           ),
         ),
       ),

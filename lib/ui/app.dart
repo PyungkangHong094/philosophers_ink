@@ -51,6 +51,17 @@ class InkApp extends StatelessWidget {
   const InkApp({super.key, this.audioOverride});
 
   @override
+  Widget build(BuildContext context) => _Bootstrap(audioOverride: audioOverride);
+}
+
+/// MaterialApp 셸. [InkServices]는 반드시 이 바깥(위)에 있어야 한다 —
+/// Navigator.push로 생기는 라우트는 home의 형제라서, InheritedWidget이
+/// MaterialApp 안쪽에 있으면 푸시된 화면에서 InkServices.of가 실패한다.
+class _MaterialShell extends StatelessWidget {
+  final Widget home;
+  const _MaterialShell({required this.home});
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Philosopher's Ink",
@@ -63,7 +74,7 @@ class InkApp extends StatelessWidget {
           primary: InkColor.gold,
         ),
       ),
-      home: _Bootstrap(audioOverride: audioOverride),
+      home: home,
     );
   }
 }
@@ -118,7 +129,8 @@ class _BootstrapState extends State<_Bootstrap> {
   @override
   Widget build(BuildContext context) {
     if (_error != null) {
-      return _Splash(child: Text('초기화 실패: $_error', style: InkText.body));
+      return _MaterialShell(
+          home: _Splash(child: Text('초기화 실패: $_error', style: InkText.body)));
     }
     final settings = _settings;
     final progress = _progress;
@@ -128,23 +140,27 @@ class _BootstrapState extends State<_Bootstrap> {
         progress == null ||
         catalog == null ||
         audio == null) {
-      return const _Splash(
-        child: SizedBox(
-          width: 28,
-          height: 28,
-          child: CircularProgressIndicator(
-            strokeWidth: 2,
-            valueColor: AlwaysStoppedAnimation(InkColor.gold),
+      return const _MaterialShell(
+        home: _Splash(
+          child: SizedBox(
+            width: 28,
+            height: 28,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              valueColor: AlwaysStoppedAnimation(InkColor.gold),
+            ),
           ),
         ),
       );
     }
+    // InkServices가 MaterialApp(=Navigator)보다 위에 있어야 푸시된 모든
+    // 라우트에서 InkServices.of가 성립한다.
     return InkServices(
       settings: settings,
       progress: progress,
       catalog: catalog,
       audio: audio,
-      child: const TitleScreen(),
+      child: const _MaterialShell(home: TitleScreen()),
     );
   }
 }

@@ -72,6 +72,37 @@ void main() {
     expect(find.text('화면을 터치하여 시작'), findsOneWidget);
   });
 
+  testWidgets('타이틀 탭 → 챕터 선택으로 내비게이션 (푸시 라우트에서 InkServices 접근 회귀)',
+      (tester) async {
+    // 실제 앱 구조 그대로: InkServices가 MaterialApp(=Navigator) **위**.
+    // 아래에 두면 푸시된 라우트가 InkServices 바깥이 되어 of()가 단언 실패한다.
+    await tester.pumpWidget(
+      InkServices(
+        settings: settings,
+        progress: GameProgress(),
+        catalog: LevelCatalog([_entry(1, 1)]),
+        audio: const SilentAudioService(),
+        child: const MaterialApp(home: TitleScreen()),
+      ),
+    );
+    await tester.pump(const Duration(milliseconds: 16));
+    await tester.tap(find.text('화면을 터치하여 시작'));
+    // 전환 애니메이션 소화 (타이틀 반복 애니메이션 때문에 pumpAndSettle 금지).
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.pump(const Duration(milliseconds: 400));
+    expect(tester.takeException(), isNull);
+    expect(find.byType(ChapterSelectScreen), findsOneWidget);
+  });
+
+  testWidgets('타이틀이 좁은 화면에서도 수평 중앙 정렬된다 (좌측 수축 회귀)', (tester) async {
+    await pumpScreen(tester, const TitleScreen());
+    final screenWidth = tester.getSize(find.byType(TitleScreen)).width;
+    final inkCenter = tester.getCenter(find.text('INK'));
+    expect((inkCenter.dx - screenWidth / 2).abs(), lessThan(1.0),
+        reason: 'INK 로고가 화면 수평 중앙에 있어야 한다 (dx=${inkCenter.dx}, '
+            '기대=${screenWidth / 2})');
+  });
+
   testWidgets('챕터 선택이 4챕터 라틴명을 그리고 잠금 챕터를 표시한다', (tester) async {
     final catalog = LevelCatalog([_entry(1, 1)]);
     await pumpScreen(tester, const ChapterSelectScreen(), catalog: catalog);
