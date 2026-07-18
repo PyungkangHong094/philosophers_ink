@@ -4,7 +4,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:philosophers_ink/gameplay/headless_session.dart';
 import 'package:philosophers_ink/level/loader.dart';
 import 'package:philosophers_ink/level/level_model.dart';
-import 'package:philosophers_ink/sim/materials.dart';
 
 Level _load(String name) =>
     loadLevelFromJson(File('assets/levels/$name').readAsStringSync(), source: name);
