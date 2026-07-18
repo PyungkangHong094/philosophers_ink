@@ -57,7 +57,7 @@ class PlayScreen extends StatefulWidget {
 }
 
 class _PlayScreenState extends State<PlayScreen>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late LevelSession _session;
   late final GameLoop _loop;
   late final Palette _palette;
@@ -96,11 +96,13 @@ class _PlayScreenState extends State<PlayScreen>
     );
     _loop = GameLoop(onTick: () => _session.tick());
     _ticker = createTicker(_onFrame)..start();
+    WidgetsBinding.instance.addObserver(this); // 앱 백그라운드 전환 감지.
   }
 
   @override
   void dispose() {
-    widget.audio.stopAmbient();
+    WidgetsBinding.instance.removeObserver(this);
+    widget.audio.stopAll(); // 화면 이탈 시 루프성 재생(앰비언트 등) 전부 정지 — 전역 잔존 방지.
     _ticker.dispose(); // 프레임 정지 먼저 — 이후 세션을 건드리지 않는다.
     _session.dispose(); // InkController(ChangeNotifier) 등 세션 소유 자원 해제 (감사 P2-2).
     _imageSource.dispose();
@@ -108,6 +110,17 @@ class _PlayScreenState extends State<PlayScreen>
     _frameTick.dispose();
     _flaskLabels.dispose();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // 앱이 포그라운드를 벗어나면 시뮬을 멈추고 루프성 재생을 정지한다(백그라운드 지속 소음 방지).
+    if (state != AppLifecycleState.resumed) {
+      widget.audio.stopAll();
+      if (!_paused && _outcome.value.phase == _Phase.playing && mounted) {
+        setState(() => _paused = true);
+      }
+    }
   }
 
   bool get _simRunning => !_paused && _outcome.value.phase == _Phase.playing;
@@ -126,7 +139,9 @@ class _PlayScreenState extends State<PlayScreen>
     _frameTick.value++;
 
     // 물질 앰비언트 그레인 — 활성 셀 밀도로 볼륨 변조 (샘플 스로틀, GDD 9.2).
-    if (++_ambientFrame % SfxSpec.grainSampleEveryFrames == 0) {
+    // 기본 OFF(드론 "지잉" 방지) — 켜질 때만 그리드를 스캔한다.
+    if (SfxSpec.ambientGrainEnabled &&
+        ++_ambientFrame % SfxSpec.grainSampleEveryFrames == 0) {
       widget.audio.setAmbientDensity(_ambientDensity());
     }
 

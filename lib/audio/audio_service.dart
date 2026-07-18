@@ -32,6 +32,10 @@ abstract class AudioService {
 
   /// 인게임 이탈 시 앰비언트 정지.
   void stopAmbient();
+
+  /// 모든 루프성/지속 재생(앰비언트·향후 BGM)을 즉시 정지한다. 원샷 SFX는 자연 종료라 무관.
+  /// 화면 dispose·앱 백그라운드 전환 시 호출해 전역 루프 핸들 잔존을 막는다.
+  void stopAll();
 }
 
 /// 무음 폴백 — 전 메서드 no-op. 테스트 기본값.
@@ -60,4 +64,6 @@ class SilentAudioService implements AudioService {
   void setAmbientDensity(double normalized) {}
   @override
   void stopAmbient() {}
+  @override
+  void stopAll() {}
 }

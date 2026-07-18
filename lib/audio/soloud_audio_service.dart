@@ -42,7 +42,10 @@ class SoLoudAudioService implements AudioService {
       _tri = await _soloud.loadWaveform(WaveForm.triangle, false, 1, 0);
       _square = await _soloud.loadWaveform(WaveForm.fSquare, false, 1, 0);
       _saw = await _soloud.loadWaveform(WaveForm.fSaw, false, 1, 0);
-      _grain = await _soloud.loadWaveform(WaveForm.saw, true, 0.5, 0.4);
+      // 앰비언트 그레인은 기본 OFF(연속 드론 "지잉" 방지) — 켜질 때만 소스를 만든다.
+      if (SfxSpec.ambientGrainEnabled) {
+        _grain = await _soloud.loadWaveform(WaveForm.saw, true, 0.5, 0.4);
+      }
       _ready = true;
     } catch (e) {
       // 미지원 플랫폼·헤드리스 테스트 등 — 무음화.
@@ -126,8 +129,16 @@ class SoLoudAudioService implements AudioService {
         mix: SfxMix.event);
   }
 
+  DateTime _lastFlask = DateTime.fromMillisecondsSinceEpoch(0);
+
   @override
   void flaskFill(FlaskState? phase) {
+    // 입자가 빠르게 쏟아질 때 착수 이벤트가 초당 수십 회 → 블립 겹침 버즈. 스로틀로 틱화.
+    final now = DateTime.now();
+    if (now.difference(_lastFlask).inMilliseconds < SfxSpec.flaskThrottleMs) {
+      return;
+    }
+    _lastFlask = now;
     final freq = switch (phase) {
       FlaskState.solid => SfxSpec.flaskSolidFreq,
       FlaskState.liquid => SfxSpec.flaskLiquidFreq,
@@ -152,6 +163,7 @@ class SoLoudAudioService implements AudioService {
 
   @override
   void setAmbientDensity(double normalized) {
+    if (!SfxSpec.ambientGrainEnabled) return; // 기본 OFF (드론 방지).
     if (!_on || _grain == null) return;
     // 샘플 스로틀은 호출부(PlayScreen)가 담당 — 여기선 받은 값을 즉시 반영.
     final target =
@@ -177,5 +189,12 @@ class SoLoudAudioService implements AudioService {
     try {
       _soloud.stop(h);
     } catch (_) {}
+  }
+
+  @override
+  void stopAll() {
+    // 현재 유일한 루프성 재생은 앰비언트 그레인. 원샷 SFX는 scheduleStop으로 자연 종료.
+    // (향후 BGM 추가 시 여기서 함께 정지.)
+    stopAmbient();
   }
 }

@@ -42,6 +42,10 @@ abstract final class SfxSpec {
   static const double flaskVol = 0.22;
   static const int flaskMs = 55;
 
+  /// 착수 틱 최소 간격 — 입자가 빠르게 쏟아질 때 블립이 겹쳐 "지잉" 버즈가 되는 것을 막는다.
+  /// 카운트업 만족감은 유지하되 초당 재생 수를 제한(≈14/s).
+  static const int flaskThrottleMs = 70;
+
   // 클리어 스팅어 — 상승 3음 아르페지오 (C5·E5·G5).
   static const List<double> clearArp = [523.25, 659.25, 783.99];
   static const double clearVol = 0.34;
@@ -61,6 +65,13 @@ abstract final class SfxSpec {
   static const int failStaggerMs = 120;
 
   // 물질 앰비언트 그레인 — 활성 셀 밀도로 볼륨 변조하는 저역 루프.
+  //
+  // ⚠️ 기본 OFF. 밀도 기반 "연속 루프"는 방출구가 입자를 계속 쏟는 동안 끊임없이 울려
+  // 거슬리는 "지잉" 드론이 된다(P1 버그). GDD 9.2의 진짜 파티클 그레인은 낙하·퇴적 "움직임"
+  // 이벤트가 필요한데 lib/sim이 그 훅을 주지 않는다. sim 전이/이동 이벤트 훅이 생기면 그때
+  // 이벤트 기반으로 재설계해 다시 켠다. 그 전까지는 밀도 근사 루프를 켜지 않는다.
+  static const bool ambientGrainEnabled = false;
+
   static const double grainFreq = 110.0; // A2
   static const double grainMaxVol = 0.5; // 밀도 1.0일 때 목표(그레인 믹스 전)
   static const int grainSampleEveryFrames = 12; // ~5Hz 갱신
