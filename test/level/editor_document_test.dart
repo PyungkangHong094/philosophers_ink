@@ -29,10 +29,14 @@ void main() {
       final doc = EditorDocument.fromLevel(original);
       final reloaded = doc.reloadExported();
       expect(reloaded.meta.id, original.meta.id);
-      expect(reloaded.flasks.single.state, FlaskState.solid);
-      expect(reloaded.emitters.single.material, Material.water);
+      // 출고 레벨은 콘텐츠라 요소 개수가 변한다 — 개수 하드커플 금지, 보존만 단언.
+      expect(reloaded.flasks.length, original.flasks.length);
+      expect(reloaded.flasks.any((f) => f.state == FlaskState.solid), isTrue);
+      expect(reloaded.emitters.length, original.emitters.length);
+      expect(reloaded.emitters.first.material, original.emitters.first.material);
       expect(reloaded.inkBudget, original.inkBudget);
-      expect(reloaded.terrain.single.material, Material.wall);
+      expect(reloaded.terrain.length, original.terrain.length);
+      expect(reloaded.terrain.first.material, original.terrain.first.material);
     });
 
     test('편집 후 무효 상태는 build에서 잡힌다 (그리드 밖 플라스크)', () {

@@ -6,11 +6,11 @@
     "difficulty": 7,
     "teaches": [],
     "tags": [
-      "ice",
       "heat_line",
       "steam",
-      "temp_zone",
-      "demolition"
+      "water",
+      "demolition",
+      "compartment"
     ],
     "optimal_ink": null,
     "solutions_verified": 2,
@@ -19,9 +19,18 @@
   "background": "#E4B94D",
   "emitters": [
     {
-      "x": 73,
+      "x": 39,
       "y": 2,
-      "width": 14,
+      "width": 12,
+      "material": "WATER",
+      "rate": 2,
+      "total": null,
+      "ash_ratio": 0
+    },
+    {
+      "x": 107,
+      "y": 2,
+      "width": 12,
       "material": "WATER",
       "rate": 2,
       "total": null,
@@ -30,11 +39,21 @@
   ],
   "flasks": [
     {
-      "x": 58,
-      "y": 6,
-      "w": 44,
+      "x": 36,
+      "y": 4,
+      "w": 20,
       "h": 18,
-      "goal": 26,
+      "goal": 20,
+      "material": null,
+      "state": "gas",
+      "pure": false
+    },
+    {
+      "x": 104,
+      "y": 4,
+      "w": 20,
+      "h": 18,
+      "goal": 20,
       "material": null,
       "state": "gas",
       "pure": false
@@ -47,21 +66,37 @@
       "w": 160,
       "h": 2,
       "material": "WALL"
-    }
-  ],
-  "gimmicks": [
+    },
     {
-      "type": "temp_zone",
-      "params": {
-        "x": 70,
-        "y": 150,
-        "w": 24,
-        "h": 6,
-        "kind": "cool",
-        "probability": null
-      }
+      "x": 28,
+      "y": 0,
+      "w": 3,
+      "h": 314,
+      "material": "WALL"
+    },
+    {
+      "x": 61,
+      "y": 0,
+      "w": 3,
+      "h": 314,
+      "material": "WALL"
+    },
+    {
+      "x": 96,
+      "y": 0,
+      "w": 3,
+      "h": 314,
+      "material": "WALL"
+    },
+    {
+      "x": 129,
+      "y": 0,
+      "w": 3,
+      "h": 314,
+      "material": "WALL"
     }
   ],
+  "gimmicks": [],
   "ink_budget": {
     "chalk": 0,
     "heat": 45,
@@ -69,6 +104,6 @@
   },
   "star_thresholds": {
     "two_star": 40,
-    "three_star": 35
+    "three_star": 34
   }
 }

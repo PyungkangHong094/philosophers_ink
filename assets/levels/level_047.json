@@ -10,7 +10,7 @@
       "water",
       "steam",
       "shield",
-      "distillation"
+      "compartment"
     ],
     "optimal_ink": null,
     "solutions_verified": 2,
@@ -19,9 +19,18 @@
   "background": "#E4B94D",
   "emitters": [
     {
-      "x": 73,
+      "x": 39,
       "y": 2,
-      "width": 14,
+      "width": 12,
+      "material": "WATER",
+      "rate": 2,
+      "total": null,
+      "ash_ratio": 0.3
+    },
+    {
+      "x": 107,
+      "y": 2,
+      "width": 12,
       "material": "WATER",
       "rate": 2,
       "total": null,
@@ -30,11 +39,21 @@
   ],
   "flasks": [
     {
-      "x": 58,
-      "y": 6,
-      "w": 44,
+      "x": 36,
+      "y": 4,
+      "w": 20,
       "h": 18,
-      "goal": 24,
+      "goal": 18,
+      "material": null,
+      "state": "gas",
+      "pure": false
+    },
+    {
+      "x": 104,
+      "y": 4,
+      "w": 20,
+      "h": 18,
+      "goal": 18,
       "material": null,
       "state": "gas",
       "pure": false
@@ -47,17 +66,44 @@
       "w": 160,
       "h": 2,
       "material": "WALL"
+    },
+    {
+      "x": 28,
+      "y": 0,
+      "w": 3,
+      "h": 314,
+      "material": "WALL"
+    },
+    {
+      "x": 61,
+      "y": 0,
+      "w": 3,
+      "h": 314,
+      "material": "WALL"
+    },
+    {
+      "x": 96,
+      "y": 0,
+      "w": 3,
+      "h": 314,
+      "material": "WALL"
+    },
+    {
+      "x": 129,
+      "y": 0,
+      "w": 3,
+      "h": 314,
+      "material": "WALL"
     }
   ],
   "gimmicks": [],
   "ink_budget": {
     "chalk": 0,
-    "heat": 51,
+    "heat": 40,
     "frost": 0
   },
   "star_thresholds": {
-    "two_star": 42,
-    "three_star": 34
-  },
-  "optimal_ink": null
+    "two_star": 34,
+    "three_star": 28
+  }
 }

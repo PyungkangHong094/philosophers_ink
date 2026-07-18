@@ -9,8 +9,8 @@
       "portal",
       "frost",
       "ice",
-      "prima",
-      "bridge"
+      "solid",
+      "remote"
     ],
     "optimal_ink": null,
     "solutions_verified": 2,
@@ -19,49 +19,47 @@
   "background": "#E9E5DB",
   "emitters": [
     {
-      "x": 12,
+      "x": 40,
       "y": 2,
       "width": 6,
       "material": "WATER",
       "rate": 3,
       "total": null,
       "ash_ratio": 0
-    },
-    {
-      "x": 24,
-      "y": 2,
-      "width": 6,
-      "material": "PRIMA",
-      "rate": 4,
-      "total": null,
-      "ash_ratio": 0
     }
   ],
   "flasks": [
     {
-      "x": 120,
+      "x": 90,
       "y": 286,
       "w": 30,
-      "h": 14,
+      "h": 24,
       "goal": 25,
-      "material": "PRIMA",
-      "state": null,
+      "material": null,
+      "state": "solid",
       "pure": false
     }
   ],
   "terrain": [
     {
-      "x": 0,
-      "y": 300,
-      "w": 70,
-      "h": 4,
+      "x": 86,
+      "y": 262,
+      "w": 3,
+      "h": 52,
       "material": "WALL"
     },
     {
-      "x": 110,
-      "y": 300,
-      "w": 50,
-      "h": 4,
+      "x": 120,
+      "y": 262,
+      "w": 3,
+      "h": 52,
+      "material": "WALL"
+    },
+    {
+      "x": 0,
+      "y": 314,
+      "w": 160,
+      "h": 2,
       "material": "WALL"
     }
   ],
@@ -71,27 +69,26 @@
       "params": {
         "entry": {
           "x": 6,
-          "y": 100,
-          "w": 12,
+          "y": 120,
+          "w": 10,
           "h": 6
         },
         "exit": {
-          "x": 78,
-          "y": 150,
-          "w": 12,
+          "x": 96,
+          "y": 200,
+          "w": 10,
           "h": 6
         }
       }
     }
   ],
   "ink_budget": {
-    "chalk": 413,
+    "chalk": 43,
     "heat": 0,
-    "frost": 120
+    "frost": 130
   },
   "star_thresholds": {
-    "two_star": 442,
-    "three_star": 352
-  },
-  "optimal_ink": null
+    "two_star": 145,
+    "three_star": 117
+  }
 }

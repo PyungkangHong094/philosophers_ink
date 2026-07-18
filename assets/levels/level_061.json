@@ -24,7 +24,7 @@
       "width": 120,
       "material": "LAVA",
       "rate": 3,
-      "total": null,
+      "total": 700,
       "ash_ratio": 0
     }
   ],
@@ -44,7 +44,14 @@
     {
       "x": 0,
       "y": 314,
-      "w": 160,
+      "w": 58,
+      "h": 2,
+      "material": "WALL"
+    },
+    {
+      "x": 102,
+      "y": 314,
+      "w": 58,
       "h": 2,
       "material": "WALL"
     },
@@ -67,10 +74,10 @@
   "ink_budget": {
     "chalk": 0,
     "heat": 0,
-    "frost": 60
+    "frost": 150
   },
   "star_thresholds": {
-    "two_star": 50,
-    "three_star": 40
+    "two_star": 132,
+    "three_star": 115
   }
 }

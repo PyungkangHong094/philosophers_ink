@@ -62,8 +62,11 @@ void main() {
           loadLevelFromJson(File('assets/levels/level_021.json').readAsStringSync());
       final round = loadLevelFromJson(serializeLevel(level));
       _expectSameLevel(level, round);
-      expect(round.flasks.single.state, FlaskState.solid);
-      expect(round.terrain.single.material, Material.wall);
+      // 출고 레벨은 콘텐츠라 개수가 변한다 — 존재·보존만 단언 (개수 하드커플 금지).
+      expect(round.flasks.any((f) => f.state == FlaskState.solid), isTrue,
+          reason: '021은 상태(고체) 플라스크 교육 레벨');
+      expect(round.terrain, isNotEmpty);
+      expect(round.terrain.first.material, Material.wall);
     });
 
     test('직렬화 결과는 다시 검증을 통과한다', () {

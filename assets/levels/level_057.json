@@ -4,25 +4,82 @@
     "name": "굳히기",
     "chapter": 4,
     "difficulty": 5,
-    "teaches": ["stone"],
-    "tags": ["stone", "lava", "frost", "solidify", "state_flask"],
+    "teaches": [
+      "stone"
+    ],
+    "tags": [
+      "stone",
+      "lava",
+      "frost",
+      "solidify",
+      "state_flask"
+    ],
     "optimal_ink": null,
     "solutions_verified": 2,
     "hint_stroke": null
   },
   "background": "#8E2A20",
   "emitters": [
-    { "x": 71, "y": 2, "width": 18, "material": "LAVA", "rate": 2, "total": null, "ash_ratio": 0 }
+    {
+      "x": 71,
+      "y": 2,
+      "width": 18,
+      "material": "LAVA",
+      "rate": 2,
+      "total": 200,
+      "ash_ratio": 0
+    }
   ],
   "flasks": [
-    { "x": 56, "y": 286, "w": 48, "h": 26, "goal": 30, "material": "STONE", "state": "solid", "pure": false }
+    {
+      "x": 56,
+      "y": 286,
+      "w": 48,
+      "h": 26,
+      "goal": 30,
+      "material": "STONE",
+      "state": "solid",
+      "pure": false
+    }
   ],
   "terrain": [
-    { "x": 0, "y": 314, "w": 160, "h": 2, "material": "WALL" },
-    { "x": 52, "y": 250, "w": 3, "h": 64, "material": "WALL" },
-    { "x": 105, "y": 250, "w": 3, "h": 64, "material": "WALL" }
+    {
+      "x": 0,
+      "y": 314,
+      "w": 66,
+      "h": 2,
+      "material": "WALL"
+    },
+    {
+      "x": 90,
+      "y": 314,
+      "w": 70,
+      "h": 2,
+      "material": "WALL"
+    },
+    {
+      "x": 52,
+      "y": 250,
+      "w": 3,
+      "h": 64,
+      "material": "WALL"
+    },
+    {
+      "x": 105,
+      "y": 250,
+      "w": 3,
+      "h": 64,
+      "material": "WALL"
+    }
   ],
   "gimmicks": [],
-  "ink_budget": { "chalk": 20, "heat": 0, "frost": 66 },
-  "star_thresholds": { "two_star": 66, "three_star": 46 }
+  "ink_budget": {
+    "chalk": 0,
+    "heat": 0,
+    "frost": 78
+  },
+  "star_thresholds": {
+    "two_star": 66,
+    "three_star": 53
+  }
 }
