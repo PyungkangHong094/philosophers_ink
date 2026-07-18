@@ -48,6 +48,53 @@ void main() {
     });
   });
 
+  group('정적 잉크 익스플로잇 차단 (GDD 5.1 판정 각주)', () {
+    test('플라스크 안에 그은 석필(WALL)은 카운트되지 않고 남는다', () {
+      final g = _grid();
+      _fill(g, 2, 2, 2, 2, Material.wall); // 잉크로 그린 정적 셀 4개
+      final sys = FlaskSystem(const [
+        FlaskSpec(x: 2, y: 2, w: 2, h: 2, goal: 10),
+      ]);
+      sys.update(g);
+      expect(sys.flasks.single.count, 0, reason: '정적 잉크는 내용물 아님');
+      expect(_countMaterial(g, Material.wall), 4, reason: '소비 안 함 — 그린 선 유지');
+    });
+
+    test('화염/서리 룬 선도 카운트되지 않는다', () {
+      final g = _grid();
+      g.set(1, 1, Material.heatLine.index);
+      g.set(2, 1, Material.coldLine.index);
+      final sys = FlaskSystem(const [
+        FlaskSpec(x: 0, y: 0, w: 5, h: 5, goal: 10),
+      ]);
+      sys.update(g);
+      expect(sys.flasks.single.count, 0);
+      expect(_countMaterial(g, Material.heatLine), 1);
+      expect(_countMaterial(g, Material.coldLine), 1);
+    });
+
+    test('정적 잉크만으로는 무조건 플라스크가 클리어되지 않는다 (익스플로잇)', () {
+      final g = _grid();
+      _fill(g, 0, 0, 3, 3, Material.wall);
+      final sys = FlaskSystem(const [
+        FlaskSpec(x: 0, y: 0, w: 3, h: 3, goal: 5),
+      ]);
+      sys.update(g);
+      expect(sys.isCleared, isFalse);
+    });
+
+    test('동적 반응 산출물 STONE(입자)은 정상 카운트된다', () {
+      final g = _grid();
+      g.set(1, 1, Material.stone.index); // LAVA→STONE 산출물, 입자
+      final sys = FlaskSystem(const [
+        FlaskSpec(x: 0, y: 0, w: 5, h: 5, goal: 10),
+      ]);
+      sys.update(g);
+      expect(sys.flasks.single.count, 1, reason: '정적 잉크가 아니라 동적 입자');
+      expect(_countMaterial(g, Material.stone), 0, reason: '카운트 후 소비');
+    });
+  });
+
   group('물질 지정 플라스크', () {
     test('지정 물질만 카운트, 타 물질은 통과·소멸', () {
       final g = _grid();

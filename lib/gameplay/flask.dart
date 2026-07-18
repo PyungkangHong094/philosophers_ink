@@ -95,6 +95,12 @@ class FlaskSystem {
         final id = grid.get(xx, yy);
         if (id == empty) continue;
 
+        // 정적 잉크(석필 WALL·화염/서리 룬 선)·벽은 플라스크 내용물이 아니다 (GDD 5.1 판정
+        // 각주). "어떤 물질이든"은 방출·낙하한 동적 물질(입자/액체/기체)을 뜻한다 —
+        // 플라스크 영역에 직접 그은 잉크를 내용물로 세던 익스플로잇을 차단한다. 소비하지
+        // 않고 그대로 남긴다(그린 선 유지). LAVA→STONE 등 동적 반응 산출물은 입자라 카운트 유지.
+        if (categoryOf(id) == MaterialCategory.staticSolid) continue;
+
         // 순수 위반: ASH 혼입 → 오염 + 재 제거 (카운트 안 함).
         if (s.pure && id == Material.ash.index) {
           flask.contaminated = true;
