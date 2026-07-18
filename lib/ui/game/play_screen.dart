@@ -104,9 +104,6 @@ class _PlayScreenState extends State<PlayScreen>
   /// 목표 배너 자동 소멸 시간.
   static const Duration _goalDwell = Duration(seconds: 3);
 
-  /// 미조작 상태에서 첫 조작 가이드가 뜨기까지의 시간.
-  static const Duration _guideIdle = Duration(seconds: 3);
-
   /// 게이지 강조 지속 시간.
   static const Duration _gaugeDwell = Duration(milliseconds: 1200);
 
@@ -133,26 +130,35 @@ class _PlayScreenState extends State<PlayScreen>
   }
 
   /// 목표 배너 자동 소멸 타이머 + (튜토리얼 챕터) 미조작 첫 조작 가이드 예약.
+  ///
+  /// 미시청 가이드가 있는 판(첫 경험)에서는 3초 방치를 기다리지 않는다 — 빠른
+  /// 플레이어는 즉시 터치해서 "3초 뒤" 안내를 평생 못 보기 때문(실플레이 피드백).
+  /// 이때 목표 배너도 자동 소멸 없이 첫 조작까지 유지한다.
   void _setupOnboarding() {
-    _goalTimer = Timer(_goalDwell, () {
-      if (mounted) setState(() => _goalVisible = false);
-    });
-
-    if (!_isTutorialChapter) return;
-    final ob = widget.onboarding;
-    // 레벨 1~2: 스트로크 가이드. 중력 기믹 레벨: 중력 가이드. (각 1회만.)
     _GuideKind pending = _GuideKind.none;
-    if (widget.entry.id <= 2 && !ob.hasSeen(OnboardingKey.stroke)) {
-      pending = _GuideKind.stroke;
-    } else if (_session.hasGravityFlip && !ob.hasSeen(OnboardingKey.gravity)) {
-      pending = _GuideKind.gravity;
+    if (_isTutorialChapter) {
+      final ob = widget.onboarding;
+      // 레벨 1~2: 스트로크 가이드. 중력 기믹 레벨: 중력 가이드. (각 1회만.)
+      if (widget.entry.id <= 2 && !ob.hasSeen(OnboardingKey.stroke)) {
+        pending = _GuideKind.stroke;
+      } else if (_session.hasGravityFlip &&
+          !ob.hasSeen(OnboardingKey.gravity)) {
+        pending = _GuideKind.gravity;
+      }
     }
-    if (pending == _GuideKind.none) return;
+
+    if (pending == _GuideKind.none) {
+      // 첫 경험이 아니면 기존 대로: 배너 3초 자동 소멸, 가이드 없음.
+      _goalTimer = Timer(_goalDwell, () {
+        if (mounted) setState(() => _goalVisible = false);
+      });
+      return;
+    }
+
+    // 첫 경험: 가이드 즉시 노출(짧은 호흡 뒤), 목표 배너는 첫 조작까지 유지.
     _guide = pending;
-    _guideTimer = Timer(_guideIdle, () {
-      // 스트로크 가이드는 아직 첫 조작 전일 때만 뜬다.
-      final blockedByInput =
-          pending == _GuideKind.stroke && _sawFirstInput;
+    _guideTimer = Timer(const Duration(milliseconds: 600), () {
+      final blockedByInput = pending == _GuideKind.stroke && _sawFirstInput;
       if (mounted && !blockedByInput) setState(() => _guideVisible = true);
     });
   }
