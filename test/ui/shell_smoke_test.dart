@@ -146,4 +146,31 @@ void main() {
     expect(find.text('석필'), findsOneWidget);
     expect(find.text('1'), findsWidgets);
   });
+
+  testWidgets('플레이 화면 콘텐츠가 0 크기로 붕괴하지 않는다 (실기기 블랙스크린 회귀)',
+      (tester) async {
+    // 존재 검사만으로는 못 잡는다 — 0×0 위젯도 find는 성공한다. 크기를 단언한다.
+    // (body Stack 자식이 전부 Positioned라 fit 미지정 시 느슨한 제약에서 0×0 붕괴했었다.)
+    await pumpScreen(
+      tester,
+      PlayScreen(
+        entry: _entry(1, 1),
+        progress: GameProgress(),
+        settings: settings,
+        audio: const SilentAudioService(),
+      ),
+    );
+    final screen = tester.getSize(find.byType(PlayScreen));
+    final label = tester.getSize(find.text('석필'));
+    expect(label.width, greaterThan(0), reason: 'HUD 라벨이 실제 크기를 가져야 한다');
+    final stack = tester.renderObject<RenderBox>(
+      find
+          .descendant(of: find.byType(PlayScreen), matching: find.byType(Stack))
+          .first,
+    );
+    expect(stack.size.width, screen.width,
+        reason: '플레이 화면 body Stack은 화면 폭을 가득 채워야 한다 (0×0 붕괴 회귀)');
+    expect(stack.size.height, screen.height,
+        reason: '플레이 화면 body Stack은 화면 높이를 가득 채워야 한다');
+  });
 }

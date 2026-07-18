@@ -278,7 +278,10 @@ class _PlayScreenState extends State<PlayScreen>
 
     return Scaffold(
       backgroundColor: Color(widget.entry.level.background),
+      // 자식이 전부 Positioned라 fit 미지정 시 느슨한 제약에서 Stack이 0×0으로
+      // 붕괴한다(실기기 블랙스크린의 원인). expand로 화면 크기를 강제한다.
       body: Stack(
+        fit: StackFit.expand,
         children: [
           // 시뮬 캔버스.
           Positioned.fill(
