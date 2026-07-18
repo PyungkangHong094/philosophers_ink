@@ -1,0 +1,31 @@
+{
+  "meta": {
+    "id": 32,
+    "name": "이중 관문",
+    "chapter": 2,
+    "difficulty": 7,
+    "teaches": [],
+    "tags": ["variance_gate", "portal", "state_flask", "solid", "liquid"],
+    "optimal_ink": { "chalk": 50 },
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#E9E5DB",
+  "emitters": [
+    { "x": 74, "y": 2, "width": 10, "material": "PRIMA", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 10, "y": 286, "w": 30, "h": 24, "goal": 30, "material": null, "state": "solid", "pure": false },
+    { "x": 122, "y": 286, "w": 30, "h": 24, "goal": 30, "material": null, "state": "liquid", "pure": false }
+  ],
+  "terrain": [
+    { "x": 78, "y": 170, "w": 4, "h": 140, "material": "WALL" },
+    { "x": 0, "y": 314, "w": 160, "h": 2, "material": "WALL" }
+  ],
+  "gimmicks": [
+    { "type": "portal", "params": { "entry": { "x": 40, "y": 120, "w": 10, "h": 6 }, "exit": { "x": 110, "y": 70, "w": 10, "h": 6 } } },
+    { "type": "variance_gate", "params": { "x": 100, "y": 130, "w": 60, "h": 1, "to": "WATER", "from": "PRIMA" } }
+  ],
+  "ink_budget": { "chalk": 75, "heat": 0, "frost": 0 },
+  "star_thresholds": null
+}

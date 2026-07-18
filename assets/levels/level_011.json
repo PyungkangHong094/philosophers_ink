@@ -1,0 +1,29 @@
+{
+  "meta": {
+    "id": 11,
+    "name": "하소",
+    "chapter": 1,
+    "difficulty": 5,
+    "teaches": [],
+    "tags": ["operatio", "calcinatio", "gravity_flip", "multi_flask"],
+    "optimal_ink": null,
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#1D1418",
+  "emitters": [
+    { "x": 74, "y": 2, "width": 12, "material": "PRIMA", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 16, "y": 288, "w": 26, "h": 28, "goal": 25, "material": null, "state": null, "pure": false },
+    { "x": 118, "y": 6, "w": 26, "h": 30, "goal": 25, "material": null, "state": null, "pure": false }
+  ],
+  "terrain": [
+    { "x": 76, "y": 150, "w": 8, "h": 60, "material": "WALL" }
+  ],
+  "gimmicks": [
+    { "type": "gravity_flip", "params": {} }
+  ],
+  "ink_budget": { "chalk": 300, "heat": 0, "frost": 0 },
+  "star_thresholds": { "two_star": 288, "three_star": 207 }
+}

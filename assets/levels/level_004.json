@@ -1,0 +1,26 @@
+{
+  "meta": {
+    "id": 4,
+    "name": "막힌 길",
+    "chapter": 1,
+    "difficulty": 2,
+    "teaches": [],
+    "tags": ["terrain", "wall", "detour"],
+    "optimal_ink": null,
+    "solutions_verified": 2,
+    "hint_stroke": [[24, 118], [88, 118], [120, 270]]
+  },
+  "background": "#1D1418",
+  "emitters": [
+    { "x": 20, "y": 2, "width": 8, "material": "PRIMA", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 110, "y": 286, "w": 28, "h": 30, "goal": 35, "material": null, "state": null, "pure": false }
+  ],
+  "terrain": [
+    { "x": 20, "y": 120, "w": 70, "h": 6, "material": "WALL" }
+  ],
+  "gimmicks": [],
+  "ink_budget": { "chalk": 300, "heat": 0, "frost": 0 },
+  "star_thresholds": { "two_star": 192, "three_star": 138 }
+}

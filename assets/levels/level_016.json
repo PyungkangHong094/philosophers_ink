@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "id": 16,
+    "name": "빙결 지대",
+    "chapter": 2,
+    "difficulty": 3,
+    "teaches": [],
+    "tags": ["water", "ice", "temp_zone", "cool"],
+    "optimal_ink": { "chalk": 30 },
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#E9E5DB",
+  "emitters": [
+    { "x": 74, "y": 2, "width": 13, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 55, "y": 286, "w": 50, "h": 16, "goal": 50, "material": null, "state": null, "pure": false }
+  ],
+  "terrain": [
+    { "x": 0, "y": 306, "w": 160, "h": 2, "material": "WALL" }
+  ],
+  "gimmicks": [
+    { "type": "temp_zone", "params": { "x": 40, "y": 150, "w": 80, "h": 10, "kind": "cool", "probability": 0.12 } }
+  ],
+  "ink_budget": { "chalk": 60, "heat": 0, "frost": 0 },
+  "star_thresholds": null
+}

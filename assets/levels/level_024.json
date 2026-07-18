@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "id": 24,
+    "name": "두 개의 문",
+    "chapter": 2,
+    "difficulty": 5,
+    "teaches": [],
+    "tags": ["portal", "water", "prima", "sorting"],
+    "optimal_ink": { "chalk": 44 },
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#E9E5DB",
+  "emitters": [
+    { "x": 30, "y": 2, "width": 10, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0 },
+    { "x": 120, "y": 2, "width": 10, "material": "PRIMA", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 6, "y": 286, "w": 26, "h": 24, "goal": 35, "material": "PRIMA", "state": null, "pure": false },
+    { "x": 128, "y": 286, "w": 26, "h": 24, "goal": 35, "material": "WATER", "state": null, "pure": false }
+  ],
+  "terrain": [
+    { "x": 78, "y": 200, "w": 4, "h": 118, "material": "WALL" },
+    { "x": 0, "y": 314, "w": 160, "h": 2, "material": "WALL" }
+  ],
+  "gimmicks": [
+    { "type": "portal", "params": { "entry": { "x": 24, "y": 130, "w": 12, "h": 5 }, "exit": { "x": 130, "y": 60, "w": 12, "h": 5 } } },
+    { "type": "portal", "params": { "entry": { "x": 118, "y": 130, "w": 12, "h": 5 }, "exit": { "x": 8, "y": 60, "w": 12, "h": 5 } } }
+  ],
+  "ink_budget": { "chalk": 75, "heat": 0, "frost": 0 },
+  "star_thresholds": null
+}

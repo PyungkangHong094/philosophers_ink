@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "id": 23,
+    "name": "문",
+    "chapter": 2,
+    "difficulty": 3,
+    "teaches": ["portal"],
+    "tags": ["portal", "water", "cooldown"],
+    "optimal_ink": { "chalk": 18 },
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#E9E5DB",
+  "emitters": [
+    { "x": 74, "y": 2, "width": 12, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 118, "y": 286, "w": 24, "h": 24, "goal": 40, "material": null, "state": null, "pure": false }
+  ],
+  "terrain": [
+    { "x": 0, "y": 314, "w": 160, "h": 2, "material": "WALL" }
+  ],
+  "gimmicks": [
+    { "type": "portal", "params": { "entry": { "x": 4, "y": 150, "w": 14, "h": 6 }, "exit": { "x": 120, "y": 40, "w": 14, "h": 6 } } }
+  ],
+  "ink_budget": { "chalk": 48, "heat": 0, "frost": 0 },
+  "star_thresholds": null
+}

@@ -1,0 +1,27 @@
+{
+  "meta": {
+    "id": 5,
+    "name": "바늘귀",
+    "chapter": 1,
+    "difficulty": 3,
+    "teaches": [],
+    "tags": ["precision", "terrain"],
+    "optimal_ink": null,
+    "solutions_verified": 2,
+    "hint_stroke": [[60, 120], [73, 156], [86, 120]]
+  },
+  "background": "#1D1418",
+  "emitters": [
+    { "x": 70, "y": 2, "width": 10, "material": "PRIMA", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 62, "y": 288, "w": 26, "h": 28, "goal": 35, "material": null, "state": null, "pure": false }
+  ],
+  "terrain": [
+    { "x": 0, "y": 160, "w": 70, "h": 6, "material": "WALL" },
+    { "x": 78, "y": 160, "w": 82, "h": 6, "material": "WALL" }
+  ],
+  "gimmicks": [],
+  "ink_budget": { "chalk": 220, "heat": 0, "frost": 0 },
+  "star_thresholds": { "two_star": 176, "three_star": 127 }
+}

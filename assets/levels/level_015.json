@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "id": 15,
+    "name": "화로 지대",
+    "chapter": 2,
+    "difficulty": 3,
+    "teaches": ["temp_zone"],
+    "tags": ["ice", "water", "temp_zone", "heat"],
+    "optimal_ink": { "chalk": 70 },
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#E9E5DB",
+  "emitters": [
+    { "x": 30, "y": 2, "width": 12, "material": "ICE", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 110, "y": 290, "w": 34, "h": 14, "goal": 45, "material": null, "state": null, "pure": false }
+  ],
+  "terrain": [
+    { "x": 0, "y": 306, "w": 160, "h": 2, "material": "WALL" }
+  ],
+  "gimmicks": [
+    { "type": "temp_zone", "params": { "x": 40, "y": 200, "w": 80, "h": 8, "kind": "heat", "probability": 0.12 } }
+  ],
+  "ink_budget": { "chalk": 140, "heat": 0, "frost": 0 },
+  "star_thresholds": null
+}

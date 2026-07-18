@@ -1,0 +1,29 @@
+{
+  "meta": {
+    "id": 18,
+    "name": "얼음 다리",
+    "chapter": 2,
+    "difficulty": 4,
+    "teaches": [],
+    "tags": ["frost", "water", "ice", "prima"],
+    "optimal_ink": { "frost": 65, "chalk": 20 },
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#E9E5DB",
+  "emitters": [
+    { "x": 10, "y": 2, "width": 10, "material": "PRIMA", "rate": 3, "total": null, "ash_ratio": 0 },
+    { "x": 70, "y": 2, "width": 10, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 120, "y": 290, "w": 34, "h": 14, "goal": 40, "material": "PRIMA", "state": null, "pure": false }
+  ],
+  "terrain": [
+    { "x": 0, "y": 306, "w": 160, "h": 2, "material": "WALL" },
+    { "x": 0, "y": 220, "w": 50, "h": 3, "material": "WALL" },
+    { "x": 112, "y": 220, "w": 20, "h": 3, "material": "WALL" }
+  ],
+  "gimmicks": [],
+  "ink_budget": { "chalk": 40, "heat": 0, "frost": 130 },
+  "star_thresholds": null
+}

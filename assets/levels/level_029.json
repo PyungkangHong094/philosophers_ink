@@ -1,0 +1,30 @@
+{
+  "meta": {
+    "id": 29,
+    "name": "쏟아지는 천장",
+    "chapter": 2,
+    "difficulty": 6,
+    "teaches": [],
+    "tags": ["gravity_flip", "water", "timing"],
+    "optimal_ink": { "chalk": 40 },
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#E9E5DB",
+  "emitters": [
+    { "x": 74, "y": 40, "width": 12, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 60, "y": 8, "w": 40, "h": 28, "goal": 45, "material": null, "state": null, "pure": false }
+  ],
+  "terrain": [
+    { "x": 40, "y": 270, "w": 4, "h": 30, "material": "WALL" },
+    { "x": 116, "y": 270, "w": 4, "h": 30, "material": "WALL" },
+    { "x": 0, "y": 300, "w": 160, "h": 4, "material": "WALL" }
+  ],
+  "gimmicks": [
+    { "type": "gravity_flip", "params": {} }
+  ],
+  "ink_budget": { "chalk": 68, "heat": 0, "frost": 0 },
+  "star_thresholds": null
+}

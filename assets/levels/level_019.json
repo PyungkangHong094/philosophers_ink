@@ -1,0 +1,26 @@
+{
+  "meta": {
+    "id": 19,
+    "name": "미끄럼틀",
+    "chapter": 2,
+    "difficulty": 4,
+    "teaches": [],
+    "tags": ["frost", "ice", "water"],
+    "optimal_ink": { "frost": 60 },
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#E9E5DB",
+  "emitters": [
+    { "x": 20, "y": 2, "width": 10, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 126, "y": 290, "w": 32, "h": 14, "goal": 45, "material": null, "state": null, "pure": false }
+  ],
+  "terrain": [
+    { "x": 0, "y": 306, "w": 160, "h": 2, "material": "WALL" }
+  ],
+  "gimmicks": [],
+  "ink_budget": { "chalk": 60, "heat": 0, "frost": 120 },
+  "star_thresholds": null
+}

@@ -1,0 +1,27 @@
+{
+  "meta": {
+    "id": 13,
+    "name": "둑",
+    "chapter": 2,
+    "difficulty": 3,
+    "teaches": [],
+    "tags": ["water", "liquid", "dam"],
+    "optimal_ink": { "chalk": 40 },
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#E9E5DB",
+  "emitters": [
+    { "x": 40, "y": 2, "width": 12, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 112, "y": 290, "w": 34, "h": 14, "goal": 50, "material": null, "state": null, "pure": false }
+  ],
+  "terrain": [
+    { "x": 0, "y": 306, "w": 160, "h": 2, "material": "WALL" },
+    { "x": 10, "y": 210, "w": 100, "h": 3, "material": "WALL" }
+  ],
+  "gimmicks": [],
+  "ink_budget": { "chalk": 80, "heat": 0, "frost": 0 },
+  "star_thresholds": null
+}

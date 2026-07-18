@@ -1,0 +1,26 @@
+{
+  "meta": {
+    "id": 12,
+    "name": "물의 등장",
+    "chapter": 2,
+    "difficulty": 2,
+    "teaches": ["water"],
+    "tags": ["water", "liquid"],
+    "optimal_ink": { "chalk": 30 },
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#E9E5DB",
+  "emitters": [
+    { "x": 74, "y": 2, "width": 13, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 48, "y": 290, "w": 64, "h": 14, "goal": 60, "material": null, "state": null, "pure": false }
+  ],
+  "terrain": [
+    { "x": 0, "y": 306, "w": 160, "h": 2, "material": "WALL" }
+  ],
+  "gimmicks": [],
+  "ink_budget": { "chalk": 75, "heat": 0, "frost": 0 },
+  "star_thresholds": null
+}

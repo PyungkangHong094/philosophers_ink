@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "id": 28,
+    "name": "갈림길",
+    "chapter": 2,
+    "difficulty": 6,
+    "teaches": [],
+    "tags": ["frost", "state_flask", "solid", "liquid", "split"],
+    "optimal_ink": { "chalk": 28, "frost": 26 },
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#E9E5DB",
+  "emitters": [
+    { "x": 74, "y": 2, "width": 12, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 8, "y": 286, "w": 30, "h": 26, "goal": 30, "material": null, "state": "solid", "pure": false },
+    { "x": 122, "y": 286, "w": 30, "h": 26, "goal": 30, "material": null, "state": "liquid", "pure": false }
+  ],
+  "terrain": [
+    { "x": 78, "y": 40, "w": 4, "h": 44, "material": "WALL" },
+    { "x": 0, "y": 314, "w": 160, "h": 2, "material": "WALL" }
+  ],
+  "gimmicks": [],
+  "ink_budget": { "chalk": 48, "heat": 0, "frost": 44 },
+  "star_thresholds": null
+}

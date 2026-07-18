@@ -1,0 +1,30 @@
+{
+  "meta": {
+    "id": 22,
+    "name": "용해",
+    "chapter": 2,
+    "difficulty": 6,
+    "teaches": [],
+    "tags": ["water", "ice", "temp_zone", "cool", "state_flask", "operatio"],
+    "optimal_ink": { "chalk": 55 },
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#E9E5DB",
+  "emitters": [
+    { "x": 74, "y": 2, "width": 13, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 18, "y": 290, "w": 38, "h": 14, "goal": 35, "material": null, "state": "liquid", "pure": false },
+    { "x": 104, "y": 290, "w": 38, "h": 14, "goal": 35, "material": null, "state": "solid", "pure": false }
+  ],
+  "terrain": [
+    { "x": 0, "y": 306, "w": 160, "h": 2, "material": "WALL" },
+    { "x": 79, "y": 240, "w": 2, "h": 40, "material": "WALL" }
+  ],
+  "gimmicks": [
+    { "type": "temp_zone", "params": { "x": 96, "y": 175, "w": 48, "h": 8, "kind": "cool", "probability": 0.12 } }
+  ],
+  "ink_budget": { "chalk": 95, "heat": 0, "frost": 60 },
+  "star_thresholds": null
+}

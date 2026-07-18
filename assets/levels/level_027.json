@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "id": 27,
+    "name": "물방울 서약",
+    "chapter": 2,
+    "difficulty": 5,
+    "teaches": [],
+    "tags": ["variance_gate", "prima", "state_flask", "liquid"],
+    "optimal_ink": { "chalk": 50 },
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#E9E5DB",
+  "emitters": [
+    { "x": 14, "y": 2, "width": 8, "material": "PRIMA", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 110, "y": 286, "w": 36, "h": 26, "goal": 45, "material": null, "state": "liquid", "pure": false }
+  ],
+  "terrain": [
+    { "x": 0, "y": 314, "w": 160, "h": 2, "material": "WALL" }
+  ],
+  "gimmicks": [
+    { "type": "variance_gate", "params": { "x": 60, "y": 140, "w": 100, "h": 1, "to": "WATER", "from": "PRIMA" } }
+  ],
+  "ink_budget": { "chalk": 85, "heat": 0, "frost": 0 },
+  "star_thresholds": null
+}

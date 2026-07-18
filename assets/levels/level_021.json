@@ -6,7 +6,7 @@
     "difficulty": 4,
     "teaches": ["state_flask"],
     "tags": ["frost", "state_flask", "solid"],
-    "optimal_ink": { "chalk": 60, "frost": 40 },
+    "optimal_ink": { "chalk": 40, "frost": 35 },
     "solutions_verified": 2,
     "hint_stroke": null
   },
@@ -15,12 +15,12 @@
     { "x": 74, "y": 2, "width": 13, "material": "WATER", "rate": 1, "total": null, "ash_ratio": 0 }
   ],
   "flasks": [
-    { "x": 70, "y": 280, "w": 20, "h": 18, "goal": 25, "material": null, "state": "solid", "pure": false }
+    { "x": 68, "y": 282, "w": 24, "h": 18, "goal": 28, "material": null, "state": "solid", "pure": false }
   ],
   "terrain": [
-    { "x": 0, "y": 300, "w": 160, "h": 2, "material": "WALL" }
+    { "x": 0, "y": 306, "w": 160, "h": 2, "material": "WALL" }
   ],
   "gimmicks": [],
-  "ink_budget": { "chalk": 80, "heat": 0, "frost": 60 },
+  "ink_budget": { "chalk": 80, "heat": 0, "frost": 70 },
   "star_thresholds": null
 }

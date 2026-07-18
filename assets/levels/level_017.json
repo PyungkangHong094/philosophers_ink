@@ -1,0 +1,26 @@
+{
+  "meta": {
+    "id": 17,
+    "name": "첫 마법",
+    "chapter": 2,
+    "difficulty": 3,
+    "teaches": ["frost_rune"],
+    "tags": ["frost", "water", "ice"],
+    "optimal_ink": { "frost": 45 },
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#E9E5DB",
+  "emitters": [
+    { "x": 30, "y": 2, "width": 12, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 100, "y": 288, "w": 44, "h": 14, "goal": 45, "material": null, "state": null, "pure": false }
+  ],
+  "terrain": [
+    { "x": 0, "y": 306, "w": 160, "h": 2, "material": "WALL" }
+  ],
+  "gimmicks": [],
+  "ink_budget": { "chalk": 80, "heat": 0, "frost": 90 },
+  "star_thresholds": null
+}

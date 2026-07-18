@@ -1,0 +1,26 @@
+{
+  "meta": {
+    "id": 7,
+    "name": "삼중주",
+    "chapter": 1,
+    "difficulty": 4,
+    "teaches": [],
+    "tags": ["multi_flask", "distribution"],
+    "optimal_ink": null,
+    "solutions_verified": 2,
+    "hint_stroke": [[40, 200], [80, 150], [120, 200]]
+  },
+  "background": "#1D1418",
+  "emitters": [
+    { "x": 74, "y": 2, "width": 12, "material": "PRIMA", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 14, "y": 288, "w": 24, "h": 28, "goal": 25, "material": null, "state": null, "pure": false },
+    { "x": 68, "y": 288, "w": 24, "h": 28, "goal": 25, "material": null, "state": null, "pure": false },
+    { "x": 122, "y": 288, "w": 24, "h": 28, "goal": 25, "material": null, "state": null, "pure": false }
+  ],
+  "terrain": [],
+  "gimmicks": [],
+  "ink_budget": { "chalk": 340, "heat": 0, "frost": 0 },
+  "star_thresholds": { "two_star": 272, "three_star": 196 }
+}

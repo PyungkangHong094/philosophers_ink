@@ -1,0 +1,31 @@
+{
+  "meta": {
+    "id": 26,
+    "name": "되돌림",
+    "chapter": 2,
+    "difficulty": 5,
+    "teaches": [],
+    "tags": ["variance_gate", "prima", "water", "switch"],
+    "optimal_ink": { "chalk": 38 },
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#E9E5DB",
+  "emitters": [
+    { "x": 74, "y": 2, "width": 10, "material": "PRIMA", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 60, "y": 286, "w": 40, "h": 24, "goal": 45, "material": "PRIMA", "state": null, "pure": false }
+  ],
+  "terrain": [
+    { "x": 0, "y": 140, "w": 77, "h": 3, "material": "WALL" },
+    { "x": 83, "y": 140, "w": 77, "h": 3, "material": "WALL" },
+    { "x": 0, "y": 314, "w": 160, "h": 2, "material": "WALL" }
+  ],
+  "gimmicks": [
+    { "type": "variance_gate", "params": { "x": 0, "y": 100, "w": 160, "h": 1, "to": "WATER", "from": "PRIMA" } },
+    { "type": "variance_gate", "params": { "x": 0, "y": 180, "w": 160, "h": 1, "to": "PRIMA", "from": "WATER" } }
+  ],
+  "ink_budget": { "chalk": 65, "heat": 0, "frost": 0 },
+  "star_thresholds": null
+}

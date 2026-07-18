@@ -1,0 +1,31 @@
+{
+  "meta": {
+    "id": 33,
+    "name": "분리",
+    "chapter": 2,
+    "difficulty": 7,
+    "teaches": [],
+    "tags": ["operatio", "separatio", "frost", "gravity_flip", "prima", "water"],
+    "optimal_ink": { "chalk": 54, "frost": 28 },
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#E9E5DB",
+  "emitters": [
+    { "x": 74, "y": 2, "width": 12, "material": "PRIMA", "rate": 2, "total": null, "ash_ratio": 0 },
+    { "x": 74, "y": 2, "width": 12, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 6, "y": 286, "w": 34, "h": 26, "goal": 40, "material": "WATER", "state": null, "pure": false },
+    { "x": 120, "y": 286, "w": 34, "h": 26, "goal": 40, "material": "PRIMA", "state": null, "pure": false }
+  ],
+  "terrain": [
+    { "x": 78, "y": 60, "w": 4, "h": 30, "material": "WALL" },
+    { "x": 0, "y": 314, "w": 160, "h": 2, "material": "WALL" }
+  ],
+  "gimmicks": [
+    { "type": "gravity_flip", "params": {} }
+  ],
+  "ink_budget": { "chalk": 80, "heat": 0, "frost": 42 },
+  "star_thresholds": null
+}

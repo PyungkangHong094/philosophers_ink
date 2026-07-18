@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "id": 20,
+    "name": "녹기 전에",
+    "chapter": 2,
+    "difficulty": 5,
+    "teaches": [],
+    "tags": ["frost", "ice", "water", "temp_zone", "heat"],
+    "optimal_ink": { "frost": 70, "chalk": 30 },
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#E9E5DB",
+  "emitters": [
+    { "x": 20, "y": 2, "width": 10, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 120, "y": 290, "w": 34, "h": 14, "goal": 50, "material": null, "state": null, "pure": false }
+  ],
+  "terrain": [
+    { "x": 0, "y": 306, "w": 160, "h": 2, "material": "WALL" }
+  ],
+  "gimmicks": [
+    { "type": "temp_zone", "params": { "x": 60, "y": 210, "w": 50, "h": 6, "kind": "heat", "probability": 0.08 } }
+  ],
+  "ink_budget": { "chalk": 51, "heat": 0, "frost": 119 },
+  "star_thresholds": null
+}

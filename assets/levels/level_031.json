@@ -1,0 +1,27 @@
+{
+  "meta": {
+    "id": 31,
+    "name": "잉크 기근",
+    "chapter": 2,
+    "difficulty": 7,
+    "teaches": [],
+    "tags": ["frost", "ice", "state_flask", "solid", "scarcity"],
+    "optimal_ink": { "frost": 34 },
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#E9E5DB",
+  "emitters": [
+    { "x": 74, "y": 2, "width": 10, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 132, "y": 280, "w": 26, "h": 20, "goal": 25, "material": null, "state": "solid", "pure": false }
+  ],
+  "terrain": [
+    { "x": 0, "y": 300, "w": 90, "h": 4, "material": "WALL" },
+    { "x": 130, "y": 300, "w": 30, "h": 4, "material": "WALL" }
+  ],
+  "gimmicks": [],
+  "ink_budget": { "chalk": 0, "heat": 0, "frost": 50 },
+  "star_thresholds": null
+}

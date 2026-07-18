@@ -58,21 +58,25 @@ void main() {
     });
   });
 
-  group('실제 에셋 픽스처', () {
-    test('level_001.json 로드·검증 통과', () {
-      final text = File('assets/levels/level_001.json').readAsStringSync();
-      final level = loadLevelFromJson(text, source: 'level_001');
-      expect(level.meta.id, 1);
-      expect(level.emitters.single.material, Material.prima);
-      expect(level.flasks.single.material, isNull, reason: '무조건 플라스크');
-      expect(level.inkBudget[InkType.chalk], 100);
-    });
-
-    test('level_021.json 로드·검증 통과 (상태 플라스크 + 지형)', () {
-      final text = File('assets/levels/level_021.json').readAsStringSync();
-      final level = loadLevelFromJson(text, source: 'level_021');
-      expect(level.flasks.single.state, FlaskState.solid);
-      expect(level.terrain.single.material, Material.wall);
+  group('실제 에셋 픽스처 (콘텐츠 갱신에 견고한 스모크)', () {
+    // 출고 레벨은 콘텐츠라 값이 계속 바뀐다 — 특정 필드 단언 대신 "모든 레벨 JSON이
+    // 로더 검증을 통과한다"로만 확인한다. 필드 매핑 단언은 인라인 픽스처(validLevelMap)가 담당.
+    test('assets/levels/의 모든 레벨 JSON이 로더 검증을 통과한다', () {
+      final files = Directory('assets/levels')
+          .listSync()
+          .whereType<File>()
+          .where((f) => f.path.endsWith('.json'))
+          .toList()
+        ..sort((a, b) => a.path.compareTo(b.path));
+      expect(files, isNotEmpty, reason: '출고 레벨 JSON이 최소 1개 있어야 한다');
+      for (final f in files) {
+        final text = f.readAsStringSync();
+        expect(
+          () => loadLevelFromJson(text, source: f.path),
+          returnsNormally,
+          reason: '${f.path} 로드·검증 실패',
+        );
+      }
     });
   });
 
