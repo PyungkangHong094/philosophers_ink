@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import '../audio/audio_service.dart';
 import '../audio/soloud_audio_service.dart';
 import '../meta/level_catalog.dart';
+import '../meta/onboarding.dart';
 import '../meta/progress.dart';
 import '../meta/progress_store.dart';
 import 'screens/title_screen.dart';
@@ -21,6 +22,7 @@ class InkServices extends InheritedWidget {
   final GameProgress progress;
   final LevelCatalog catalog;
   final AudioService audio;
+  final OnboardingState onboarding;
 
   const InkServices({
     super.key,
@@ -28,6 +30,7 @@ class InkServices extends InheritedWidget {
     required this.progress,
     required this.catalog,
     required this.audio,
+    required this.onboarding,
     required super.child,
   });
 
@@ -42,7 +45,8 @@ class InkServices extends InheritedWidget {
       settings != old.settings ||
       progress != old.progress ||
       catalog != old.catalog ||
-      audio != old.audio;
+      audio != old.audio ||
+      onboarding != old.onboarding;
 }
 
 class InkApp extends StatelessWidget {
@@ -92,6 +96,7 @@ class _BootstrapState extends State<_Bootstrap> {
   GameProgress? _progress;
   LevelCatalog? _catalog;
   AudioService? _audio;
+  OnboardingState? _onboarding;
   Object? _error;
 
   @override
@@ -120,6 +125,7 @@ class _BootstrapState extends State<_Bootstrap> {
         _progress = store.loadProgress();
         _catalog = catalog;
         _audio = audio;
+        _onboarding = store.loadOnboarding();
       });
     } catch (e) {
       if (mounted) setState(() => _error = e);
@@ -136,10 +142,12 @@ class _BootstrapState extends State<_Bootstrap> {
     final progress = _progress;
     final catalog = _catalog;
     final audio = _audio;
+    final onboarding = _onboarding;
     if (settings == null ||
         progress == null ||
         catalog == null ||
-        audio == null) {
+        audio == null ||
+        onboarding == null) {
       return const _MaterialShell(
         home: _Splash(
           child: SizedBox(
@@ -160,6 +168,7 @@ class _BootstrapState extends State<_Bootstrap> {
       progress: progress,
       catalog: catalog,
       audio: audio,
+      onboarding: onboarding,
       child: const _MaterialShell(home: TitleScreen()),
     );
   }

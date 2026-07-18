@@ -3,101 +3,86 @@
   "name": "스스로 굳는 관",
   "chapter": 4,
   "solvable": true,
-  "min_ink": 0,
-  "effort": 1,
-  "rollouts": 15,
-  "elapsed_ms": 5712,
+  "min_ink": 4,
+  "effort": 3,
+  "rollouts": 211,
+  "elapsed_ms": 187004,
   "budget": {
-    "chalk": 9,
+    "chalk": 0,
     "heat": 0,
-    "frost": 36
+    "frost": 60
   },
   "solutions": [
     {
-      "ink": 0,
-      "ticks": 288,
-      "strokes": [],
-      "gravity_taps": []
-    },
-    {
-      "ink": 0,
-      "ticks": 288,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 88,
-          "y0": 128,
-          "x1": 80,
-          "y1": 316
-        }
-      ],
-      "gravity_taps": []
-    },
-    {
-      "ink": 0,
-      "ticks": 288,
+      "ink": 4,
+      "ticks": 348,
       "strokes": [
         {
           "ink": "frost",
-          "x0": 80,
-          "y0": 140,
-          "x1": 80,
-          "y1": 300
-        },
+          "x0": 86,
+          "y0": 134,
+          "x1": 86,
+          "y1": 134
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 4,
+      "ticks": 381,
+      "strokes": [
         {
           "ink": "frost",
-          "x0": 68,
-          "y0": 80,
-          "x1": 84,
-          "y1": 308
+          "x0": 74,
+          "y0": 230,
+          "x1": 74,
+          "y1": 230
         }
       ],
       "gravity_taps": []
     },
     {
-      "ink": 9,
-      "ticks": 288,
+      "ink": 6,
+      "ticks": 374,
       "strokes": [
         {
-          "ink": "chalk",
-          "x0": 88,
-          "y0": 88,
-          "x1": 80,
-          "y1": 104
+          "ink": "frost",
+          "x0": 73,
+          "y0": 230,
+          "x1": 74,
+          "y1": 230
         }
       ],
       "gravity_taps": []
     },
     {
-      "ink": 9,
-      "ticks": 289,
+      "ink": 6,
+      "ticks": 343,
       "strokes": [
         {
-          "ink": "chalk",
-          "x0": 84,
-          "y0": 224,
-          "x1": 64,
-          "y1": 236
-        },
+          "ink": "frost",
+          "x0": 74,
+          "y0": 230,
+          "x1": 74,
+          "y1": 229
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 6,
+      "ticks": 360,
+      "strokes": [
         {
-          "ink": "chalk",
-          "x0": 96,
-          "y0": 68,
-          "x1": 76,
-          "y1": 319
+          "ink": "frost",
+          "x0": 86,
+          "y0": 134,
+          "x1": 86,
+          "y1": 133
         }
       ],
       "gravity_taps": []
     }
   ],
-  "probes": {
-    "no_ink_chalk": {
-      "solvable": true,
-      "min_ink": 0
-    },
-    "no_ink_frost": {
-      "solvable": true,
-      "min_ink": 0
-    }
-  }
+  "probes": {}
 }

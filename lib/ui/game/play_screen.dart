@@ -5,6 +5,8 @@
 /// 클리어/실패/일시정지 오버레이를 얹는다. 입력 처리는 세션 공개 API 호출뿐이다.
 library;
 
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -16,15 +18,21 @@ import '../../core/game_loop.dart';
 import '../../gameplay/level_session.dart';
 import '../../meta/chapters.dart';
 import '../../meta/level_catalog.dart';
+import '../../meta/onboarding.dart';
 import '../../meta/progress.dart';
 import '../../render/palette.dart';
 import '../../render/world_painter.dart';
 import '../../sim/materials.dart';
+import '../onboarding/onboarding_text.dart';
+import '../onboarding/onboarding_widgets.dart';
 import '../settings_controller.dart';
 import '../tokens.dart';
 import 'clear_overlay.dart';
 import 'ink_palette_bar.dart';
 import 'pause_overlay.dart';
+
+/// 첫 조작 가이드 종류.
+enum _GuideKind { none, stroke, gravity }
 
 enum _Phase { playing, cleared, failed }
 
@@ -39,6 +47,7 @@ class PlayScreen extends StatefulWidget {
   final GameProgress progress;
   final SettingsController settings;
   final AudioService audio;
+  final OnboardingState onboarding;
 
   /// "다음 레벨" 콜백. null이면 다음이 없거나 잠김 — 버튼 숨김.
   final VoidCallback? onNext;
@@ -49,6 +58,7 @@ class PlayScreen extends StatefulWidget {
     required this.progress,
     required this.settings,
     required this.audio,
+    required this.onboarding,
     this.onNext,
   });
 
@@ -80,6 +90,28 @@ class _PlayScreenState extends State<PlayScreen>
   /// 플라스크 라벨 TextPainter 캐시 — 라벨 문자열이 바뀔 때만 재생성 (감사 P3-2).
   final _FlaskLabelCache _flaskLabels = _FlaskLabelCache();
 
+  // ---- 온보딩 (GDD 7.2) ----
+  bool _goalVisible = true;
+  bool _guideVisible = false;
+  _GuideKind _guide = _GuideKind.none;
+  bool _gaugeEmphasize = false;
+  bool _sawFirstInput = false;
+  bool _explainStars = false; // 이번 클리어가 첫 클리어라 별점 설명을 노출하는가.
+  Timer? _goalTimer;
+  Timer? _guideTimer;
+  Timer? _gaugeTimer;
+
+  /// 목표 배너 자동 소멸 시간.
+  static const Duration _goalDwell = Duration(seconds: 3);
+
+  /// 미조작 상태에서 첫 조작 가이드가 뜨기까지의 시간.
+  static const Duration _guideIdle = Duration(seconds: 3);
+
+  /// 게이지 강조 지속 시간.
+  static const Duration _gaugeDwell = Duration(milliseconds: 1200);
+
+  bool get _isTutorialChapter => widget.entry.chapter == 1;
+
   @override
   void initState() {
     super.initState();
@@ -97,10 +129,68 @@ class _PlayScreenState extends State<PlayScreen>
     _loop = GameLoop(onTick: () => _session.tick());
     _ticker = createTicker(_onFrame)..start();
     WidgetsBinding.instance.addObserver(this); // 앱 백그라운드 전환 감지.
+    _setupOnboarding();
+  }
+
+  /// 목표 배너 자동 소멸 타이머 + (튜토리얼 챕터) 미조작 첫 조작 가이드 예약.
+  void _setupOnboarding() {
+    _goalTimer = Timer(_goalDwell, () {
+      if (mounted) setState(() => _goalVisible = false);
+    });
+
+    if (!_isTutorialChapter) return;
+    final ob = widget.onboarding;
+    // 레벨 1~2: 스트로크 가이드. 중력 기믹 레벨: 중력 가이드. (각 1회만.)
+    _GuideKind pending = _GuideKind.none;
+    if (widget.entry.id <= 2 && !ob.hasSeen(OnboardingKey.stroke)) {
+      pending = _GuideKind.stroke;
+    } else if (_session.hasGravityFlip && !ob.hasSeen(OnboardingKey.gravity)) {
+      pending = _GuideKind.gravity;
+    }
+    if (pending == _GuideKind.none) return;
+    _guide = pending;
+    _guideTimer = Timer(_guideIdle, () {
+      // 스트로크 가이드는 아직 첫 조작 전일 때만 뜬다.
+      final blockedByInput =
+          pending == _GuideKind.stroke && _sawFirstInput;
+      if (mounted && !blockedByInput) setState(() => _guideVisible = true);
+    });
+  }
+
+  /// 첫 조작(스트로크) 시 온보딩 반응: 목표·스트로크 가이드 소멸 + 게이지 힌트 1회.
+  void _onFirstInput() {
+    if (_sawFirstInput) return;
+    _sawFirstInput = true;
+    setState(() {
+      _goalVisible = false;
+      if (_guide == _GuideKind.stroke) {
+        _guideVisible = false;
+        widget.onboarding.markSeenOnce(OnboardingKey.stroke);
+      }
+    });
+    // 게이지 이해 힌트 — 튜토리얼 챕터에서 1회만.
+    if (_isTutorialChapter &&
+        widget.onboarding.markSeenOnce(OnboardingKey.gauge)) {
+      setState(() => _gaugeEmphasize = true);
+      _gaugeTimer = Timer(_gaugeDwell, () {
+        if (mounted) setState(() => _gaugeEmphasize = false);
+      });
+    }
+  }
+
+  /// 중력 반전 첫 사용 시 중력 가이드 소멸.
+  void _onGravityUsed() {
+    if (_guide == _GuideKind.gravity && _guideVisible) {
+      setState(() => _guideVisible = false);
+      widget.onboarding.markSeenOnce(OnboardingKey.gravity);
+    }
   }
 
   @override
   void dispose() {
+    _goalTimer?.cancel();
+    _guideTimer?.cancel();
+    _gaugeTimer?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     widget.audio.stopAll(); // 화면 이탈 시 루프성 재생(앰비언트 등) 전부 정지 — 전역 잔존 방지.
     _ticker.dispose(); // 프레임 정지 먼저 — 이후 세션을 건드리지 않는다.
@@ -151,6 +241,8 @@ class _PlayScreenState extends State<PlayScreen>
       widget.audio.fail();
     } else if (_session.isCleared) {
       final stars = _session.result.stars;
+      // 첫 클리어면 별점 설명을 1회 노출(이후 영속으로 숨김).
+      _explainStars = widget.onboarding.markSeenOnce(OnboardingKey.firstClear);
       _outcome.value = _Outcome(_Phase.cleared, stars: stars);
       _recordResult(stars);
       widget.audio.stopAmbient();
@@ -209,6 +301,7 @@ class _PlayScreenState extends State<PlayScreen>
 
   void _onPanStart(DragStartDetails d) {
     if (!_canDraw) return;
+    _onFirstInput();
     final cell = _cellAt(d.localPosition);
     if (cell == null) return;
     final ink = _session.ink.selected;
@@ -221,6 +314,7 @@ class _PlayScreenState extends State<PlayScreen>
 
   void _onPanUpdate(DragUpdateDetails d) {
     if (!_canDraw) return;
+    _onFirstInput();
     final cell = _cellAt(d.localPosition);
     if (cell == null) return;
     if (_activeStrokeId == null) {
@@ -338,6 +432,7 @@ class _PlayScreenState extends State<PlayScreen>
                       if (_canDraw) {
                         _session.toggleGravity();
                         widget.settings.hapticSelection();
+                        _onGravityUsed();
                       }
                     },
                   ),
@@ -365,6 +460,7 @@ class _PlayScreenState extends State<PlayScreen>
             child: Center(
               child: InkPaletteBar(
                 controller: _session.ink,
+                emphasizeCount: _gaugeEmphasize,
                 onSelect: () {
                   widget.settings.hapticSelection();
                   widget.audio.uiTap();
@@ -372,6 +468,37 @@ class _PlayScreenState extends State<PlayScreen>
               ),
             ),
           ),
+          // 목표 배너 (상단, 3초/첫 터치 후 페이드). 대형 레벨 번호 아래.
+          Positioned(
+            top: topPad + InkSpace.xl + InkSpace.md,
+            left: InkSpace.md,
+            right: InkSpace.md,
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: GoalBanner(
+                text: goalLine(widget.entry.level),
+                visible: _goalVisible,
+              ),
+            ),
+          ),
+          // 첫 조작 가이드 (튜토리얼 챕터, 미조작 3초 후).
+          if (_guideVisible && _guide != _GuideKind.none)
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: bottomPad + 140,
+              child: Center(
+                child: FirstOpGuide(
+                  text: _guide == _GuideKind.gravity
+                      ? OnboardingCopy.gravityGuide
+                      : OnboardingCopy.strokeGuide,
+                  icon: _guide == _GuideKind.gravity
+                      ? Icons.swap_vert
+                      : Icons.gesture,
+                  reducedMotion: reduced,
+                ),
+              ),
+            ),
           // 오버레이들.
           ValueListenableBuilder<_Outcome>(
             valueListenable: _outcome,
@@ -386,6 +513,10 @@ class _PlayScreenState extends State<PlayScreen>
                   onRetry: _retry,
                   reducedMotion: reduced,
                   onStarStamped: widget.settings.hapticLight,
+                  // 첫 클리어에만 별점 설명 1줄 + 이번 판 사용량/임계.
+                  starHelp: _explainStars ? OnboardingCopy.starExplain : null,
+                  usageLine: clearUsageLine(
+                      widget.entry.level, _session.ink.budget.totalUsed),
                 );
               }
               if (o.phase == _Phase.failed) {
@@ -403,6 +534,7 @@ class _PlayScreenState extends State<PlayScreen>
               muted: !widget.settings.sound,
               onToggleMute: () =>
                   setState(() => widget.settings.sound = !widget.settings.sound),
+              thresholdLine: starThresholdLine(widget.entry.level),
             ),
         ],
       ),

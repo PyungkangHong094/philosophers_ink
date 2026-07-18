@@ -3,20 +3,84 @@
   "name": "화로 지대",
   "chapter": 2,
   "solvable": true,
-  "min_ink": 0,
-  "effort": 1,
-  "rollouts": 25,
-  "elapsed_ms": 13272,
+  "min_ink": 233,
+  "effort": 12,
+  "rollouts": 382,
+  "elapsed_ms": 349663,
   "budget": {
-    "chalk": 140,
+    "chalk": 468,
     "heat": 0,
     "frost": 0
   },
   "solutions": [
     {
-      "ink": 0,
-      "ticks": 994,
-      "strokes": [],
+      "ink": 233,
+      "ticks": 373,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 16,
+          "y0": 106,
+          "x1": 95,
+          "y1": 177
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 233,
+      "ticks": 363,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 17,
+          "y0": 104,
+          "x1": 95,
+          "y1": 177
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 234,
+      "ticks": 440,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 20,
+          "y0": 87,
+          "x1": 96,
+          "y1": 164
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 236,
+      "ticks": 315,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 16,
+          "y0": 106,
+          "x1": 96,
+          "y1": 178
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 236,
+      "ticks": 379,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 15,
+          "y0": 105,
+          "x1": 95,
+          "y1": 177
+        }
+      ],
       "gravity_taps": []
     }
   ],

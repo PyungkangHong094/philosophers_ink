@@ -3,10 +3,10 @@
   "name": "철거 순서",
   "chapter": 3,
   "solvable": true,
-  "min_ink": 0,
-  "effort": 1,
-  "rollouts": 25,
-  "elapsed_ms": 14188,
+  "min_ink": 4,
+  "effort": 7,
+  "rollouts": 423,
+  "elapsed_ms": 197778,
   "budget": {
     "chalk": 0,
     "heat": 45,
@@ -14,9 +14,73 @@
   },
   "solutions": [
     {
-      "ink": 0,
-      "ticks": 632,
-      "strokes": [],
+      "ink": 4,
+      "ticks": 126,
+      "strokes": [
+        {
+          "ink": "heat",
+          "x0": 77,
+          "y0": 24,
+          "x1": 77,
+          "y1": 24
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 6,
+      "ticks": 84,
+      "strokes": [
+        {
+          "ink": "heat",
+          "x0": 78,
+          "y0": 24,
+          "x1": 77,
+          "y1": 24
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 6,
+      "ticks": 103,
+      "strokes": [
+        {
+          "ink": "heat",
+          "x0": 77,
+          "y0": 24,
+          "x1": 76,
+          "y1": 24
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 6,
+      "ticks": 84,
+      "strokes": [
+        {
+          "ink": "heat",
+          "x0": 77,
+          "y0": 24,
+          "x1": 78,
+          "y1": 24
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 7,
+      "ticks": 87,
+      "strokes": [
+        {
+          "ink": "heat",
+          "x0": 76,
+          "y0": 25,
+          "x1": 77,
+          "y1": 24
+        }
+      ],
       "gravity_taps": []
     }
   ],

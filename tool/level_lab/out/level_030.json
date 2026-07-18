@@ -3,31 +3,95 @@
   "name": "원격 결빙",
   "chapter": 2,
   "solvable": true,
-  "min_ink": 0,
-  "effort": 1,
-  "rollouts": 25,
-  "elapsed_ms": 15316,
+  "min_ink": 266,
+  "effort": 16,
+  "rollouts": 653,
+  "elapsed_ms": 326035,
   "budget": {
-    "chalk": 61,
+    "chalk": 413,
     "heat": 0,
-    "frost": 44
+    "frost": 120
   },
   "solutions": [
     {
-      "ink": 0,
-      "ticks": 1887,
-      "strokes": [],
+      "ink": 266,
+      "ticks": 473,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 28,
+          "y0": 151,
+          "x1": 114,
+          "y1": 239
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 267,
+      "ticks": 414,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 26,
+          "y0": 152,
+          "x1": 114,
+          "y1": 239
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 269,
+      "ticks": 385,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 27,
+          "y0": 150,
+          "x1": 114,
+          "y1": 239
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 270,
+      "ticks": 473,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 28,
+          "y0": 149,
+          "x1": 114,
+          "y1": 239
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 270,
+      "ticks": 355,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 26,
+          "y0": 150,
+          "x1": 114,
+          "y1": 239
+        }
+      ],
       "gravity_taps": []
     }
   ],
   "probes": {
     "no_ink_chalk": {
-      "solvable": true,
-      "min_ink": 0
+      "solvable": false,
+      "min_ink": null
     },
     "no_ink_frost": {
       "solvable": true,
-      "min_ink": 0
+      "min_ink": 285
     }
   }
 }

@@ -19,6 +19,9 @@ class PauseOverlay extends StatelessWidget {
   final bool muted;
   final VoidCallback onToggleMute;
 
+  /// 이 레벨의 별점 임계 1줄 ("★★ ≤ 42 · ★★★ ≤ 30"). null이면 미검증 — 표시 안 함.
+  final String? thresholdLine;
+
   const PauseOverlay({
     super.key,
     required this.eyebrow,
@@ -27,6 +30,7 @@ class PauseOverlay extends StatelessWidget {
     required this.onExit,
     required this.muted,
     required this.onToggleMute,
+    this.thresholdLine,
   });
 
   @override
@@ -43,6 +47,11 @@ class PauseOverlay extends StatelessWidget {
               InkEyebrow(eyebrow),
               const SizedBox(height: InkSpace.md),
               Text('멈춤', style: InkText.titleKo),
+              if (thresholdLine != null) ...[
+                const SizedBox(height: InkSpace.sm),
+                Text(thresholdLine!,
+                    style: InkText.caption.copyWith(color: InkColor.gold)),
+              ],
               const SizedBox(height: InkSpace.xl),
               SizedBox(
                   width: 220,

@@ -9,11 +9,13 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'onboarding.dart';
 import 'progress.dart';
 
 class ProgressStore {
   static const String _progressKey = 'ink.progress.v1';
   static const String _settingsKey = 'ink.settings.v1';
+  static const String _onboardingKey = 'ink.onboarding.v1';
 
   final SharedPreferences _prefs;
   ProgressStore(this._prefs);
@@ -53,5 +55,24 @@ class ProgressStore {
 
   void saveSettings(Map<String, dynamic> settings) {
     _prefs.setString(_settingsKey, jsonEncode(settings));
+  }
+
+  /// 온보딩 노출 이력을 로드하고, 변경 시 자동 저장하는 [OnboardingState]를 만든다.
+  OnboardingState loadOnboarding() {
+    final raw = _prefs.getString(_onboardingKey);
+    if (raw == null) {
+      return OnboardingState(onChanged: _saveOnboarding);
+    }
+    try {
+      final list = jsonDecode(raw) as List<dynamic>;
+      return OnboardingState.fromJsonList(list, onChanged: _saveOnboarding);
+    } catch (e) {
+      if (kDebugMode) debugPrint('[ProgressStore] 온보딩 로드 실패, 초기화: $e');
+      return OnboardingState(onChanged: _saveOnboarding);
+    }
+  }
+
+  void _saveOnboarding(OnboardingState s) {
+    _prefs.setString(_onboardingKey, jsonEncode(s.toJsonList()));
   }
 }

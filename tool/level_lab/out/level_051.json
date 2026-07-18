@@ -3,108 +3,86 @@
   "name": "빗물 계단",
   "chapter": 3,
   "solvable": true,
-  "min_ink": 0,
-  "effort": 1,
-  "rollouts": 15,
-  "elapsed_ms": 5712,
+  "min_ink": 21,
+  "effort": 1182,
+  "rollouts": 2342,
+  "elapsed_ms": 2418927,
   "budget": {
-    "chalk": 36,
+    "chalk": 54,
     "heat": 0,
-    "frost": 36
+    "frost": 0
   },
   "solutions": [
     {
-      "ink": 0,
-      "ticks": 306,
-      "strokes": [],
-      "gravity_taps": []
-    },
-    {
-      "ink": 0,
-      "ticks": 306,
+      "ink": 21,
+      "ticks": 1318,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 88,
-          "y0": 256,
-          "x1": 136,
-          "y1": 316
+          "x0": 76,
+          "y0": 126,
+          "x1": 62,
+          "y1": 120
         }
       ],
       "gravity_taps": []
     },
     {
-      "ink": 0,
-      "ticks": 306,
+      "ink": 22,
+      "ticks": 1131,
       "strokes": [
         {
-          "ink": "frost",
-          "x0": 80,
-          "y0": 228,
-          "x1": 136,
-          "y1": 300
-        },
-        {
-          "ink": "frost",
-          "x0": 68,
-          "y0": 232,
-          "x1": 136,
-          "y1": 308
+          "ink": "chalk",
+          "x0": 76,
+          "y0": 126,
+          "x1": 64,
+          "y1": 118
         }
       ],
       "gravity_taps": []
     },
     {
-      "ink": 0,
-      "ticks": 306,
+      "ink": 22,
+      "ticks": 1380,
       "strokes": [
         {
-          "ink": "frost",
-          "x0": 96,
-          "y0": 316,
-          "x1": 148,
-          "y1": 244
+          "ink": "chalk",
+          "x0": 76,
+          "y0": 126,
+          "x1": 66,
+          "y1": 117
         }
       ],
       "gravity_taps": []
     },
     {
-      "ink": 20,
-      "ticks": 306,
+      "ink": 26,
+      "ticks": 1318,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 128,
-          "y0": 300,
-          "x1": 24,
-          "y1": 236
-        },
+          "x0": 76,
+          "y0": 126,
+          "x1": 60,
+          "y1": 119
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 28,
+      "ticks": 1152,
+      "strokes": [
         {
           "ink": "chalk",
-          "x0": 60,
-          "y0": 232,
-          "x1": 120,
-          "y1": 292
-        },
-        {
-          "ink": "chalk",
-          "x0": 96,
-          "y0": 248,
-          "x1": 96,
-          "y1": 256
+          "x0": 78,
+          "y0": 124,
+          "x1": 62,
+          "y1": 120
         }
       ],
       "gravity_taps": []
     }
   ],
-  "probes": {
-    "no_ink_chalk": {
-      "solvable": true,
-      "min_ink": 0
-    },
-    "no_ink_frost": {
-      "solvable": true,
-      "min_ink": 0
-    }
-  }
+  "probes": {}
 }

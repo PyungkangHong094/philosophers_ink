@@ -154,6 +154,7 @@ class LevelSelectScreen extends StatelessWidget {
         progress: services.progress,
         settings: services.settings,
         audio: services.audio,
+        onboarding: services.onboarding,
         onNext: onNext,
       ),
     );

@@ -6,7 +6,7 @@
   "min_ink": null,
   "effort": null,
   "rollouts": 2700,
-  "elapsed_ms": 1286113,
+  "elapsed_ms": 1542239,
   "budget": {
     "chalk": 60,
     "heat": 0,

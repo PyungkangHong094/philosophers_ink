@@ -54,6 +54,7 @@ class _DevApp extends StatelessWidget {
   Future<Widget> _buildPlay() async {
     final store = await ProgressStore.open();
     final settings = SettingsController.fromStore(store);
+    final onboarding = store.loadOnboarding();
     final json = await rootBundle.loadString('assets/levels/level_001.json');
     final level = loadLevelFromJson(json, source: 'level_001.json');
     final entry = LevelEntry(
@@ -69,11 +70,13 @@ class _DevApp extends StatelessWidget {
       progress: GameProgress(),
       catalog: LevelCatalog([entry]),
       audio: audio,
+      onboarding: onboarding,
       child: PlayScreen(
         entry: entry,
         progress: GameProgress(),
         settings: settings,
         audio: audio,
+        onboarding: onboarding,
       ),
     );
   }

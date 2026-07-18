@@ -3,116 +3,86 @@
   "name": "화염 룬",
   "chapter": 3,
   "solvable": true,
-  "min_ink": 20,
-  "effort": 5,
-  "rollouts": 192,
-  "elapsed_ms": 95443,
+  "min_ink": 4,
+  "effort": 3,
+  "rollouts": 261,
+  "elapsed_ms": 175494,
   "budget": {
-    "chalk": 16,
-    "heat": 20,
+    "chalk": 0,
+    "heat": 40,
     "frost": 0
   },
   "solutions": [
     {
-      "ink": 20,
-      "ticks": 340,
+      "ink": 4,
+      "ticks": 678,
       "strokes": [
         {
           "ink": "heat",
-          "x0": 87,
-          "y0": 99,
-          "x1": 88,
-          "y1": 265
+          "x0": 66,
+          "y0": 230,
+          "x1": 66,
+          "y1": 230
         }
       ],
       "gravity_taps": []
     },
     {
-      "ink": 20,
-      "ticks": 331,
+      "ink": 4,
+      "ticks": 390,
       "strokes": [
         {
           "ink": "heat",
-          "x0": 76,
-          "y0": 28,
+          "x0": 79,
+          "y0": 259,
+          "x1": 79,
+          "y1": 259
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 6,
+      "ticks": 357,
+      "strokes": [
+        {
+          "ink": "heat",
+          "x0": 79,
+          "y0": 258,
+          "x1": 79,
+          "y1": 259
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 6,
+      "ticks": 375,
+      "strokes": [
+        {
+          "ink": "heat",
+          "x0": 79,
+          "y0": 262,
           "x1": 80,
-          "y1": 196
-        },
-        {
-          "ink": "heat",
-          "x0": 104,
-          "y0": 16,
-          "x1": 84,
-          "y1": 300
-        },
-        {
-          "ink": "heat",
-          "x0": 96,
-          "y0": 88,
-          "x1": 84,
-          "y1": 284
+          "y1": 262
         }
       ],
       "gravity_taps": []
     },
     {
-      "ink": 20,
-      "ticks": 600,
+      "ink": 6,
+      "ticks": 357,
       "strokes": [
         {
           "ink": "heat",
-          "x0": 92,
-          "y0": 157,
-          "x1": 96,
-          "y1": 126
-        }
-      ],
-      "gravity_taps": []
-    },
-    {
-      "ink": 20,
-      "ticks": 332,
-      "strokes": [
-        {
-          "ink": "heat",
-          "x0": 76,
-          "y0": 176,
-          "x1": 112,
-          "y1": 112
-        }
-      ],
-      "gravity_taps": []
-    },
-    {
-      "ink": 20,
-      "ticks": 320,
-      "strokes": [
-        {
-          "ink": "heat",
-          "x0": 88,
-          "y0": 200,
-          "x1": 4,
-          "y1": 116
-        },
-        {
-          "ink": "heat",
-          "x0": 52,
-          "y0": 232,
-          "x1": 84,
-          "y1": 136
+          "x0": 79,
+          "y0": 260,
+          "x1": 79,
+          "y1": 261
         }
       ],
       "gravity_taps": []
     }
   ],
-  "probes": {
-    "no_ink_chalk": {
-      "solvable": true,
-      "min_ink": 6
-    },
-    "no_ink_heat": {
-      "solvable": false,
-      "min_ink": null
-    }
-  }
+  "probes": {}
 }

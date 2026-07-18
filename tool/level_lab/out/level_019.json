@@ -3,31 +3,86 @@
   "name": "미끄럼틀",
   "chapter": 2,
   "solvable": true,
-  "min_ink": 0,
-  "effort": 1,
-  "rollouts": 25,
-  "elapsed_ms": 11891,
+  "min_ink": 292,
+  "effort": 12,
+  "rollouts": 394,
+  "elapsed_ms": 212082,
   "budget": {
-    "chalk": 60,
+    "chalk": 546,
     "heat": 0,
-    "frost": 120
+    "frost": 0
   },
   "solutions": [
     {
-      "ink": 0,
-      "ticks": 481,
-      "strokes": [],
+      "ink": 292,
+      "ticks": 468,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 16,
+          "y0": 106,
+          "x1": 118,
+          "y1": 195
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 294,
+      "ticks": 468,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 16,
+          "y0": 104,
+          "x1": 118,
+          "y1": 195
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 295,
+      "ticks": 528,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 16,
+          "y0": 104,
+          "x1": 116,
+          "y1": 195
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 297,
+      "ticks": 331,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 15,
+          "y0": 103,
+          "x1": 118,
+          "y1": 195
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 300,
+      "ticks": 343,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 15,
+          "y0": 101,
+          "x1": 118,
+          "y1": 196
+        }
+      ],
       "gravity_taps": []
     }
   ],
-  "probes": {
-    "no_ink_chalk": {
-      "solvable": true,
-      "min_ink": 0
-    },
-    "no_ink_frost": {
-      "solvable": true,
-      "min_ink": 0
-    }
-  }
+  "probes": {}
 }

@@ -3,31 +3,86 @@
   "name": "녹기 전에",
   "chapter": 2,
   "solvable": true,
-  "min_ink": 0,
-  "effort": 1,
-  "rollouts": 25,
-  "elapsed_ms": 12166,
+  "min_ink": 166,
+  "effort": 12,
+  "rollouts": 643,
+  "elapsed_ms": 355664,
   "budget": {
-    "chalk": 51,
+    "chalk": 277,
     "heat": 0,
-    "frost": 119
+    "frost": 0
   },
   "solutions": [
     {
-      "ink": 0,
-      "ticks": 489,
-      "strokes": [],
+      "ink": 166,
+      "ticks": 1382,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 91,
+          "y0": 74,
+          "x1": 17,
+          "y1": 60
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 166,
+      "ticks": 734,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 92,
+          "y0": 72,
+          "x1": 17,
+          "y1": 60
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 167,
+      "ticks": 651,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 92,
+          "y0": 73,
+          "x1": 17,
+          "y1": 60
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 168,
+      "ticks": 602,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 92,
+          "y0": 74,
+          "x1": 17,
+          "y1": 60
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 168,
+      "ticks": 914,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 91,
+          "y0": 74,
+          "x1": 16,
+          "y1": 60
+        }
+      ],
       "gravity_taps": []
     }
   ],
-  "probes": {
-    "no_ink_chalk": {
-      "solvable": true,
-      "min_ink": 0
-    },
-    "no_ink_frost": {
-      "solvable": true,
-      "min_ink": 0
-    }
-  }
+  "probes": {}
 }

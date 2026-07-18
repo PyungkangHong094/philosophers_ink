@@ -28,6 +28,12 @@ class ClearOverlay extends StatefulWidget {
   /// 별 1개가 스탬프될 때마다 호출 (햅틱).
   final VoidCallback? onStarStamped;
 
+  /// 첫 클리어 별점 설명 1줄 (GDD 7.2). null이면 표시 안 함(이미 봄).
+  final String? starHelp;
+
+  /// 이번 판 사용량/임계 1줄 (별점 설명과 함께만 노출).
+  final String? usageLine;
+
   const ClearOverlay({
     super.key,
     required this.eyebrow,
@@ -38,6 +44,8 @@ class ClearOverlay extends StatefulWidget {
     required this.onRetry,
     required this.reducedMotion,
     this.onStarStamped,
+    this.starHelp,
+    this.usageLine,
   });
 
   @override
@@ -121,6 +129,17 @@ class _ClearOverlayState extends State<ClearOverlay>
                   ],
                 ),
               ),
+              // 첫 클리어 별점 설명 1줄 + 사용량/임계 (GDD 7.2).
+              if (widget.starHelp != null) ...[
+                const SizedBox(height: InkSpace.md),
+                Text(widget.starHelp!,
+                    style: InkText.body, textAlign: TextAlign.center),
+                if (widget.usageLine != null) ...[
+                  const SizedBox(height: InkSpace.xs),
+                  Text(widget.usageLine!,
+                      style: InkText.caption.copyWith(color: InkColor.gold)),
+                ],
+              ],
               const SizedBox(height: InkSpace.xl),
               SizedBox(
                 width: 220,

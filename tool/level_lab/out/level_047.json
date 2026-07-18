@@ -3,108 +3,86 @@
   "name": "재의 방패",
   "chapter": 3,
   "solvable": true,
-  "min_ink": 0,
-  "effort": 1,
-  "rollouts": 15,
-  "elapsed_ms": 4997,
+  "min_ink": 4,
+  "effort": 7,
+  "rollouts": 410,
+  "elapsed_ms": 179576,
   "budget": {
-    "chalk": 58,
-    "heat": 17,
+    "chalk": 0,
+    "heat": 51,
     "frost": 0
   },
   "solutions": [
     {
-      "ink": 0,
-      "ticks": 288,
-      "strokes": [],
-      "gravity_taps": []
-    },
-    {
-      "ink": 0,
-      "ticks": 288,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 104,
-          "y0": 276,
-          "x1": 96,
-          "y1": 292
-        }
-      ],
-      "gravity_taps": []
-    },
-    {
-      "ink": 0,
-      "ticks": 288,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 36,
-          "y0": 152,
-          "x1": 72,
-          "y1": 316
-        }
-      ],
-      "gravity_taps": []
-    },
-    {
-      "ink": 0,
-      "ticks": 288,
+      "ink": 4,
+      "ticks": 133,
       "strokes": [
         {
           "ink": "heat",
-          "x0": 72,
-          "y0": 88,
+          "x0": 76,
+          "y0": 26,
           "x1": 76,
-          "y1": 300
-        },
-        {
-          "ink": "heat",
-          "x0": 16,
-          "y0": 96,
-          "x1": 76,
-          "y1": 308
+          "y1": 26
         }
       ],
       "gravity_taps": []
     },
     {
-      "ink": 12,
-      "ticks": 288,
+      "ink": 6,
+      "ticks": 107,
       "strokes": [
         {
-          "ink": "chalk",
-          "x0": 128,
-          "y0": 292,
-          "x1": 24,
-          "y1": 276
-        },
+          "ink": "heat",
+          "x0": 76,
+          "y0": 26,
+          "x1": 76,
+          "y1": 27
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 6,
+      "ticks": 127,
+      "strokes": [
         {
-          "ink": "chalk",
-          "x0": 8,
-          "y0": 116,
-          "x1": 60,
-          "y1": 292
-        },
+          "ink": "heat",
+          "x0": 76,
+          "y0": 26,
+          "x1": 75,
+          "y1": 26
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 6,
+      "ticks": 127,
+      "strokes": [
         {
-          "ink": "chalk",
-          "x0": 122,
-          "y0": 208,
-          "x1": 122,
-          "y1": 212
+          "ink": "heat",
+          "x0": 75,
+          "y0": 26,
+          "x1": 76,
+          "y1": 26
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 6,
+      "ticks": 141,
+      "strokes": [
+        {
+          "ink": "heat",
+          "x0": 76,
+          "y0": 26,
+          "x1": 77,
+          "y1": 26
         }
       ],
       "gravity_taps": []
     }
   ],
-  "probes": {
-    "no_ink_chalk": {
-      "solvable": true,
-      "min_ink": 0
-    },
-    "no_ink_heat": {
-      "solvable": true,
-      "min_ink": 0
-    }
-  }
+  "probes": {}
 }

@@ -3,95 +3,82 @@
   "name": "되돌림",
   "chapter": 2,
   "solvable": true,
-  "min_ink": 0,
-  "effort": 1,
-  "rollouts": 15,
-  "elapsed_ms": 5182,
+  "min_ink": 273,
+  "effort": 30,
+  "rollouts": 449,
+  "elapsed_ms": 238147,
   "budget": {
-    "chalk": 65,
+    "chalk": 468,
     "heat": 0,
     "frost": 0
   },
   "solutions": [
     {
-      "ink": 0,
-      "ticks": 292,
-      "strokes": [],
-      "gravity_taps": []
-    },
-    {
-      "ink": 0,
-      "ticks": 292,
+      "ink": 273,
+      "ticks": 565,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 88,
-          "y0": 276,
-          "x1": 80,
-          "y1": 292
+          "x0": 29,
+          "y0": 157,
+          "x1": 118,
+          "y1": 247
         }
       ],
       "gravity_taps": []
     },
     {
-      "ink": 0,
-      "ticks": 292,
+      "ink": 274,
+      "ticks": 693,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 84,
-          "y0": 152,
-          "x1": 80,
-          "y1": 316
+          "x0": 29,
+          "y0": 157,
+          "x1": 119,
+          "y1": 247
         }
       ],
       "gravity_taps": []
     },
     {
-      "ink": 0,
-      "ticks": 292,
+      "ink": 276,
+      "ticks": 417,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 80,
-          "y0": 88,
-          "x1": 80,
-          "y1": 300
-        },
-        {
-          "ink": "chalk",
-          "x0": 68,
-          "y0": 96,
-          "x1": 84,
-          "y1": 308
+          "x0": 27,
+          "y0": 157,
+          "x1": 118,
+          "y1": 247
         }
       ],
       "gravity_taps": []
     },
     {
-      "ink": 12,
-      "ticks": 292,
+      "ink": 276,
+      "ticks": 549,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 128,
-          "y0": 292,
-          "x1": 24,
-          "y1": 276
-        },
+          "x0": 28,
+          "y0": 157,
+          "x1": 119,
+          "y1": 247
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 276,
+      "ticks": 613,
+      "strokes": [
         {
           "ink": "chalk",
-          "x0": 60,
-          "y0": 116,
-          "x1": 64,
-          "y1": 292
-        },
-        {
-          "ink": "chalk",
-          "x0": 112,
-          "y0": 208,
-          "x1": 112,
-          "y1": 212
+          "x0": 29,
+          "y0": 157,
+          "x1": 119,
+          "y1": 248
         }
       ],
       "gravity_taps": []

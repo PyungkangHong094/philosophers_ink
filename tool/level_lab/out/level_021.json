@@ -4,81 +4,81 @@
   "chapter": 2,
   "solvable": true,
   "min_ink": 4,
-  "effort": 7,
-  "rollouts": 363,
-  "elapsed_ms": 155623,
+  "effort": 5,
+  "rollouts": 247,
+  "elapsed_ms": 123177,
   "budget": {
-    "chalk": 80,
+    "chalk": 60,
     "heat": 0,
-    "frost": 70
+    "frost": 300
   },
   "solutions": [
     {
       "ink": 4,
-      "ticks": 326,
+      "ticks": 428,
       "strokes": [
         {
           "ink": "frost",
-          "x0": 83,
-          "y0": 55,
-          "x1": 83,
-          "y1": 55
+          "x0": 80,
+          "y0": 126,
+          "x1": 80,
+          "y1": 126
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 4,
+      "ticks": 428,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 80,
+          "y0": 12,
+          "x1": 80,
+          "y1": 12
         }
       ],
       "gravity_taps": []
     },
     {
       "ink": 6,
-      "ticks": 319,
+      "ticks": 398,
       "strokes": [
         {
           "ink": "frost",
-          "x0": 84,
-          "y0": 55,
-          "x1": 83,
-          "y1": 55
+          "x0": 80,
+          "y0": 127,
+          "x1": 80,
+          "y1": 126
         }
       ],
       "gravity_taps": []
     },
     {
       "ink": 6,
-      "ticks": 322,
+      "ticks": 398,
       "strokes": [
         {
           "ink": "frost",
-          "x0": 83,
-          "y0": 55,
-          "x1": 82,
-          "y1": 55
+          "x0": 80,
+          "y0": 12,
+          "x1": 80,
+          "y1": 13
         }
       ],
       "gravity_taps": []
     },
     {
       "ink": 6,
-      "ticks": 322,
+      "ticks": 392,
       "strokes": [
         {
           "ink": "frost",
-          "x0": 82,
-          "y0": 55,
-          "x1": 83,
-          "y1": 55
-        }
-      ],
-      "gravity_taps": []
-    },
-    {
-      "ink": 6,
-      "ticks": 314,
-      "strokes": [
-        {
-          "ink": "frost",
-          "x0": 83,
-          "y0": 54,
-          "x1": 83,
-          "y1": 55
+          "x0": 80,
+          "y0": 129,
+          "x1": 80,
+          "y1": 130
         }
       ],
       "gravity_taps": []

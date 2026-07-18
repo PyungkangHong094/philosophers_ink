@@ -3,31 +3,86 @@
   "name": "얼음 다리",
   "chapter": 2,
   "solvable": true,
-  "min_ink": 0,
-  "effort": 1,
-  "rollouts": 25,
-  "elapsed_ms": 14160,
+  "min_ink": 228,
+  "effort": 15,
+  "rollouts": 585,
+  "elapsed_ms": 309334,
   "budget": {
-    "chalk": 40,
+    "chalk": 462,
     "heat": 0,
-    "frost": 130
+    "frost": 0
   },
   "solutions": [
     {
-      "ink": 0,
-      "ticks": 2110,
-      "strokes": [],
+      "ink": 228,
+      "ticks": 967,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 20,
+          "y0": 83,
+          "x1": 95,
+          "y1": 157
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 231,
+      "ticks": 675,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 20,
+          "y0": 83,
+          "x1": 96,
+          "y1": 158
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 231,
+      "ticks": 440,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 19,
+          "y0": 82,
+          "x1": 95,
+          "y1": 157
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 232,
+      "ticks": 396,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 19,
+          "y0": 81,
+          "x1": 95,
+          "y1": 157
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 237,
+      "ticks": 367,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 20,
+          "y0": 83,
+          "x1": 97,
+          "y1": 161
+        }
+      ],
       "gravity_taps": []
     }
   ],
-  "probes": {
-    "no_ink_chalk": {
-      "solvable": true,
-      "min_ink": 0
-    },
-    "no_ink_frost": {
-      "solvable": true,
-      "min_ink": 0
-    }
-  }
+  "probes": {}
 }

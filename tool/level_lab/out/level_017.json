@@ -3,31 +3,86 @@
   "name": "첫 마법",
   "chapter": 2,
   "solvable": true,
-  "min_ink": 0,
-  "effort": 1,
-  "rollouts": 25,
-  "elapsed_ms": 12151,
+  "min_ink": 171,
+  "effort": 12,
+  "rollouts": 380,
+  "elapsed_ms": 230785,
   "budget": {
-    "chalk": 80,
+    "chalk": 0,
     "heat": 0,
-    "frost": 90
+    "frost": 348
   },
   "solutions": [
     {
-      "ink": 0,
-      "ticks": 492,
-      "strokes": [],
+      "ink": 171,
+      "ticks": 683,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 94,
+          "y0": 68,
+          "x1": 15,
+          "y1": 59
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 173,
+      "ticks": 567,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 95,
+          "y0": 68,
+          "x1": 15,
+          "y1": 59
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 174,
+      "ticks": 614,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 94,
+          "y0": 71,
+          "x1": 14,
+          "y1": 61
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 174,
+      "ticks": 524,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 95,
+          "y0": 69,
+          "x1": 14,
+          "y1": 61
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 174,
+      "ticks": 512,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 95,
+          "y0": 69,
+          "x1": 15,
+          "y1": 59
+        }
+      ],
       "gravity_taps": []
     }
   ],
-  "probes": {
-    "no_ink_chalk": {
-      "solvable": true,
-      "min_ink": 0
-    },
-    "no_ink_frost": {
-      "solvable": true,
-      "min_ink": 0
-    }
-  }
+  "probes": {}
 }

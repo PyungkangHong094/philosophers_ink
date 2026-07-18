@@ -3,10 +3,10 @@
   "name": "가라앉는 구름",
   "chapter": 3,
   "solvable": true,
-  "min_ink": 0,
-  "effort": 8,
-  "rollouts": 35,
-  "elapsed_ms": 19805,
+  "min_ink": 4,
+  "effort": 208,
+  "rollouts": 549,
+  "elapsed_ms": 335385,
   "budget": {
     "chalk": 45,
     "heat": 12,
@@ -14,97 +14,54 @@
   },
   "solutions": [
     {
-      "ink": 0,
-      "ticks": 381,
+      "ink": 4,
+      "ticks": 448,
       "strokes": [
         {
           "ink": "chalk",
           "x0": 88,
-          "y0": 108,
-          "x1": 84,
-          "y1": 316
+          "y0": 12,
+          "x1": 88,
+          "y1": 296
         },
         {
           "ink": "heat",
-          "x0": 100,
-          "y0": 92,
-          "x1": 80,
-          "y1": 316
-        }
-      ],
-      "gravity_taps": [
-        150
-      ]
-    },
-    {
-      "ink": 12,
-      "ticks": 381,
-      "strokes": [
-        {
-          "ink": "heat",
-          "x0": 40,
-          "y0": 72,
-          "x1": 60,
-          "y1": 124
-        }
-      ],
-      "gravity_taps": [
-        150
-      ]
-    },
-    {
-      "ink": 45,
-      "ticks": 381,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 104,
-          "y0": 184,
-          "x1": 116,
-          "y1": 40
-        }
-      ],
-      "gravity_taps": [
-        150
-      ]
-    },
-    {
-      "ink": 45,
-      "ticks": 381,
-      "strokes": [
+          "x0": 88,
+          "y0": 308,
+          "x1": 88,
+          "y1": 308
+        },
         {
           "ink": "chalk",
           "x0": 68,
-          "y0": 128,
-          "x1": 104,
-          "y1": 292
+          "y0": 84,
+          "x1": 72,
+          "y1": 288
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 12,
+      "ticks": 364,
+      "strokes": [
+        {
+          "ink": "heat",
+          "x0": 80,
+          "y0": 256,
+          "x1": 76,
+          "y1": 252
         },
         {
           "ink": "heat",
-          "x0": 128,
-          "y0": 184,
-          "x1": 92,
-          "y1": 292
+          "x0": 48,
+          "y0": 164,
+          "x1": 60,
+          "y1": 288
         }
       ],
       "gravity_taps": [
-        150
-      ]
-    },
-    {
-      "ink": 45,
-      "ticks": 381,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 44,
-          "y0": 296,
-          "x1": 48,
-          "y1": 188
-        }
-      ],
-      "gravity_taps": [
-        150
+        300
       ]
     }
   ],
@@ -115,11 +72,11 @@
     },
     "no_ink_chalk": {
       "solvable": true,
-      "min_ink": 0
+      "min_ink": 9
     },
     "no_ink_heat": {
-      "solvable": true,
-      "min_ink": 0
+      "solvable": false,
+      "min_ink": null
     }
   }
 }

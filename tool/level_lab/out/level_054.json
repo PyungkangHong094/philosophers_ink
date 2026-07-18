@@ -2,100 +2,16 @@
   "level": 54,
   "name": "우아함의 시험",
   "chapter": 3,
-  "solvable": true,
-  "min_ink": 0,
-  "effort": 1,
-  "rollouts": 15,
-  "elapsed_ms": 6878,
+  "solvable": false,
+  "min_ink": null,
+  "effort": null,
+  "rollouts": 2700,
+  "elapsed_ms": 2033822,
   "budget": {
     "chalk": 27,
     "heat": 0,
     "frost": 0
   },
-  "solutions": [
-    {
-      "ink": 0,
-      "ticks": 378,
-      "strokes": [],
-      "gravity_taps": []
-    },
-    {
-      "ink": 0,
-      "ticks": 378,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 88,
-          "y0": 152,
-          "x1": 132,
-          "y1": 316
-        }
-      ],
-      "gravity_taps": []
-    },
-    {
-      "ink": 0,
-      "ticks": 378,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 80,
-          "y0": 88,
-          "x1": 132,
-          "y1": 300
-        },
-        {
-          "ink": "chalk",
-          "x0": 68,
-          "y0": 96,
-          "x1": 132,
-          "y1": 308
-        }
-      ],
-      "gravity_taps": []
-    },
-    {
-      "ink": 12,
-      "ticks": 378,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 128,
-          "y0": 292,
-          "x1": 24,
-          "y1": 276
-        },
-        {
-          "ink": "chalk",
-          "x0": 60,
-          "y0": 116,
-          "x1": 116,
-          "y1": 292
-        },
-        {
-          "ink": "chalk",
-          "x0": 96,
-          "y0": 208,
-          "x1": 96,
-          "y1": 212
-        }
-      ],
-      "gravity_taps": []
-    },
-    {
-      "ink": 21,
-      "ticks": 378,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 64,
-          "y0": 276,
-          "x1": 60,
-          "y1": 292
-        }
-      ],
-      "gravity_taps": []
-    }
-  ],
+  "solutions": [],
   "probes": {}
 }

@@ -3,104 +3,94 @@
   "name": "쏟아지는 천장",
   "chapter": 2,
   "solvable": true,
-  "min_ink": 0,
-  "effort": 2,
-  "rollouts": 25,
-  "elapsed_ms": 14987,
+  "min_ink": 125,
+  "effort": 2014,
+  "rollouts": 2262,
+  "elapsed_ms": 1257625,
   "budget": {
-    "chalk": 68,
+    "chalk": 231,
     "heat": 0,
     "frost": 0
   },
   "solutions": [
     {
-      "ink": 0,
-      "ticks": 71,
+      "ink": 125,
+      "ticks": 336,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 88,
-          "y0": 8,
-          "x1": 80,
-          "y1": 20
+          "x0": 39,
+          "y0": 134,
+          "x1": 81,
+          "y1": 97
         }
       ],
       "gravity_taps": [
-        60
+        194
       ]
     },
     {
-      "ink": 0,
-      "ticks": 161,
+      "ink": 126,
+      "ticks": 339,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 40,
-          "y0": 28,
-          "x1": 60,
-          "y1": 16
+          "x0": 39,
+          "y0": 135,
+          "x1": 81,
+          "y1": 97
         }
       ],
       "gravity_taps": [
-        150
+        194
       ]
     },
     {
-      "ink": 0,
-      "ticks": 311,
+      "ink": 127,
+      "ticks": 342,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 88,
-          "y0": 12,
-          "x1": 120,
-          "y1": 16
+          "x0": 39,
+          "y0": 136,
+          "x1": 81,
+          "y1": 97
         }
       ],
       "gravity_taps": [
-        300,
-        800
+        194
       ]
     },
     {
-      "ink": 0,
-      "ticks": 311,
+      "ink": 127,
+      "ticks": 335,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 92,
-          "y0": 12,
+          "x0": 39,
+          "y0": 135,
+          "x1": 82,
+          "y1": 98
+        }
+      ],
+      "gravity_taps": [
+        194
+      ]
+    },
+    {
+      "ink": 129,
+      "ticks": 334,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 39,
+          "y0": 135,
           "x1": 84,
-          "y1": 40
+          "y1": 100
         }
       ],
       "gravity_taps": [
-        450,
-        300
-      ]
-    },
-    {
-      "ink": 0,
-      "ticks": 161,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 68,
-          "y0": 12,
-          "x1": 104,
-          "y1": 0
-        },
-        {
-          "ink": "chalk",
-          "x0": 88,
-          "y0": 12,
-          "x1": 56,
-          "y1": 0
-        }
-      ],
-      "gravity_taps": [
-        150,
-        450
+        194
       ]
     }
   ],

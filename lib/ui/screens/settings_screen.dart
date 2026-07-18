@@ -62,6 +62,20 @@ class SettingsScreen extends StatelessWidget {
                 value: settings.reducedMotion,
                 onChanged: (v) => settings.reducedMotion = v,
               ),
+              _ActionRow(
+                label: '안내 다시 보기',
+                caption: '목표·조작·별점 안내를 처음처럼',
+                actionLabel: '초기화',
+                onTap: () {
+                  InkServices.of(context).onboarding.reset();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('안내를 초기화했다'),
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                },
+              ),
               const Spacer(),
               if (kDebugMode)
                 Padding(
@@ -78,6 +92,48 @@ class SettingsScreen extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// 액션 행 — 우측에 고스트 버튼(초기화 등). 헤어라인 구분.
+class _ActionRow extends StatelessWidget {
+  final String label;
+  final String caption;
+  final String actionLabel;
+  final VoidCallback onTap;
+
+  const _ActionRow({
+    required this.label,
+    required this.caption,
+    required this.actionLabel,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: const BoxConstraints(minHeight: InkSpace.touchTarget),
+      padding: const EdgeInsets.symmetric(
+          horizontal: InkSpace.lg, vertical: InkSpace.sm),
+      decoration: const BoxDecoration(
+        border: Border(bottom: BorderSide(color: InkColor.hairline)),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(label,
+                    style: InkText.body.copyWith(color: InkColor.parchment)),
+                Text(caption, style: InkText.caption),
+              ],
+            ),
+          ),
+          InkGhostButton(label: actionLabel, onTap: onTap),
+        ],
       ),
     );
   }

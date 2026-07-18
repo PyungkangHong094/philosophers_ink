@@ -17,21 +17,66 @@ String _inkLabel(InkType t) => switch (t) {
       InkType.frost => '서리',
     };
 
-class InkPaletteBar extends StatelessWidget {
+class InkPaletteBar extends StatefulWidget {
   final InkController controller;
 
   /// 병 선택 시 콜백 (햅틱 훅).
   final VoidCallback? onSelect;
 
-  const InkPaletteBar({super.key, required this.controller, this.onSelect});
+  /// 잔량 숫자 강조(마이크로 피드백) — 첫 스트로크 시 잠깐 true (GDD 7.2 게이지 이해).
+  final bool emphasizeCount;
+
+  const InkPaletteBar({
+    super.key,
+    required this.controller,
+    this.onSelect,
+    this.emphasizeCount = false,
+  });
+
+  @override
+  State<InkPaletteBar> createState() => _InkPaletteBarState();
+}
+
+class _InkPaletteBarState extends State<InkPaletteBar>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _pulse;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulse = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    );
+    if (widget.emphasizeCount) _pulse.repeat(reverse: true);
+  }
+
+  @override
+  void didUpdateWidget(InkPaletteBar old) {
+    super.didUpdateWidget(old);
+    if (widget.emphasizeCount && !_pulse.isAnimating) {
+      _pulse.repeat(reverse: true);
+    } else if (!widget.emphasizeCount && _pulse.isAnimating) {
+      _pulse.stop();
+      _pulse.value = 0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _pulse.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: controller,
+      animation: Listenable.merge([widget.controller, _pulse]),
       builder: (context, _) {
+        final controller = widget.controller;
         final inks = controller.visibleInks;
         if (inks.isEmpty) return const SizedBox.shrink();
+        final emphasis = widget.emphasizeCount ? _pulse.value : 0.0;
         return Container(
           padding: const EdgeInsets.symmetric(
               horizontal: InkSpace.sm, vertical: InkSpace.sm),
@@ -54,9 +99,10 @@ class InkPaletteBar extends StatelessWidget {
                     remaining: controller.budget.remaining(ink),
                     fraction: controller.budget.fraction(ink),
                     depleted: controller.budget.isDepleted(ink),
+                    countEmphasis: emphasis,
                     onTap: () {
                       controller.select(ink);
-                      onSelect?.call();
+                      widget.onSelect?.call();
                     },
                   ),
                 ),
@@ -75,6 +121,7 @@ class _InkBottle extends StatelessWidget {
   final int remaining;
   final double fraction;
   final bool depleted;
+  final double countEmphasis; // 0~1, 잔량 숫자 강조 펄스.
   final VoidCallback onTap;
 
   const _InkBottle({
@@ -84,6 +131,7 @@ class _InkBottle extends StatelessWidget {
     required this.remaining,
     required this.fraction,
     required this.depleted,
+    required this.countEmphasis,
     required this.onTap,
   });
 
@@ -116,9 +164,15 @@ class _InkBottle extends StatelessWidget {
               children: [
                 _VerticalGauge(color: color, fraction: fraction),
                 const SizedBox(height: InkSpace.xs),
-                Text(
-                  '$remaining',
-                  style: InkText.caption.copyWith(color: InkColor.parchment),
+                Transform.scale(
+                  scale: 1.0 + 0.35 * countEmphasis,
+                  child: Text(
+                    '$remaining',
+                    style: InkText.caption.copyWith(
+                      color: Color.lerp(InkColor.parchment, InkColor.goldHi,
+                          countEmphasis),
+                    ),
+                  ),
                 ),
                 Text(
                   label,

@@ -9,6 +9,7 @@ import 'package:philosophers_ink/audio/audio_service.dart';
 import 'package:philosophers_ink/level/level_model.dart';
 import 'package:philosophers_ink/meta/chapters.dart';
 import 'package:philosophers_ink/meta/level_catalog.dart';
+import 'package:philosophers_ink/meta/onboarding.dart';
 import 'package:philosophers_ink/meta/progress.dart';
 import 'package:philosophers_ink/ui/app.dart';
 import 'package:philosophers_ink/ui/game/play_screen.dart';
@@ -58,6 +59,7 @@ void main() {
           progress: progress ?? GameProgress(),
           catalog: catalog ?? LevelCatalog(const []),
           audio: const SilentAudioService(),
+          onboarding: OnboardingState(),
           child: screen,
         ),
       ),
@@ -82,6 +84,7 @@ void main() {
         progress: GameProgress(),
         catalog: LevelCatalog([_entry(1, 1)]),
         audio: const SilentAudioService(),
+        onboarding: OnboardingState(),
         child: const MaterialApp(home: TitleScreen()),
       ),
     );
@@ -140,11 +143,14 @@ void main() {
         progress: GameProgress(),
         settings: settings,
         audio: const SilentAudioService(),
+        onboarding: OnboardingState(),
       ),
     );
     // 잉크 팔레트 바의 석필 라벨 + 대형 레벨 번호.
     expect(find.text('석필'), findsOneWidget);
     expect(find.text('1'), findsWidgets);
+    // 온보딩 타이머 정리 — 위젯 제거로 dispose(타이머 취소).
+    await tester.pumpWidget(const SizedBox.shrink());
   });
 
   testWidgets('플레이 화면 콘텐츠가 0 크기로 붕괴하지 않는다 (실기기 블랙스크린 회귀)',
@@ -158,6 +164,7 @@ void main() {
         progress: GameProgress(),
         settings: settings,
         audio: const SilentAudioService(),
+        onboarding: OnboardingState(),
       ),
     );
     final screen = tester.getSize(find.byType(PlayScreen));
@@ -172,5 +179,6 @@ void main() {
         reason: '플레이 화면 body Stack은 화면 폭을 가득 채워야 한다 (0×0 붕괴 회귀)');
     expect(stack.size.height, screen.height,
         reason: '플레이 화면 body Stack은 화면 높이를 가득 채워야 한다');
+    await tester.pumpWidget(const SizedBox.shrink()); // 온보딩 타이머 정리.
   });
 }

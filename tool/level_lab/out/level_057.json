@@ -4,24 +4,24 @@
   "chapter": 4,
   "solvable": true,
   "min_ink": 4,
-  "effort": 7,
-  "rollouts": 286,
-  "elapsed_ms": 142481,
+  "effort": 5,
+  "rollouts": 237,
+  "elapsed_ms": 221322,
   "budget": {
-    "chalk": 24,
+    "chalk": 20,
     "heat": 0,
-    "frost": 38
+    "frost": 66
   },
   "solutions": [
     {
       "ink": 4,
-      "ticks": 386,
+      "ticks": 402,
       "strokes": [
         {
           "ink": "frost",
-          "x0": 78,
+          "x0": 80,
           "y0": 240,
-          "x1": 78,
+          "x1": 80,
           "y1": 240
         }
       ],
@@ -29,11 +29,11 @@
     },
     {
       "ink": 6,
-      "ticks": 362,
+      "ticks": 388,
       "strokes": [
         {
           "ink": "frost",
-          "x0": 78,
+          "x0": 80,
           "y0": 240,
           "x1": 79,
           "y1": 240
@@ -43,42 +43,42 @@
     },
     {
       "ink": 6,
-      "ticks": 358,
+      "ticks": 426,
       "strokes": [
         {
           "ink": "frost",
-          "x0": 78,
-          "y0": 240,
-          "x1": 78,
-          "y1": 241
+          "x0": 71,
+          "y0": 42,
+          "x1": 70,
+          "y1": 42
         }
       ],
       "gravity_taps": []
     },
     {
       "ink": 6,
-      "ticks": 360,
+      "ticks": 392,
       "strokes": [
         {
           "ink": "frost",
-          "x0": 78,
-          "y0": 240,
-          "x1": 77,
-          "y1": 240
+          "x0": 71,
+          "y0": 42,
+          "x1": 72,
+          "y1": 42
         }
       ],
       "gravity_taps": []
     },
     {
       "ink": 6,
-      "ticks": 358,
+      "ticks": 396,
       "strokes": [
         {
           "ink": "frost",
-          "x0": 78,
-          "y0": 239,
-          "x1": 78,
-          "y1": 240
+          "x0": 73,
+          "y0": 42,
+          "x1": 72,
+          "y1": 42
         }
       ],
       "gravity_taps": []

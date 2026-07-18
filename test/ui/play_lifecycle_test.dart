@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:philosophers_ink/audio/audio_service.dart';
 import 'package:philosophers_ink/level/level_model.dart';
 import 'package:philosophers_ink/meta/level_catalog.dart';
+import 'package:philosophers_ink/meta/onboarding.dart';
 import 'package:philosophers_ink/meta/progress.dart';
 import 'package:philosophers_ink/meta/progress_store.dart';
 import 'package:philosophers_ink/ui/game/play_screen.dart';
@@ -84,6 +85,7 @@ void main() {
           progress: GameProgress(),
           settings: settings,
           audio: audio,
+          onboarding: OnboardingState(),
         ),
       );
 
@@ -116,5 +118,6 @@ void main() {
 
     expect(rec.stopAllCount, greaterThan(0), reason: '백그라운드가 stopAll 호출');
     expect(rec.loopActive, isFalse);
+    await tester.pumpWidget(const SizedBox.shrink()); // 온보딩 타이머 정리.
   });
 }

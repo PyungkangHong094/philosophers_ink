@@ -6,7 +6,7 @@
   "min_ink": 256,
   "effort": 880,
   "rollouts": 2349,
-  "elapsed_ms": 656428,
+  "elapsed_ms": 1523648,
   "budget": {
     "chalk": 300,
     "heat": 0,
@@ -83,5 +83,15 @@
       ],
       "gravity_taps": []
     }
-  ]
+  ],
+  "probes": {
+    "no_ink_chalk": {
+      "solvable": true,
+      "min_ink": 300
+    },
+    "no_ink_frost": {
+      "solvable": false,
+      "min_ink": null
+    }
+  }
 }
