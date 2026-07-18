@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "id": 41,
+    "name": "유한한 자비",
+    "chapter": 3,
+    "difficulty": 5,
+    "teaches": ["finite_emitter"],
+    "tags": ["finite", "water", "economy"],
+    "optimal_ink": null,
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#E2CF94",
+  "emitters": [
+    { "x": 14, "y": 2, "width": 12, "material": "WATER", "rate": 2, "total": 120, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 100, "y": 284, "w": 40, "h": 28, "goal": 100, "material": null, "state": null, "pure": false }
+  ],
+  "terrain": [
+    { "x": 0, "y": 314, "w": 160, "h": 2, "material": "WALL" },
+    { "x": 96, "y": 250, "w": 4, "h": 64, "material": "WALL" },
+    { "x": 142, "y": 250, "w": 4, "h": 64, "material": "WALL" }
+  ],
+  "gimmicks": [],
+  "ink_budget": { "chalk": 60, "heat": 0, "frost": 0 },
+  "star_thresholds": { "two_star": 51, "three_star": 37 }
+}

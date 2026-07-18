@@ -1,0 +1,40 @@
+{
+  "meta": {
+    "id": 70,
+    "name": "세 방울",
+    "chapter": 4,
+    "difficulty": 9,
+    "teaches": [],
+    "tags": ["lava", "stone", "water", "reaction", "finite", "precision"],
+    "optimal_ink": null,
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#7A1B29",
+  "emitters": [
+    { "x": 74, "y": 2, "width": 12, "material": "WATER", "rate": 1, "total": 40, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 26, "y": 278, "w": 14, "h": 12, "goal": 8, "material": "STONE", "state": null, "pure": false },
+    { "x": 73, "y": 278, "w": 14, "h": 12, "goal": 8, "material": "STONE", "state": null, "pure": false },
+    { "x": 120, "y": 278, "w": 14, "h": 12, "goal": 8, "material": "STONE", "state": null, "pure": false }
+  ],
+  "terrain": [
+    { "x": 0, "y": 314, "w": 160, "h": 2, "material": "WALL" },
+    { "x": 24, "y": 250, "w": 2, "h": 42, "material": "WALL" },
+    { "x": 40, "y": 250, "w": 2, "h": 42, "material": "WALL" },
+    { "x": 24, "y": 290, "w": 18, "h": 2, "material": "WALL" },
+    { "x": 26, "y": 280, "w": 14, "h": 10, "material": "LAVA" },
+    { "x": 71, "y": 250, "w": 2, "h": 42, "material": "WALL" },
+    { "x": 87, "y": 250, "w": 2, "h": 42, "material": "WALL" },
+    { "x": 71, "y": 290, "w": 18, "h": 2, "material": "WALL" },
+    { "x": 73, "y": 280, "w": 14, "h": 10, "material": "LAVA" },
+    { "x": 118, "y": 250, "w": 2, "h": 42, "material": "WALL" },
+    { "x": 134, "y": 250, "w": 2, "h": 42, "material": "WALL" },
+    { "x": 118, "y": 290, "w": 18, "h": 2, "material": "WALL" },
+    { "x": 120, "y": 280, "w": 14, "h": 10, "material": "LAVA" }
+  ],
+  "gimmicks": [],
+  "ink_budget": { "chalk": 41, "heat": 0, "frost": 0 },
+  "star_thresholds": { "two_star": 38, "three_star": 35 }
+}

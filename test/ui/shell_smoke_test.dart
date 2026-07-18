@@ -5,6 +5,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:philosophers_ink/audio/audio_service.dart';
 import 'package:philosophers_ink/level/level_model.dart';
 import 'package:philosophers_ink/meta/chapters.dart';
 import 'package:philosophers_ink/meta/level_catalog.dart';
@@ -56,6 +57,7 @@ void main() {
           settings: settings,
           progress: progress ?? GameProgress(),
           catalog: catalog ?? LevelCatalog(const []),
+          audio: const SilentAudioService(),
           child: screen,
         ),
       ),
@@ -106,6 +108,7 @@ void main() {
         entry: _entry(1, 1),
         progress: GameProgress(),
         settings: settings,
+        audio: const SilentAudioService(),
       ),
     );
     // 잉크 팔레트 바의 석필 라벨 + 대형 레벨 번호.

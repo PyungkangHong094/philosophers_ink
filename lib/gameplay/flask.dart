@@ -106,6 +106,9 @@ class FlaskSystem {
         if (_matches(s, id, cat)) {
           if (flask.count < s.goal) {
             flask.count++;
+            // 물질 테이블 조회 전 셀 ID 범위 가드 (디버그 조기 노출, 릴리즈 비용 0).
+            assert(id >= 0 && id < Material.values.length,
+                '물질 ID $id가 범위 밖 (0~${Material.values.length - 1})');
             onSettle?.call(SettleEvent(
               flaskIndex: fi,
               x: xx,

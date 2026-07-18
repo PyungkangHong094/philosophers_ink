@@ -1,0 +1,27 @@
+{
+  "meta": {
+    "id": 69,
+    "name": "순수한 불",
+    "chapter": 4,
+    "difficulty": 8,
+    "teaches": [],
+    "tags": ["lava", "stone", "ash", "pure", "frost", "separation"],
+    "optimal_ink": null,
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#9A2333",
+  "emitters": [
+    { "x": 72, "y": 2, "width": 16, "material": "LAVA", "rate": 2, "total": null, "ash_ratio": 0.28 }
+  ],
+  "flasks": [
+    { "x": 6, "y": 286, "w": 34, "h": 26, "goal": 30, "material": "STONE", "state": null, "pure": true }
+  ],
+  "terrain": [
+    { "x": 0, "y": 314, "w": 160, "h": 2, "material": "WALL" },
+    { "x": 20, "y": 150, "w": 120, "h": 3, "material": "WALL" }
+  ],
+  "gimmicks": [],
+  "ink_budget": { "chalk": 18, "heat": 0, "frost": 36 },
+  "star_thresholds": { "two_star": 48, "three_star": 41 }
+}

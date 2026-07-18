@@ -6,7 +6,7 @@
     "difficulty": 3,
     "teaches": [],
     "tags": ["water", "ice", "temp_zone", "cool"],
-    "optimal_ink": { "chalk": 30 },
+    "optimal_ink": null,
     "solutions_verified": 2,
     "hint_stroke": null
   },
@@ -24,5 +24,5 @@
     { "type": "temp_zone", "params": { "x": 40, "y": 150, "w": 80, "h": 10, "kind": "cool", "probability": 0.12 } }
   ],
   "ink_budget": { "chalk": 60, "heat": 0, "frost": 0 },
-  "star_thresholds": null
+  "star_thresholds": { "two_star": 48, "three_star": 35 }
 }

@@ -6,7 +6,7 @@
     "difficulty": 6,
     "teaches": [],
     "tags": ["frost", "state_flask", "solid", "liquid", "split"],
-    "optimal_ink": { "chalk": 28, "frost": 26 },
+    "optimal_ink": null,
     "solutions_verified": 2,
     "hint_stroke": null
   },
@@ -24,5 +24,5 @@
   ],
   "gimmicks": [],
   "ink_budget": { "chalk": 48, "heat": 0, "frost": 44 },
-  "star_thresholds": null
+  "star_thresholds": { "two_star": 86, "three_star": 62 }
 }

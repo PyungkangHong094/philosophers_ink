@@ -15,12 +15,18 @@ class PauseOverlay extends StatelessWidget {
   final VoidCallback onRetry;
   final VoidCallback onExit;
 
+  /// 인게임 음소거 접근 (GDD 9 — 설정 + 인게임 접근 필수). 현재 음소거 상태 + 토글.
+  final bool muted;
+  final VoidCallback onToggleMute;
+
   const PauseOverlay({
     super.key,
     required this.eyebrow,
     required this.onResume,
     required this.onRetry,
     required this.onExit,
+    required this.muted,
+    required this.onToggleMute,
   });
 
   @override
@@ -45,6 +51,12 @@ class PauseOverlay extends StatelessWidget {
               SizedBox(
                   width: 220,
                   child: InkGhostButton(label: '재시작', onTap: onRetry)),
+              const SizedBox(height: InkSpace.sm),
+              SizedBox(
+                  width: 220,
+                  child: InkGhostButton(
+                      label: muted ? '소리 켜기' : '소리 끄기',
+                      onTap: onToggleMute)),
               const SizedBox(height: InkSpace.sm),
               SizedBox(
                   width: 220,

@@ -1,0 +1,31 @@
+{
+  "meta": {
+    "id": 48,
+    "name": "가라앉는 구름",
+    "chapter": 3,
+    "difficulty": 7,
+    "teaches": [],
+    "tags": ["steam", "gravity_flip", "water", "temp_zone"],
+    "optimal_ink": { "chalk": 30, "heat": 8 },
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#E4B94D",
+  "emitters": [
+    { "x": 73, "y": 2, "width": 14, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 60, "y": 286, "w": 40, "h": 22, "goal": 35, "material": null, "state": "gas", "pure": false }
+  ],
+  "terrain": [
+    { "x": 0, "y": 314, "w": 160, "h": 2, "material": "WALL" },
+    { "x": 52, "y": 120, "w": 3, "h": 194, "material": "WALL" },
+    { "x": 104, "y": 120, "w": 3, "h": 194, "material": "WALL" }
+  ],
+  "gimmicks": [
+    { "type": "temp_zone", "params": { "x": 52, "y": 60, "w": 55, "h": 6, "kind": "heat", "probability": null } },
+    { "type": "gravity_flip", "params": {} }
+  ],
+  "ink_budget": { "chalk": 45, "heat": 12, "frost": 0 },
+  "star_thresholds": { "two_star": 51, "three_star": 44 }
+}

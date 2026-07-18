@@ -6,6 +6,8 @@ library;
 
 import 'package:flutter/material.dart';
 
+import '../audio/audio_service.dart';
+import '../audio/soloud_audio_service.dart';
 import '../meta/level_catalog.dart';
 import '../meta/progress.dart';
 import '../meta/progress_store.dart';
@@ -18,12 +20,14 @@ class InkServices extends InheritedWidget {
   final SettingsController settings;
   final GameProgress progress;
   final LevelCatalog catalog;
+  final AudioService audio;
 
   const InkServices({
     super.key,
     required this.settings,
     required this.progress,
     required this.catalog,
+    required this.audio,
     required super.child,
   });
 
@@ -37,11 +41,14 @@ class InkServices extends InheritedWidget {
   bool updateShouldNotify(InkServices old) =>
       settings != old.settings ||
       progress != old.progress ||
-      catalog != old.catalog;
+      catalog != old.catalog ||
+      audio != old.audio;
 }
 
 class InkApp extends StatelessWidget {
-  const InkApp({super.key});
+  /// 오디오 서비스 주입 (테스트에서 [SilentAudioService]). null이면 실제 SoLoud.
+  final AudioService? audioOverride;
+  const InkApp({super.key, this.audioOverride});
 
   @override
   Widget build(BuildContext context) {
@@ -56,13 +63,14 @@ class InkApp extends StatelessWidget {
           primary: InkColor.gold,
         ),
       ),
-      home: const _Bootstrap(),
+      home: _Bootstrap(audioOverride: audioOverride),
     );
   }
 }
 
 class _Bootstrap extends StatefulWidget {
-  const _Bootstrap();
+  final AudioService? audioOverride;
+  const _Bootstrap({this.audioOverride});
 
   @override
   State<_Bootstrap> createState() => _BootstrapState();
@@ -72,6 +80,7 @@ class _BootstrapState extends State<_Bootstrap> {
   SettingsController? _settings;
   GameProgress? _progress;
   LevelCatalog? _catalog;
+  AudioService? _audio;
   Object? _error;
 
   @override
@@ -84,11 +93,22 @@ class _BootstrapState extends State<_Bootstrap> {
     try {
       final store = await ProgressStore.open();
       final catalog = await LevelCatalog.discover();
+      final settings = SettingsController.fromStore(store);
+      final audio = widget.audioOverride ?? SoLoudAudioService();
+      // 오디오 초기화 실패는 내부에서 무음화(게임을 막지 않는다).
+      await audio.init();
+      audio.configure(enabled: settings.sound, volume: settings.volume);
+      // 설정 변경 → 오디오 반영 (음소거·볼륨).
+      settings.addListener(
+        () => audio.configure(
+            enabled: settings.sound, volume: settings.volume),
+      );
       if (!mounted) return;
       setState(() {
-        _settings = SettingsController.fromStore(store);
+        _settings = settings;
         _progress = store.loadProgress();
         _catalog = catalog;
+        _audio = audio;
       });
     } catch (e) {
       if (mounted) setState(() => _error = e);
@@ -103,7 +123,11 @@ class _BootstrapState extends State<_Bootstrap> {
     final settings = _settings;
     final progress = _progress;
     final catalog = _catalog;
-    if (settings == null || progress == null || catalog == null) {
+    final audio = _audio;
+    if (settings == null ||
+        progress == null ||
+        catalog == null ||
+        audio == null) {
       return const _Splash(
         child: SizedBox(
           width: 28,
@@ -119,6 +143,7 @@ class _BootstrapState extends State<_Bootstrap> {
       settings: settings,
       progress: progress,
       catalog: catalog,
+      audio: audio,
       child: const TitleScreen(),
     );
   }

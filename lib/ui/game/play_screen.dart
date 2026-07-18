@@ -9,6 +9,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
+import '../../audio/audio_service.dart';
+import '../../audio/sound_tokens.dart';
 import '../../core/constants.dart';
 import '../../core/game_loop.dart';
 import '../../gameplay/level_session.dart';
@@ -17,6 +19,7 @@ import '../../meta/level_catalog.dart';
 import '../../meta/progress.dart';
 import '../../render/palette.dart';
 import '../../render/world_painter.dart';
+import '../../sim/materials.dart';
 import '../settings_controller.dart';
 import '../tokens.dart';
 import 'clear_overlay.dart';
@@ -35,6 +38,7 @@ class PlayScreen extends StatefulWidget {
   final LevelEntry entry;
   final GameProgress progress;
   final SettingsController settings;
+  final AudioService audio;
 
   /// "다음 레벨" 콜백. null이면 다음이 없거나 잠김 — 버튼 숨김.
   final VoidCallback? onNext;
@@ -44,6 +48,7 @@ class PlayScreen extends StatefulWidget {
     required this.entry,
     required this.progress,
     required this.settings,
+    required this.audio,
     this.onNext,
   });
 
@@ -70,11 +75,19 @@ class _PlayScreenState extends State<PlayScreen>
   int? _activeStrokeId;
   (int, int)? _lastCell;
   Size _viewSize = Size.zero;
+  int _ambientFrame = 0;
+
+  /// 플라스크 라벨 TextPainter 캐시 — 라벨 문자열이 바뀔 때만 재생성 (감사 P3-2).
+  final _FlaskLabelCache _flaskLabels = _FlaskLabelCache();
 
   @override
   void initState() {
     super.initState();
-    _session = LevelSession(widget.entry.level);
+    // 플라스크 착수 이벤트 → 착수 틱(카운트업 동기, GDD 9.2). 상별 피치.
+    _session = LevelSession(
+      widget.entry.level,
+      onSettle: (e) => widget.audio.flaskFill(e.phase),
+    );
     _palette = Palette();
     _rgba = Uint8List(SimConstants.gridWidth * SimConstants.gridHeight * 4);
     _imageSource = WorldImageSource(
@@ -87,10 +100,13 @@ class _PlayScreenState extends State<PlayScreen>
 
   @override
   void dispose() {
-    _ticker.dispose();
+    widget.audio.stopAmbient();
+    _ticker.dispose(); // 프레임 정지 먼저 — 이후 세션을 건드리지 않는다.
+    _session.dispose(); // InkController(ChangeNotifier) 등 세션 소유 자원 해제 (감사 P2-2).
     _imageSource.dispose();
     _outcome.dispose();
     _frameTick.dispose();
+    _flaskLabels.dispose();
     super.dispose();
   }
 
@@ -99,19 +115,35 @@ class _PlayScreenState extends State<PlayScreen>
   void _onFrame(Duration elapsed) {
     // 일시정지·클리어·실패 중에는 시뮬을 멈춘다. GameLoop이 누적기를
     // maxFrameAccumSeconds로 클램프하므로 복귀 시 큰 델타로 튀지 않는다.
-    if (!_simRunning) return;
+    if (!_simRunning) {
+      widget.audio.stopAmbient();
+      return;
+    }
 
     _loop.advance(elapsed);
     _palette.writeRgba(_session.game.grid.cells, _rgba);
     _imageSource.update(_rgba);
     _frameTick.value++;
 
+    // 물질 앰비언트 그레인 — 활성 셀 밀도로 볼륨 변조 (샘플 스로틀, GDD 9.2).
+    if (++_ambientFrame % SfxSpec.grainSampleEveryFrames == 0) {
+      widget.audio.setAmbientDensity(_ambientDensity());
+    }
+
     if (_session.isFailed) {
       _outcome.value = const _Outcome(_Phase.failed);
+      widget.audio.stopAmbient();
+      widget.audio.fail();
     } else if (_session.isCleared) {
       final stars = _session.result.stars;
       _outcome.value = _Outcome(_Phase.cleared, stars: stars);
       _recordResult(stars);
+      widget.audio.stopAmbient();
+      if (isOperatioLevel(widget.entry.id)) {
+        widget.audio.operatioStinger();
+      } else {
+        widget.audio.clearStinger();
+      }
     }
   }
 
@@ -137,6 +169,27 @@ class _PlayScreenState extends State<PlayScreen>
     final placed =
         _session.game.extendStroke(strokeId, x0, y0, x1, y1, maxCells: budget);
     _session.ink.chargePlaced(placed);
+    if (placed > 0) widget.audio.stroke(); // 드로잉 획음 (내부 스로틀).
+  }
+
+  /// 활성 셀 밀도(0~1) — 동적 카테고리(입자·액체·기체) 셀 수 / 기준. 앰비언트 그레인 변조.
+  double _ambientDensity() {
+    final cells = _session.game.grid.cells;
+    var n = 0;
+    for (var i = 0; i < cells.length; i++) {
+      final c = cells[i];
+      if (c == 0) continue;
+      switch (propsOf(c).category) {
+        case MaterialCategory.particle:
+        case MaterialCategory.liquid:
+        case MaterialCategory.gas:
+          n++;
+        case MaterialCategory.none:
+        case MaterialCategory.staticSolid:
+          break;
+      }
+    }
+    return (n / SfxSpec.grainRefCells).clamp(0.0, 1.0);
   }
 
   void _onPanStart(DragStartDetails d) {
@@ -235,8 +288,8 @@ class _PlayScreenState extends State<PlayScreen>
             child: IgnorePointer(
               child: ValueListenableBuilder<int>(
                 valueListenable: _frameTick,
-                builder: (context, _, child) =>
-                    CustomPaint(painter: _FlaskHudPainter(_session)),
+                builder: (context, _, child) => CustomPaint(
+                    painter: _FlaskHudPainter(_session, _flaskLabels)),
               ),
             ),
           ),
@@ -294,7 +347,10 @@ class _PlayScreenState extends State<PlayScreen>
             child: Center(
               child: InkPaletteBar(
                 controller: _session.ink,
-                onSelect: widget.settings.hapticSelection,
+                onSelect: () {
+                  widget.settings.hapticSelection();
+                  widget.audio.uiTap();
+                },
               ),
             ),
           ),
@@ -326,6 +382,9 @@ class _PlayScreenState extends State<PlayScreen>
               onResume: () => setState(() => _paused = false),
               onRetry: _retry,
               onExit: _exit,
+              muted: !widget.settings.sound,
+              onToggleMute: () =>
+                  setState(() => widget.settings.sound = !widget.settings.sound),
             ),
         ],
       ),
@@ -376,10 +435,44 @@ class _HudIconButton extends StatelessWidget {
   }
 }
 
+/// 플라스크 라벨(count/goal) TextPainter 캐시 — 라벨이 바뀔 때만 재레이아웃 (감사 P3-2).
+/// 프레임당 새 TextPainter 할당을 피한다. State가 소유·dispose한다.
+class _FlaskLabelCache {
+  static const TextStyle _style = TextStyle(
+    color: InkColor.parchment,
+    fontSize: 13,
+    fontWeight: FontWeight.w700,
+    fontFeatures: InkText.tabular,
+  );
+
+  final Map<int, ({String label, TextPainter tp})> _entries = {};
+
+  /// 플라스크 [index]의 [label] TextPainter — 라벨 동일 시 캐시 재사용.
+  TextPainter painterFor(int index, String label) {
+    final cur = _entries[index];
+    if (cur != null && cur.label == label) return cur.tp;
+    cur?.tp.dispose();
+    final tp = TextPainter(
+      text: TextSpan(text: label, style: _style),
+      textDirection: TextDirection.ltr,
+    )..layout();
+    _entries[index] = (label: label, tp: tp);
+    return tp;
+  }
+
+  void dispose() {
+    for (final e in _entries.values) {
+      e.tp.dispose();
+    }
+    _entries.clear();
+  }
+}
+
 /// 플라스크 목표를 윤곽 + count/goal 로 그린다 (정식 HUD 버전, 셸 토큰).
 class _FlaskHudPainter extends CustomPainter {
   final LevelSession session;
-  _FlaskHudPainter(this.session);
+  final _FlaskLabelCache labels;
+  _FlaskHudPainter(this.session, this.labels);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -390,7 +483,9 @@ class _FlaskHudPainter extends CustomPainter {
       ..strokeWidth = 1.5
       ..color = InkColor.gold;
 
-    for (final flask in session.flasks.flasks) {
+    final flasks = session.flasks.flasks;
+    for (var i = 0; i < flasks.length; i++) {
+      final flask = flasks[i];
       final s = flask.spec;
       final rect = Rect.fromLTWH(
         vp.offsetX + s.x * vp.scale,
@@ -401,19 +496,7 @@ class _FlaskHudPainter extends CustomPainter {
       canvas.drawRect(rect, border);
       final label =
           flask.isFailed ? '✕' : '${flask.count}/${s.goal}${s.pure ? '!' : ''}';
-      final tp = TextPainter(
-        text: TextSpan(
-          text: label,
-          style: const TextStyle(
-            color: InkColor.parchment,
-            fontSize: 13,
-            fontWeight: FontWeight.w700,
-            fontFeatures: InkText.tabular,
-          ),
-        ),
-        textDirection: TextDirection.ltr,
-      )..layout();
-      tp.paint(canvas, Offset(rect.left, rect.top - 16));
+      labels.painterFor(i, label).paint(canvas, Offset(rect.left, rect.top - 16));
     }
   }
 

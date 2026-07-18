@@ -1,0 +1,36 @@
+{
+  "meta": {
+    "id": 71,
+    "name": "사중주",
+    "chapter": 4,
+    "difficulty": 9,
+    "teaches": [],
+    "tags": ["lava", "stone", "water", "prima", "steam", "portal", "quartet"],
+    "optimal_ink": null,
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#8E1F2F",
+  "emitters": [
+    { "x": 10, "y": 2, "width": 10, "material": "PRIMA", "rate": 2, "total": null, "ash_ratio": 0 },
+    { "x": 74, "y": 2, "width": 12, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0 },
+    { "x": 140, "y": 2, "width": 10, "material": "LAVA", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 6, "y": 286, "w": 28, "h": 26, "goal": 24, "material": "PRIMA", "state": null, "pure": false },
+    { "x": 66, "y": 286, "w": 28, "h": 26, "goal": 24, "material": "STONE", "state": null, "pure": false },
+    { "x": 126, "y": 286, "w": 28, "h": 26, "goal": 24, "material": "WATER", "state": null, "pure": false },
+    { "x": 126, "y": 6, "w": 28, "h": 18, "goal": 20, "material": "STEAM", "state": null, "pure": false }
+  ],
+  "terrain": [
+    { "x": 0, "y": 314, "w": 160, "h": 2, "material": "WALL" },
+    { "x": 20, "y": 60, "w": 40, "h": 3, "material": "WALL" },
+    { "x": 110, "y": 60, "w": 40, "h": 3, "material": "WALL" }
+  ],
+  "gimmicks": [
+    { "type": "portal", "params": { "entry": { "x": 8, "y": 150, "w": 5, "h": 5 }, "exit": { "x": 120, "y": 40, "w": 5, "h": 5 } } },
+    { "type": "portal", "params": { "entry": { "x": 142, "y": 120, "w": 5, "h": 5 }, "exit": { "x": 40, "y": 40, "w": 5, "h": 5 } } }
+  ],
+  "ink_budget": { "chalk": 54, "heat": 0, "frost": 19 },
+  "star_thresholds": { "two_star": 68, "three_star": 62 }
+}

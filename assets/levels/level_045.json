@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "id": 45,
+    "name": "김 서린 오후",
+    "chapter": 3,
+    "difficulty": 5,
+    "teaches": [],
+    "tags": ["steam", "water", "heat_line", "gas", "cooldown"],
+    "optimal_ink": { "chalk": 16 },
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#E4B94D",
+  "emitters": [
+    { "x": 73, "y": 170, "width": 14, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 58, "y": 6, "w": 44, "h": 18, "goal": 40, "material": null, "state": "gas", "pure": false }
+  ],
+  "terrain": [
+    { "x": 0, "y": 314, "w": 160, "h": 2, "material": "WALL" }
+  ],
+  "gimmicks": [
+    { "type": "temp_zone", "params": { "x": 46, "y": 206, "w": 68, "h": 8, "kind": "heat", "probability": null } }
+  ],
+  "ink_budget": { "chalk": 40, "heat": 20, "frost": 0 },
+  "star_thresholds": { "two_star": 26, "three_star": 18 }
+}

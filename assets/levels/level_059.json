@@ -1,0 +1,31 @@
+{
+  "meta": {
+    "id": 59,
+    "name": "부산물 회수",
+    "chapter": 4,
+    "difficulty": 6,
+    "teaches": [],
+    "tags": ["lava", "water", "reaction", "steam", "condense", "frost", "state_flask"],
+    "optimal_ink": null,
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#8E2A20",
+  "emitters": [
+    { "x": 30, "y": 210, "width": 14, "material": "LAVA", "rate": 2, "total": null, "ash_ratio": 0 },
+    { "x": 108, "y": 60, "width": 12, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 40, "y": 30, "w": 80, "h": 22, "goal": 30, "material": "WATER", "state": "liquid", "pure": false }
+  ],
+  "terrain": [
+    { "x": 0, "y": 314, "w": 160, "h": 2, "material": "WALL" },
+    { "x": 24, "y": 236, "w": 3, "h": 78, "material": "WALL" },
+    { "x": 70, "y": 236, "w": 3, "h": 78, "material": "WALL" },
+    { "x": 40, "y": 54, "w": 3, "h": 30, "material": "WALL" },
+    { "x": 117, "y": 54, "w": 3, "h": 30, "material": "WALL" }
+  ],
+  "gimmicks": [],
+  "ink_budget": { "chalk": 17, "heat": 0, "frost": 31 },
+  "star_thresholds": { "two_star": 40, "three_star": 32 }
+}

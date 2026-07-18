@@ -193,10 +193,18 @@ const List<MaterialProps> kMaterialTable = [
 ];
 
 /// 셀 ID → 속성. 핫패스에서 쓰이므로 인덱스 접근.
-MaterialProps propsOf(int id) => kMaterialTable[id];
+/// 그리드는 0~10만 기입하나, 손상/미정의 ID가 들어오면 릴리즈에서 RangeError로 크래시한다.
+/// assert는 릴리즈에서 제거되어 성능 영향 0 — 디버그에서 원인을 조기에 드러낸다(방어).
+MaterialProps propsOf(int id) {
+  assert(id >= 0 && id < kMaterialTable.length, '미정의 물질 ID: $id');
+  return kMaterialTable[id];
+}
 
 /// 셀 ID → 카테고리. rules에서 분기 대신 테이블 조회로 쓴다.
-MaterialCategory categoryOf(int id) => kMaterialTable[id].category;
+MaterialCategory categoryOf(int id) {
+  assert(id >= 0 && id < kMaterialTable.length, '미정의 물질 ID: $id');
+  return kMaterialTable[id].category;
+}
 
 /// 물질의 상(相) — 상태 플라스크(물방울/눈꽃/김) 판정용 (GDD 5.1).
 enum Phase { solid, liquid, gas }

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:philosophers_ink/gameplay/level_session.dart';
 import 'package:philosophers_ink/level/level_model.dart';
@@ -74,6 +75,26 @@ void main() {
       expect(s.game.grid.get(23, 21), Material.wall.index);
       s.reset();
       expect(s.game.grid.get(20, 20), Material.wall.index, reason: 'reset 후 재스탬프');
+    });
+  });
+
+  group('dispose (notifier 정리)', () {
+    test('dispose가 소유 notifier(InkController)를 정리한다', () {
+      final s = LevelSession(_level());
+      // 폐기 전에는 리스너 등록·해제가 정상.
+      void listener() {}
+      s.ink.addListener(listener);
+      s.ink.removeListener(listener);
+
+      s.dispose();
+
+      // 폐기 후 InkController 사용 시 ChangeNotifier가 assert로 막는다(리스너 누수 방지).
+      expect(() => s.ink.addListener(() {}), throwsA(isA<FlutterError>()));
+    });
+
+    test('dispose는 예외 없이 완료된다', () {
+      final s = LevelSession(_level());
+      expect(s.dispose, returnsNormally);
     });
   });
 

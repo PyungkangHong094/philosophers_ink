@@ -130,6 +130,7 @@ class LevelSelectScreen extends StatelessWidget {
   void _launch(BuildContext context, LevelEntry entry, Offset origin,
       {required bool replace}) {
     final services = InkServices.of(context);
+    services.audio.uiTap();
     final reduced = services.settings.reducedMotion ||
         MediaQuery.of(context).disableAnimations;
     final navigator = Navigator.of(context);
@@ -147,10 +148,12 @@ class LevelSelectScreen extends StatelessWidget {
     final route = inkFloodRoute<void>(
       origin: origin,
       reducedMotion: reduced,
+      floodColor: Color(entry.level.background),
       builder: (_) => PlayScreen(
         entry: entry,
         progress: services.progress,
         settings: services.settings,
+        audio: services.audio,
         onNext: onNext,
       ),
     );

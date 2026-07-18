@@ -1,0 +1,31 @@
+{
+  "meta": {
+    "id": 62,
+    "name": "스스로 굳는 관",
+    "chapter": 4,
+    "difficulty": 8,
+    "teaches": [],
+    "tags": ["lava", "frost", "stone", "channel", "temp_zone"],
+    "optimal_ink": null,
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#8E2A20",
+  "emitters": [
+    { "x": 71, "y": 2, "width": 18, "material": "LAVA", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 60, "y": 288, "w": 40, "h": 24, "goal": 34, "material": "LAVA", "state": null, "pure": false }
+  ],
+  "terrain": [
+    { "x": 0, "y": 314, "w": 160, "h": 2, "material": "WALL" },
+    { "x": 58, "y": 284, "w": 3, "h": 30, "material": "WALL" },
+    { "x": 99, "y": 284, "w": 3, "h": 30, "material": "WALL" }
+  ],
+  "gimmicks": [
+    { "type": "temp_zone", "params": { "x": 40, "y": 120, "w": 12, "h": 90, "kind": "cool", "probability": null } },
+    { "type": "temp_zone", "params": { "x": 108, "y": 120, "w": 12, "h": 90, "kind": "cool", "probability": null } }
+  ],
+  "ink_budget": { "chalk": 9, "heat": 0, "frost": 36 },
+  "star_thresholds": { "two_star": 40, "three_star": 35 }
+}

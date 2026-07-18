@@ -140,7 +140,9 @@ class _ChapterCard extends StatelessWidget {
             InkSpace.lg, InkSpace.md, InkSpace.md, InkSpace.md),
         onTap: enabled
             ? () {
-                InkServices.of(context).settings.hapticSelection();
+                final s = InkServices.of(context);
+                s.settings.hapticSelection();
+                s.audio.uiTap();
                 Navigator.of(context).push(
                   MaterialPageRoute<void>(
                     builder: (_) =>

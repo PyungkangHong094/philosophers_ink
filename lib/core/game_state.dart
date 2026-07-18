@@ -111,6 +111,11 @@ class GameState {
     }
   }
 
+  /// 상전이 관찰 콜백 (M5 폴리시). shell-ui가 결빙 crackle·증발 puff 등 SFX/VFX를 여기에
+  /// 연결한다. 관찰 전용(결정성 무영향), null이면 비용 0. reset()이 지우지 않는다.
+  PhaseChangeCallback? get onPhaseChange => rules.onPhaseChange;
+  set onPhaseChange(PhaseChangeCallback? cb) => rules.onPhaseChange = cb;
+
   /// 중력이 반전(위 방향)되어 있는가 (GDD 6).
   bool get gravityInverted => rules.gravityInverted;
 

@@ -6,7 +6,7 @@
     "difficulty": 3,
     "teaches": ["portal"],
     "tags": ["portal", "water", "cooldown"],
-    "optimal_ink": { "chalk": 18 },
+    "optimal_ink": null,
     "solutions_verified": 2,
     "hint_stroke": null
   },
@@ -24,5 +24,5 @@
     { "type": "portal", "params": { "entry": { "x": 4, "y": 150, "w": 14, "h": 6 }, "exit": { "x": 120, "y": 40, "w": 14, "h": 6 } } }
   ],
   "ink_budget": { "chalk": 48, "heat": 0, "frost": 0 },
-  "star_thresholds": null
+  "star_thresholds": { "two_star": 29, "three_star": 21 }
 }

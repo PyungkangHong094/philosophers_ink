@@ -6,7 +6,7 @@
     "difficulty": 6,
     "teaches": [],
     "tags": ["portal", "frost", "ice", "prima", "bridge"],
-    "optimal_ink": { "chalk": 36, "frost": 26 },
+    "optimal_ink": null,
     "solutions_verified": 2,
     "hint_stroke": null
   },
@@ -26,5 +26,5 @@
     { "type": "portal", "params": { "entry": { "x": 6, "y": 100, "w": 12, "h": 5 }, "exit": { "x": 78, "y": 160, "w": 12, "h": 5 } } }
   ],
   "ink_budget": { "chalk": 61, "heat": 0, "frost": 44 },
-  "star_thresholds": null
+  "star_thresholds": { "two_star": 99, "three_star": 71 }
 }

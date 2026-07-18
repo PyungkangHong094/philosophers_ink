@@ -6,7 +6,7 @@
     "difficulty": 3,
     "teaches": [],
     "tags": ["water", "liquid", "overflow"],
-    "optimal_ink": { "chalk": 50 },
+    "optimal_ink": null,
     "solutions_verified": 2,
     "hint_stroke": null
   },
@@ -23,5 +23,5 @@
   ],
   "gimmicks": [],
   "ink_budget": { "chalk": 100, "heat": 0, "frost": 0 },
-  "star_thresholds": null
+  "star_thresholds": { "two_star": 80, "three_star": 58 }
 }

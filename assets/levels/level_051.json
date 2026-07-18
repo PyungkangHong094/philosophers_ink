@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "id": 51,
+    "name": "빗물 계단",
+    "chapter": 3,
+    "difficulty": 7,
+    "teaches": [],
+    "tags": ["steam", "frost", "water", "condensation", "stairs"],
+    "optimal_ink": { "chalk": 24, "frost": 24 },
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#E4B94D",
+  "emitters": [
+    { "x": 73, "y": 220, "width": 14, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 118, "y": 286, "w": 34, "h": 24, "goal": 40, "material": null, "state": "liquid", "pure": false }
+  ],
+  "terrain": [
+    { "x": 0, "y": 314, "w": 160, "h": 2, "material": "WALL" },
+    { "x": 20, "y": 96, "w": 34, "h": 3, "material": "WALL" },
+    { "x": 54, "y": 132, "w": 34, "h": 3, "material": "WALL" },
+    { "x": 88, "y": 168, "w": 34, "h": 3, "material": "WALL" },
+    { "x": 118, "y": 204, "w": 34, "h": 3, "material": "WALL" }
+  ],
+  "gimmicks": [
+    { "type": "temp_zone", "params": { "x": 50, "y": 250, "w": 60, "h": 6, "kind": "heat", "probability": null } }
+  ],
+  "ink_budget": { "chalk": 36, "heat": 0, "frost": 36 },
+  "star_thresholds": { "two_star": 64, "three_star": 55 }
+}

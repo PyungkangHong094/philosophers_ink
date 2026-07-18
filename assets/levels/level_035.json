@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "id": 35,
+    "name": "증발",
+    "chapter": 3,
+    "difficulty": 4,
+    "teaches": ["steam"],
+    "tags": ["steam", "water", "heat", "gas_flask", "gas"],
+    "optimal_ink": null,
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#E4D29A",
+  "emitters": [
+    { "x": 110, "y": 2, "width": 12, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 36, "y": 6, "w": 64, "h": 22, "goal": 36, "material": null, "state": "gas", "pure": false }
+  ],
+  "terrain": [
+    { "x": 0, "y": 306, "w": 160, "h": 2, "material": "WALL" },
+    { "x": 30, "y": 280, "w": 4, "h": 26, "material": "WALL" },
+    { "x": 126, "y": 280, "w": 4, "h": 26, "material": "WALL" }
+  ],
+  "gimmicks": [],
+  "ink_budget": { "chalk": 16, "heat": 28, "frost": 0 },
+  "star_thresholds": { "two_star": 22, "three_star": 16 }
+}

@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "id": 43,
+    "name": "증기의 문",
+    "chapter": 3,
+    "difficulty": 7,
+    "teaches": [],
+    "tags": ["steam", "portal", "frost", "condense", "liquid", "chain"],
+    "optimal_ink": null,
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#D8BC7A",
+  "emitters": [
+    { "x": 16, "y": 2, "width": 12, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 104, "y": 282, "w": 40, "h": 30, "goal": 30, "material": null, "state": "liquid", "pure": false }
+  ],
+  "terrain": [
+    { "x": 0, "y": 314, "w": 160, "h": 2, "material": "WALL" },
+    { "x": 4, "y": 30, "w": 4, "h": 284, "material": "WALL" },
+    { "x": 40, "y": 30, "w": 4, "h": 284, "material": "WALL" },
+    { "x": 100, "y": 250, "w": 4, "h": 64, "material": "WALL" },
+    { "x": 146, "y": 250, "w": 4, "h": 64, "material": "WALL" }
+  ],
+  "gimmicks": [
+    { "type": "portal", "params": { "entry": { "x": 20, "y": 26, "w": 6, "h": 6 }, "exit": { "x": 120, "y": 40, "w": 6, "h": 6 } } }
+  ],
+  "ink_budget": { "chalk": 12, "heat": 21, "frost": 21 },
+  "star_thresholds": { "two_star": 43, "three_star": 32 }
+}

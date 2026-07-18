@@ -6,7 +6,7 @@
     "difficulty": 7,
     "teaches": [],
     "tags": ["operatio", "separatio", "frost", "gravity_flip", "prima", "water"],
-    "optimal_ink": { "chalk": 54, "frost": 28 },
+    "optimal_ink": null,
     "solutions_verified": 2,
     "hint_stroke": null
   },
@@ -27,5 +27,5 @@
     { "type": "gravity_flip", "params": {} }
   ],
   "ink_budget": { "chalk": 80, "heat": 0, "frost": 42 },
-  "star_thresholds": null
+  "star_thresholds": { "two_star": 108, "three_star": 94 }
 }

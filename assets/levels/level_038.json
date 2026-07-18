@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "id": 38,
+    "name": "이슬 정밀",
+    "chapter": 3,
+    "difficulty": 6,
+    "teaches": [],
+    "tags": ["steam", "frost", "condense", "precision", "multi_flask"],
+    "optimal_ink": null,
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#DBC280",
+  "emitters": [
+    { "x": 14, "y": 2, "width": 12, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 46, "y": 82, "w": 20, "h": 28, "goal": 16, "material": null, "state": null, "pure": false },
+    { "x": 84, "y": 82, "w": 20, "h": 28, "goal": 16, "material": null, "state": null, "pure": false },
+    { "x": 124, "y": 82, "w": 20, "h": 28, "goal": 16, "material": null, "state": null, "pure": false }
+  ],
+  "terrain": [
+    { "x": 0, "y": 314, "w": 160, "h": 2, "material": "WALL" },
+    { "x": 36, "y": 20, "w": 4, "h": 294, "material": "WALL" },
+    { "x": 40, "y": 110, "w": 112, "h": 4, "material": "WALL" },
+    { "x": 72, "y": 20, "w": 4, "h": 90, "material": "WALL" },
+    { "x": 112, "y": 20, "w": 4, "h": 90, "material": "WALL" }
+  ],
+  "gimmicks": [],
+  "ink_budget": { "chalk": 12, "heat": 20, "frost": 40 },
+  "star_thresholds": { "two_star": 58, "three_star": 41 }
+}

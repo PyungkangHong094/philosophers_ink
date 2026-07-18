@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "id": 47,
+    "name": "재의 방패",
+    "chapter": 3,
+    "difficulty": 6,
+    "teaches": [],
+    "tags": ["ash", "water", "steam", "shield", "temp_zone"],
+    "optimal_ink": { "chalk": 34, "heat": 10 },
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#E4B94D",
+  "emitters": [
+    { "x": 20, "y": 2, "width": 16, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0.4 },
+    { "x": 66, "y": 2, "width": 14, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 50, "y": 286, "w": 48, "h": 24, "goal": 40, "material": "WATER", "state": null, "pure": false }
+  ],
+  "terrain": [
+    { "x": 0, "y": 314, "w": 160, "h": 2, "material": "WALL" },
+    { "x": 28, "y": 150, "w": 22, "h": 3, "material": "WALL" },
+    { "x": 44, "y": 270, "w": 3, "h": 30, "material": "WALL" },
+    { "x": 104, "y": 270, "w": 3, "h": 44, "material": "WALL" }
+  ],
+  "gimmicks": [
+    { "type": "temp_zone", "params": { "x": 12, "y": 120, "w": 44, "h": 6, "kind": "heat", "probability": null } }
+  ],
+  "ink_budget": { "chalk": 58, "heat": 17, "frost": 0 },
+  "star_thresholds": { "two_star": 63, "three_star": 51 }
+}

@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "id": 34,
+    "name": "화염 룬",
+    "chapter": 3,
+    "difficulty": 3,
+    "teaches": ["heat"],
+    "tags": ["heat", "ice", "water", "phase"],
+    "optimal_ink": null,
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#E8D9A6",
+  "emitters": [
+    { "x": 68, "y": 2, "width": 24, "material": "ICE", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 62, "y": 286, "w": 36, "h": 28, "goal": 40, "material": "WATER", "state": null, "pure": false }
+  ],
+  "terrain": [
+    { "x": 0, "y": 316, "w": 160, "h": 2, "material": "WALL" },
+    { "x": 56, "y": 130, "w": 4, "h": 186, "material": "WALL" },
+    { "x": 100, "y": 130, "w": 4, "h": 186, "material": "WALL" }
+  ],
+  "gimmicks": [],
+  "ink_budget": { "chalk": 16, "heat": 20, "frost": 0 },
+  "star_thresholds": { "two_star": 16, "three_star": 12 }
+}

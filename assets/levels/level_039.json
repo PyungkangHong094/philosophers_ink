@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "id": 39,
+    "name": "재와 증류",
+    "chapter": 3,
+    "difficulty": 5,
+    "teaches": ["ash", "pure_flask"],
+    "tags": ["ash", "pure", "steam", "distill", "frost", "heat", "liquid"],
+    "optimal_ink": null,
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#E6D6A0",
+  "emitters": [
+    { "x": 72, "y": 34, "width": 8, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0.3 }
+  ],
+  "flasks": [
+    { "x": 56, "y": 6, "w": 48, "h": 22, "goal": 26, "material": null, "state": "liquid", "pure": true }
+  ],
+  "terrain": [
+    { "x": 0, "y": 314, "w": 160, "h": 2, "material": "WALL" },
+    { "x": 64, "y": 30, "w": 4, "h": 250, "material": "WALL" },
+    { "x": 96, "y": 30, "w": 4, "h": 250, "material": "WALL" }
+  ],
+  "gimmicks": [],
+  "ink_budget": { "chalk": 12, "heat": 24, "frost": 24 },
+  "star_thresholds": { "two_star": 38, "three_star": 28 }
+}

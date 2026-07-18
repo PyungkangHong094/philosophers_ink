@@ -1,0 +1,53 @@
+/// 오디오 서비스 단위 테스트 — 무음 폴백 + SoLoud 미초기화 시 안전 무음(무예외).
+///
+/// 헤드리스 테스트에서 SoLoud FFI를 초기화하지 않는다. 목표는 "오디오가 게임을 죽이지
+/// 않는다" — init을 부르지 않은 SoLoudAudioService의 모든 이벤트가 no-op이어야 한다.
+library;
+
+import 'package:flutter_test/flutter_test.dart';
+import 'package:philosophers_ink/audio/audio_service.dart';
+import 'package:philosophers_ink/audio/soloud_audio_service.dart';
+import 'package:philosophers_ink/level/level_model.dart' show FlaskState;
+
+void main() {
+  test('SilentAudioService는 모든 이벤트가 no-op (무예외)', () {
+    const a = SilentAudioService();
+    expect(() {
+      a.configure(enabled: true, volume: 0.5);
+      a.uiTap();
+      a.stroke();
+      a.flaskFill(FlaskState.solid);
+      a.flaskFill(null);
+      a.clearStinger();
+      a.operatioStinger();
+      a.fail();
+      a.setAmbientDensity(0.7);
+      a.stopAmbient();
+    }, returnsNormally);
+  });
+
+  test('SoLoudAudioService는 init 없이도 안전하게 무음 (FFI 미접근)', () {
+    final a = SoLoudAudioService();
+    // init을 부르지 않았으므로 _ready=false → 전 이벤트가 엔진을 건드리지 않고 반환.
+    expect(() {
+      a.configure(enabled: true, volume: 1.0);
+      a.uiTap();
+      a.stroke();
+      a.flaskFill(FlaskState.liquid);
+      a.clearStinger();
+      a.operatioStinger();
+      a.fail();
+      a.setAmbientDensity(1.0);
+      a.stopAmbient();
+    }, returnsNormally);
+  });
+
+  test('음소거(enabled=false) 설정 시에도 무예외', () {
+    final a = SoLoudAudioService();
+    a.configure(enabled: false, volume: 0.0);
+    expect(() {
+      a.uiTap();
+      a.setAmbientDensity(0.5);
+    }, returnsNormally);
+  });
+}

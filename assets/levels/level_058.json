@@ -1,0 +1,29 @@
+{
+  "meta": {
+    "id": 58,
+    "name": "반응",
+    "chapter": 4,
+    "difficulty": 5,
+    "teaches": ["lava_water_reaction"],
+    "tags": ["lava", "water", "reaction", "stone", "steam", "chalk"],
+    "optimal_ink": null,
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#8E2A20",
+  "emitters": [
+    { "x": 24, "y": 2, "width": 16, "material": "LAVA", "rate": 2, "total": null, "ash_ratio": 0 },
+    { "x": 112, "y": 2, "width": 12, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 14, "y": 286, "w": 46, "h": 26, "goal": 28, "material": "STONE", "state": "solid", "pure": false }
+  ],
+  "terrain": [
+    { "x": 0, "y": 314, "w": 160, "h": 2, "material": "WALL" },
+    { "x": 10, "y": 226, "w": 3, "h": 88, "material": "WALL" },
+    { "x": 62, "y": 226, "w": 3, "h": 88, "material": "WALL" }
+  ],
+  "gimmicks": [],
+  "ink_budget": { "chalk": 37, "heat": 0, "frost": 0 },
+  "star_thresholds": { "two_star": 31, "three_star": 25 }
+}

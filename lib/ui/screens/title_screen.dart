@@ -39,9 +39,25 @@ class _TitleScreenState extends State<TitleScreen>
     super.dispose();
   }
 
+  // 트리에서 분리될 때 호흡 컨트롤러를 멈춘다(감사 P3-4). 다른 라우트가 위를 덮는
+  // 경우는 Flutter의 TickerMode가 이미 vsync를 뮤트하므로, 여기선 명시적 분리(pop/이동)만 다룬다.
+  @override
+  void deactivate() {
+    _breath.stop();
+    super.deactivate();
+  }
+
+  @override
+  void activate() {
+    super.activate();
+    if (!_breath.isAnimating) _breath.repeat();
+  }
+
   void _start() {
-    final settings = InkServices.of(context).settings;
+    final services = InkServices.of(context);
+    final settings = services.settings;
     settings.hapticSelection();
+    services.audio.uiTap();
     Navigator.of(context).push(
       PageRouteBuilder(
         transitionDuration:

@@ -1,0 +1,29 @@
+{
+  "meta": {
+    "id": 68,
+    "name": "유리 성",
+    "chapter": 4,
+    "difficulty": 8,
+    "teaches": [],
+    "tags": ["lava", "stone", "frost", "constraint", "multilayer"],
+    "optimal_ink": null,
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#8E1F2F",
+  "emitters": [
+    { "x": 74, "y": 2, "width": 12, "material": "LAVA", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 58, "y": 286, "w": 44, "h": 26, "goal": 44, "material": "STONE", "state": null, "pure": false }
+  ],
+  "terrain": [
+    { "x": 0, "y": 314, "w": 160, "h": 2, "material": "WALL" },
+    { "x": 12, "y": 96, "w": 78, "h": 3, "material": "WALL" },
+    { "x": 70, "y": 158, "w": 78, "h": 3, "material": "WALL" },
+    { "x": 12, "y": 220, "w": 78, "h": 3, "material": "WALL" }
+  ],
+  "gimmicks": [],
+  "ink_budget": { "chalk": 0, "heat": 0, "frost": 63 },
+  "star_thresholds": { "two_star": 56, "three_star": 48 }
+}

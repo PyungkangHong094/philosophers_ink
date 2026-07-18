@@ -6,7 +6,7 @@
     "difficulty": 5,
     "teaches": [],
     "tags": ["variance_gate", "prima", "state_flask", "liquid"],
-    "optimal_ink": { "chalk": 50 },
+    "optimal_ink": null,
     "solutions_verified": 2,
     "hint_stroke": null
   },
@@ -24,5 +24,5 @@
     { "type": "variance_gate", "params": { "x": 60, "y": 140, "w": 100, "h": 1, "to": "WATER", "from": "PRIMA" } }
   ],
   "ink_budget": { "chalk": 85, "heat": 0, "frost": 0 },
-  "star_thresholds": null
+  "star_thresholds": { "two_star": 80, "three_star": 58 }
 }

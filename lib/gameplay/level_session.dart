@@ -138,4 +138,11 @@ class LevelSession {
     gravityLog.clear();
     _stampTerrain();
   }
+
+  /// 세션이 소유한 notifier를 정리한다. 레벨 화면(play_screen)이 세션을 폐기할 때
+  /// 호출한다 — 미호출 시 레벨 재플레이 반복에서 InkController 리스너가 누적된다.
+  /// [game]·[flasks]는 notifier가 아니라 별도 정리가 없다. 호출 후 세션은 재사용 불가.
+  void dispose() {
+    ink.dispose();
+  }
 }

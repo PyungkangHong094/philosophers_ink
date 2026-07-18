@@ -57,16 +57,23 @@ class WorldImageSource extends ChangeNotifier {
   final int height;
   ui.Image? _image;
   bool _converting = false;
+  bool _disposed = false;
 
   WorldImageSource({required this.width, required this.height});
 
   ui.Image? get image => _image;
 
   /// [rgba]로 새 이미지를 만든다. 이전 변환이 진행 중이면 이번 프레임은 건너뛴다.
+  ///
+  /// 변환은 여러 await를 거치는 비동기라, 그 사이 [dispose]가 끼어들 수 있다(플레이 중
+  /// 이탈). 재개 시 이미 dispose된 상태면 방금 디코드한 이미지를 버리고 조용히 종료한다 —
+  /// dispose된 ChangeNotifier에 notify(계약 위반 throw)하거나 이미지를 누수시키지 않는다.
   Future<void> update(Uint8List rgba) async {
-    if (_converting) return;
+    if (_disposed || _converting) return;
     _converting = true;
     try {
+      // fromUint8List는 바이트를 **즉시(동기) 복사**하므로(엔진 계약), 이 await 이후
+      // 호출자가 rgba 버퍼를 재사용해도 안전하다 — 단일 버퍼 티어링 없음.
       final buffer = await ui.ImmutableBuffer.fromUint8List(rgba);
       final descriptor = ui.ImageDescriptor.raw(
         buffer,
@@ -79,6 +86,11 @@ class WorldImageSource extends ChangeNotifier {
       buffer.dispose();
       descriptor.dispose();
       codec.dispose();
+      // await 중 dispose가 끼어들었으면: 디코드한 이미지를 해제하고 종료(누수·notify 방지).
+      if (_disposed) {
+        frame.image.dispose();
+        return;
+      }
       final old = _image;
       _image = frame.image;
       old?.dispose();
@@ -90,7 +102,9 @@ class WorldImageSource extends ChangeNotifier {
 
   @override
   void dispose() {
+    _disposed = true;
     _image?.dispose();
+    _image = null;
     super.dispose();
   }
 }

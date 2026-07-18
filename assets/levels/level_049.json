@@ -1,0 +1,30 @@
+{
+  "meta": {
+    "id": 49,
+    "name": "이중 순수",
+    "chapter": 3,
+    "difficulty": 8,
+    "teaches": [],
+    "tags": ["ash", "water", "steam", "pure", "finite", "distillation"],
+    "optimal_ink": { "chalk": 44, "heat": 12, "frost": 20 },
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#E4B94D",
+  "emitters": [
+    { "x": 73, "y": 2, "width": 14, "material": "WATER", "rate": 2, "total": 220, "ash_ratio": 0.3 }
+  ],
+  "flasks": [
+    { "x": 12, "y": 286, "w": 34, "h": 24, "goal": 40, "material": "WATER", "state": "liquid", "pure": true },
+    { "x": 114, "y": 286, "w": 34, "h": 24, "goal": 40, "material": "WATER", "state": "liquid", "pure": true }
+  ],
+  "terrain": [
+    { "x": 0, "y": 314, "w": 160, "h": 2, "material": "WALL" },
+    { "x": 70, "y": 170, "w": 20, "h": 3, "material": "WALL" }
+  ],
+  "gimmicks": [
+    { "type": "temp_zone", "params": { "x": 40, "y": 150, "w": 80, "h": 8, "kind": "heat", "probability": null } }
+  ],
+  "ink_budget": { "chalk": 66, "heat": 18, "frost": 30 },
+  "star_thresholds": { "two_star": 101, "three_star": 87 }
+}

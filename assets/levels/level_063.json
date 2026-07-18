@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "id": 63,
+    "name": "세 물질 분류",
+    "chapter": 4,
+    "difficulty": 8,
+    "teaches": [],
+    "tags": ["lava", "water", "prima", "stone", "sort", "chalk", "frost"],
+    "optimal_ink": null,
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#8E2A20",
+  "emitters": [
+    { "x": 68, "y": 2, "width": 8, "material": "PRIMA", "rate": 3, "total": 320, "ash_ratio": 0 },
+    { "x": 76, "y": 2, "width": 8, "material": "LAVA", "rate": 3, "total": 320, "ash_ratio": 0 },
+    { "x": 84, "y": 2, "width": 8, "material": "WATER", "rate": 3, "total": 320, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 8, "y": 288, "w": 36, "h": 24, "goal": 20, "material": "PRIMA", "state": null, "pure": false },
+    { "x": 62, "y": 288, "w": 36, "h": 24, "goal": 20, "material": "STONE", "state": "solid", "pure": false },
+    { "x": 116, "y": 288, "w": 36, "h": 24, "goal": 20, "material": "WATER", "state": "liquid", "pure": false }
+  ],
+  "terrain": [
+    { "x": 0, "y": 314, "w": 160, "h": 2, "material": "WALL" },
+    { "x": 46, "y": 180, "w": 3, "h": 134, "material": "WALL" },
+    { "x": 111, "y": 180, "w": 3, "h": 134, "material": "WALL" }
+  ],
+  "gimmicks": [],
+  "ink_budget": { "chalk": 51, "heat": 0, "frost": 9 },
+  "star_thresholds": { "two_star": 53, "three_star": 46 }
+}

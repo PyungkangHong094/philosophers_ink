@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "id": 42,
+    "name": "배급",
+    "chapter": 3,
+    "difficulty": 6,
+    "teaches": [],
+    "tags": ["finite", "water", "split", "multi_flask", "economy"],
+    "optimal_ink": null,
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#DEC786",
+  "emitters": [
+    { "x": 74, "y": 2, "width": 12, "material": "WATER", "rate": 2, "total": 120, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 16, "y": 284, "w": 40, "h": 28, "goal": 52, "material": null, "state": null, "pure": false },
+    { "x": 104, "y": 284, "w": 40, "h": 28, "goal": 52, "material": null, "state": null, "pure": false }
+  ],
+  "terrain": [
+    { "x": 0, "y": 314, "w": 160, "h": 2, "material": "WALL" },
+    { "x": 76, "y": 150, "w": 8, "h": 8, "material": "WALL" },
+    { "x": 12, "y": 250, "w": 4, "h": 64, "material": "WALL" },
+    { "x": 56, "y": 250, "w": 4, "h": 64, "material": "WALL" },
+    { "x": 100, "y": 250, "w": 4, "h": 64, "material": "WALL" },
+    { "x": 148, "y": 250, "w": 4, "h": 64, "material": "WALL" }
+  ],
+  "gimmicks": [],
+  "ink_budget": { "chalk": 40, "heat": 0, "frost": 0 },
+  "star_thresholds": { "two_star": 38, "three_star": 28 }
+}

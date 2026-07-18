@@ -106,17 +106,27 @@ void main() {
     for (var i = 0; i < 400; i++) {
       game.tick();
     }
-    const iters = 300;
-    final sw = Stopwatch()..start();
-    for (var i = 0; i < iters; i++) {
-      game.tick();
+    // 배치별 평균의 **최솟값**으로 판정한다. flutter_test는 파일을 병렬 아이솔레이트로
+    // 돌리므로 단순 평균은 머신 포화 시 벽시계 노이즈로 위양성을 낸다 (lava_reaction_test와
+    // 동일 방식). 경합이 덜 낀 배치의 최솟값이 실제 처리량을 대표한다.
+    const batches = 6;
+    const itersPerBatch = 50;
+    var minPerTickMs = double.infinity;
+    var lastAvg = 0.0;
+    for (var b = 0; b < batches; b++) {
+      final sw = Stopwatch()..start();
+      for (var i = 0; i < itersPerBatch; i++) {
+        game.tick();
+      }
+      sw.stop();
+      lastAvg = sw.elapsedMicroseconds / itersPerBatch / 1000.0;
+      if (lastAvg < minPerTickMs) minPerTickMs = lastAvg;
     }
-    sw.stop();
-    final perTickMs = sw.elapsedMicroseconds / iters / 1000.0;
     // ignore: avoid_print
-    print('기믹 활성 틱 평균: ${perTickMs.toStringAsFixed(3)}ms '
-        '(활성 셀 ${game.activeCellCount}, 예산 3ms)');
-    expect(perTickMs, lessThan(3.0),
-        reason: '기믹 활성 최악 시나리오 틱 예산 초과 (${perTickMs}ms)');
+    print('기믹 활성 틱: min ${minPerTickMs.toStringAsFixed(3)}ms '
+        '(마지막 배치 ${lastAvg.toStringAsFixed(3)}ms, '
+        '활성 셀 ${game.activeCellCount}, 예산 3ms)');
+    expect(minPerTickMs, lessThan(3.0),
+        reason: '기믹 활성 최악 시나리오 틱 예산 초과 (${minPerTickMs}ms)');
   });
 }

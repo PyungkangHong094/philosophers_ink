@@ -1,0 +1,30 @@
+{
+  "meta": {
+    "id": 64,
+    "name": "종유석",
+    "chapter": 4,
+    "difficulty": 8,
+    "teaches": [],
+    "tags": ["lava", "stone", "frost", "gravity_flip", "stalactite"],
+    "optimal_ink": null,
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#8E2A20",
+  "emitters": [
+    { "x": 71, "y": 40, "width": 18, "material": "LAVA", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 56, "y": 6, "w": 48, "h": 22, "goal": 28, "material": "STONE", "state": "solid", "pure": false }
+  ],
+  "terrain": [
+    { "x": 0, "y": 314, "w": 160, "h": 2, "material": "WALL" },
+    { "x": 52, "y": 6, "w": 3, "h": 40, "material": "WALL" },
+    { "x": 105, "y": 6, "w": 3, "h": 40, "material": "WALL" }
+  ],
+  "gimmicks": [
+    { "type": "gravity_flip" }
+  ],
+  "ink_budget": { "chalk": 18, "heat": 0, "frost": 27 },
+  "star_thresholds": { "two_star": 40, "three_star": 35 }
+}

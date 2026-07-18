@@ -1,0 +1,34 @@
+{
+  "meta": {
+    "id": 73,
+    "name": "대장간",
+    "chapter": 4,
+    "difficulty": 9,
+    "teaches": [],
+    "tags": ["lava", "stone", "steam", "ice", "water", "temp_zone", "reaction", "cycle"],
+    "optimal_ink": null,
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#8E1F2F",
+  "emitters": [
+    { "x": 90, "y": 2, "width": 8, "material": "LAVA", "rate": 3, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 52, "y": 270, "w": 58, "h": 22, "goal": 40, "material": "STONE", "state": null, "pure": false },
+    { "x": 112, "y": 6, "w": 40, "h": 18, "goal": 20, "material": "STEAM", "state": null, "pure": false }
+  ],
+  "terrain": [
+    { "x": 0, "y": 314, "w": 160, "h": 2, "material": "WALL" },
+    { "x": 20, "y": 70, "w": 60, "h": 18, "material": "ICE" },
+    { "x": 50, "y": 250, "w": 2, "h": 42, "material": "WALL" },
+    { "x": 110, "y": 250, "w": 2, "h": 42, "material": "WALL" },
+    { "x": 50, "y": 290, "w": 62, "h": 2, "material": "WALL" },
+    { "x": 52, "y": 270, "w": 58, "h": 20, "material": "LAVA" }
+  ],
+  "gimmicks": [
+    { "type": "temp_zone", "params": { "x": 20, "y": 88, "w": 60, "h": 6, "kind": "heat", "probability": null } }
+  ],
+  "ink_budget": { "chalk": 35, "heat": 11, "frost": 0 },
+  "star_thresholds": { "two_star": 43, "three_star": 39 }
+}

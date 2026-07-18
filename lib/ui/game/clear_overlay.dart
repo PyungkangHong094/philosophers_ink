@@ -5,6 +5,8 @@
 /// reduced motion 시 스탬프는 페이드로 대체.
 library;
 
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import '../tokens.dart';
@@ -94,11 +96,30 @@ class _ClearOverlayState extends State<ClearOverlay>
               Text('정제 완료',
                   style: InkText.headingKo, textAlign: TextAlign.center),
               const SizedBox(height: InkSpace.lg),
-              StarRow(
-                filled: widget.stars,
-                size: 40,
-                stampProgress:
-                    widget.reducedMotion ? 1.0 : _controller.value,
+              // 별 스탬프 + 골드 파티클 버스트 (reduced motion 시 파티클 생략).
+              SizedBox(
+                width: 220,
+                height: 72,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    if (!widget.reducedMotion)
+                      Positioned.fill(
+                        child: CustomPaint(
+                          painter: _StarParticles(
+                            stars: widget.stars,
+                            progress: _controller.value,
+                          ),
+                        ),
+                      ),
+                    StarRow(
+                      filled: widget.stars,
+                      size: 40,
+                      stampProgress:
+                          widget.reducedMotion ? 1.0 : _controller.value,
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: InkSpace.xl),
               SizedBox(
@@ -126,6 +147,44 @@ class _ClearOverlayState extends State<ClearOverlay>
       ),
     );
   }
+}
+
+/// 별 스탬프 골드 파티클 — 각 별이 착지하는 순간 그 위치에서 골드 입자가 솟아 페이드.
+class _StarParticles extends CustomPainter {
+  final int stars;
+  final double progress; // 0~1 전체 스탬프 진행
+  _StarParticles({required this.stars, required this.progress});
+
+  static const int _perStar = 7;
+  static const double _spacing = 49.6; // StarRow size 40 * (1+2*0.12)
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final cy = size.height / 2;
+    final cx = size.width / 2;
+    final paint = Paint();
+    for (var i = 0; i < stars; i++) {
+      // i번째 별 착지 시각과 그 이후 로컬 진행.
+      final t0 = i / stars;
+      final local = ((progress - t0) * stars).clamp(0.0, 1.0);
+      if (local <= 0) continue;
+      final sx = cx + (i - (stars - 1) / 2.0) * _spacing;
+      for (var k = 0; k < _perStar; k++) {
+        final seed = (i * 13 + k * 7) % 100 / 100.0;
+        final ang = seed * 2 * math.pi;
+        final dist = (8 + seed * 26) * local;
+        final px = sx + math.cos(ang) * dist;
+        final py = cy - math.sin(ang).abs() * dist * 1.2; // 위로 솟음
+        final r = (2.2 * (1 - local)).clamp(0.4, 2.2);
+        paint.color = InkColor.goldHi.withValues(alpha: (1 - local) * 0.9);
+        canvas.drawCircle(Offset(px, py), r, paint);
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(_StarParticles old) =>
+      old.progress != progress || old.stars != stars;
 }
 
 /// 실패(오염) 오버레이 — 재시작 유도. 별 없음, 골드 없음(무채).

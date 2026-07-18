@@ -40,10 +40,16 @@ class SettingsScreen extends StatelessWidget {
               const SizedBox(height: InkSpace.md),
               _ToggleRow(
                 label: '사운드',
-                caption: '효과음·음악 (M5)',
+                caption: '효과음·앰비언트',
                 value: settings.sound,
                 onChanged: (v) => settings.sound = v,
               ),
+              if (settings.sound)
+                _VolumeRow(
+                  value: settings.volume,
+                  onChanged: (v) => settings.volume = v,
+                  onChangeEnd: (_) => InkServices.of(context).audio.uiTap(),
+                ),
               _ToggleRow(
                 label: '햅틱',
                 caption: '진동 피드백',
@@ -117,6 +123,63 @@ class _ToggleRow extends StatelessWidget {
             _Switch(value: value),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// 볼륨 슬라이더 행 — 활성 트랙만 골드. 사운드 켜짐일 때만 노출.
+class _VolumeRow extends StatelessWidget {
+  final double value;
+  final ValueChanged<double> onChanged;
+  final ValueChanged<double> onChangeEnd;
+
+  const _VolumeRow({
+    required this.value,
+    required this.onChanged,
+    required this.onChangeEnd,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: const BoxConstraints(minHeight: InkSpace.touchTarget),
+      padding: const EdgeInsets.symmetric(
+          horizontal: InkSpace.lg, vertical: InkSpace.sm),
+      decoration: const BoxDecoration(
+        border: Border(bottom: BorderSide(color: InkColor.hairline)),
+      ),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 88,
+            child: Text('볼륨', style: InkText.body),
+          ),
+          Expanded(
+            child: SliderTheme(
+              data: SliderThemeData(
+                activeTrackColor: InkColor.gold,
+                inactiveTrackColor: InkColor.hairline,
+                thumbColor: InkColor.gold,
+                overlayColor: InkColor.goldDeep,
+                trackHeight: 2,
+              ),
+              child: Slider(
+                value: value,
+                onChanged: onChanged,
+                onChangeEnd: onChangeEnd,
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 40,
+            child: Text(
+              '${(value * 100).round()}',
+              textAlign: TextAlign.end,
+              style: InkText.caption,
+            ),
+          ),
+        ],
       ),
     );
   }

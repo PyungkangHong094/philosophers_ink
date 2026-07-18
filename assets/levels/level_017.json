@@ -6,7 +6,7 @@
     "difficulty": 3,
     "teaches": ["frost_rune"],
     "tags": ["frost", "water", "ice"],
-    "optimal_ink": { "frost": 45 },
+    "optimal_ink": null,
     "solutions_verified": 2,
     "hint_stroke": null
   },
@@ -22,5 +22,5 @@
   ],
   "gimmicks": [],
   "ink_budget": { "chalk": 80, "heat": 0, "frost": 90 },
-  "star_thresholds": null
+  "star_thresholds": { "two_star": 72, "three_star": 52 }
 }

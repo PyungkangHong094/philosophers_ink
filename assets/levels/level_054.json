@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "id": 54,
+    "name": "우아함의 시험",
+    "chapter": 3,
+    "difficulty": 8,
+    "teaches": [],
+    "tags": ["water", "minimal", "elegance", "open"],
+    "optimal_ink": { "chalk": 18 },
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#E4B94D",
+  "emitters": [
+    { "x": 73, "y": 2, "width": 14, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 114, "y": 286, "w": 34, "h": 24, "goal": 40, "material": "WATER", "state": null, "pure": false }
+  ],
+  "terrain": [
+    { "x": 0, "y": 314, "w": 160, "h": 2, "material": "WALL" },
+    { "x": 60, "y": 250, "w": 3, "h": 64, "material": "WALL" },
+    { "x": 100, "y": 200, "w": 30, "h": 3, "material": "WALL" }
+  ],
+  "gimmicks": [],
+  "ink_budget": { "chalk": 27, "heat": 0, "frost": 0 },
+  "star_thresholds": { "two_star": 24, "three_star": 21 }
+}

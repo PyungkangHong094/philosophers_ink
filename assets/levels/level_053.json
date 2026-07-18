@@ -1,0 +1,35 @@
+{
+  "meta": {
+    "id": 53,
+    "name": "세 개의 상",
+    "chapter": 3,
+    "difficulty": 8,
+    "teaches": [],
+    "tags": ["solid", "liquid", "gas", "water", "ice", "steam", "temp_zone"],
+    "optimal_ink": { "chalk": 34, "heat": 6, "frost": 10 },
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#E4B94D",
+  "emitters": [
+    { "x": 70, "y": 2, "width": 20, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 8, "y": 286, "w": 36, "h": 24, "goal": 26, "material": null, "state": "solid", "pure": false },
+    { "x": 62, "y": 286, "w": 36, "h": 24, "goal": 26, "material": null, "state": "liquid", "pure": false },
+    { "x": 118, "y": 6, "w": 36, "h": 18, "goal": 26, "material": null, "state": "gas", "pure": false }
+  ],
+  "terrain": [
+    { "x": 0, "y": 314, "w": 160, "h": 2, "material": "WALL" },
+    { "x": 50, "y": 40, "w": 3, "h": 40, "material": "WALL" },
+    { "x": 106, "y": 40, "w": 3, "h": 40, "material": "WALL" },
+    { "x": 50, "y": 220, "w": 3, "h": 94, "material": "WALL" },
+    { "x": 106, "y": 220, "w": 3, "h": 94, "material": "WALL" }
+  ],
+  "gimmicks": [
+    { "type": "temp_zone", "params": { "x": 8, "y": 200, "w": 44, "h": 6, "kind": "cool", "probability": null } },
+    { "type": "temp_zone", "params": { "x": 108, "y": 120, "w": 44, "h": 6, "kind": "heat", "probability": null } }
+  ],
+  "ink_budget": { "chalk": 51, "heat": 9, "frost": 15 },
+  "star_thresholds": { "two_star": 67, "three_star": 58 }
+}

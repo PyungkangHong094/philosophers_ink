@@ -1,0 +1,29 @@
+{
+  "meta": {
+    "id": 61,
+    "name": "용암 커튼",
+    "chapter": 4,
+    "difficulty": 7,
+    "teaches": [],
+    "tags": ["lava", "frost", "stone", "wall", "chalk"],
+    "optimal_ink": null,
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#8E2A20",
+  "emitters": [
+    { "x": 20, "y": 2, "width": 120, "material": "LAVA", "rate": 3, "total": null, "ash_ratio": 0 },
+    { "x": 72, "y": 250, "width": 16, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0 }
+  ],
+  "flasks": [
+    { "x": 58, "y": 288, "w": 44, "h": 24, "goal": 30, "material": "WATER", "state": "liquid", "pure": false }
+  ],
+  "terrain": [
+    { "x": 0, "y": 314, "w": 160, "h": 2, "material": "WALL" },
+    { "x": 30, "y": 200, "w": 3, "h": 40, "material": "WALL" },
+    { "x": 127, "y": 200, "w": 3, "h": 40, "material": "WALL" }
+  ],
+  "gimmicks": [],
+  "ink_budget": { "chalk": 12, "heat": 0, "frost": 30 },
+  "star_thresholds": { "two_star": 37, "three_star": 32 }
+}

@@ -1,0 +1,29 @@
+{
+  "meta": {
+    "id": 40,
+    "name": "거르기",
+    "chapter": 3,
+    "difficulty": 6,
+    "teaches": [],
+    "tags": ["ash", "pure", "ice", "steam", "distill", "frost", "heat"],
+    "optimal_ink": null,
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
+  "background": "#DDC488",
+  "emitters": [
+    { "x": 72, "y": 34, "width": 8, "material": "ICE", "rate": 2, "total": null, "ash_ratio": 0.3 }
+  ],
+  "flasks": [
+    { "x": 56, "y": 6, "w": 48, "h": 22, "goal": 24, "material": null, "state": "liquid", "pure": true }
+  ],
+  "terrain": [
+    { "x": 0, "y": 314, "w": 160, "h": 2, "material": "WALL" },
+    { "x": 64, "y": 30, "w": 4, "h": 250, "material": "WALL" },
+    { "x": 96, "y": 30, "w": 4, "h": 250, "material": "WALL" },
+    { "x": 68, "y": 200, "w": 12, "h": 3, "material": "WALL" }
+  ],
+  "gimmicks": [],
+  "ink_budget": { "chalk": 12, "heat": 34, "frost": 22 },
+  "star_thresholds": { "two_star": 51, "three_star": 37 }
+}

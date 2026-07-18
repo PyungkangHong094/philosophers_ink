@@ -6,7 +6,7 @@
     "difficulty": 5,
     "teaches": [],
     "tags": ["portal", "water", "prima", "sorting"],
-    "optimal_ink": { "chalk": 44 },
+    "optimal_ink": null,
     "solutions_verified": 2,
     "hint_stroke": null
   },
@@ -28,5 +28,5 @@
     { "type": "portal", "params": { "entry": { "x": 118, "y": 130, "w": 12, "h": 5 }, "exit": { "x": 8, "y": 60, "w": 12, "h": 5 } } }
   ],
   "ink_budget": { "chalk": 75, "heat": 0, "frost": 0 },
-  "star_thresholds": null
+  "star_thresholds": { "two_star": 70, "three_star": 51 }
 }
