@@ -3,95 +3,82 @@
   "name": "웅덩이",
   "chapter": 2,
   "solvable": true,
-  "min_ink": 0,
-  "effort": 1,
-  "rollouts": 15,
-  "elapsed_ms": 6722,
+  "min_ink": 233,
+  "effort": 5,
+  "rollouts": 463,
+  "elapsed_ms": 206663,
   "budget": {
-    "chalk": 100,
+    "chalk": 400,
     "heat": 0,
     "frost": 0
   },
   "solutions": [
     {
-      "ink": 0,
-      "ticks": 350,
-      "strokes": [],
-      "gravity_taps": []
-    },
-    {
-      "ink": 0,
-      "ticks": 350,
+      "ink": 233,
+      "ticks": 353,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 108,
-          "y0": 292,
-          "x1": 104,
-          "y1": 308
+          "x0": 141,
+          "y0": 92,
+          "x1": 63,
+          "y1": 165
         }
       ],
       "gravity_taps": []
     },
     {
-      "ink": 0,
-      "ticks": 350,
+      "ink": 235,
+      "ticks": 304,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 64,
-          "y0": 8,
-          "x1": 108,
-          "y1": 316
+          "x0": 141,
+          "y0": 92,
+          "x1": 61,
+          "y1": 163
         }
       ],
       "gravity_taps": []
     },
     {
-      "ink": 0,
-      "ticks": 350,
+      "ink": 235,
+      "ticks": 363,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 56,
-          "y0": 40,
-          "x1": 112,
-          "y1": 300
-        },
-        {
-          "ink": "chalk",
-          "x0": 44,
-          "y0": 96,
-          "x1": 112,
-          "y1": 308
+          "x0": 141,
+          "y0": 90,
+          "x1": 63,
+          "y1": 165
         }
       ],
       "gravity_taps": []
     },
     {
-      "ink": 20,
-      "ticks": 350,
+      "ink": 235,
+      "ticks": 305,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 128,
-          "y0": 292,
-          "x1": 24,
-          "y1": 276
-        },
+          "x0": 142,
+          "y0": 92,
+          "x1": 63,
+          "y1": 165
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 236,
+      "ticks": 300,
+      "strokes": [
         {
           "ink": "chalk",
-          "x0": 36,
-          "y0": 96,
-          "x1": 96,
-          "y1": 292
-        },
-        {
-          "ink": "chalk",
-          "x0": 88,
-          "y0": 40,
-          "x1": 88,
-          "y1": 48
+          "x0": 141,
+          "y0": 92,
+          "x1": 62,
+          "y1": 166
         }
       ],
       "gravity_taps": []

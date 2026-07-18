@@ -3,67 +3,82 @@
   "name": "둑",
   "chapter": 2,
   "solvable": true,
-  "min_ink": 0,
-  "effort": 1,
-  "rollouts": 25,
-  "elapsed_ms": 13098,
+  "min_ink": 184,
+  "effort": 12,
+  "rollouts": 388,
+  "elapsed_ms": 198302,
   "budget": {
-    "chalk": 80,
+    "chalk": 400,
     "heat": 0,
     "frost": 0
   },
   "solutions": [
     {
-      "ink": 0,
-      "ticks": 473,
-      "strokes": [],
-      "gravity_taps": []
-    },
-    {
-      "ink": 80,
-      "ticks": 470,
+      "ink": 184,
+      "ticks": 556,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 96,
-          "y0": 228,
-          "x1": 148,
-          "y1": 256
+          "x0": 18,
+          "y0": 37,
+          "x1": 98,
+          "y1": 57
         }
       ],
       "gravity_taps": []
     },
     {
-      "ink": 80,
-      "ticks": 492,
+      "ink": 184,
+      "ticks": 891,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 28,
-          "y0": 64,
-          "x1": 112,
-          "y1": 284
-        },
-        {
-          "ink": "chalk",
-          "x0": 28,
-          "y0": 60,
-          "x1": 108,
-          "y1": 280
+          "x0": 17,
+          "y0": 39,
+          "x1": 98,
+          "y1": 57
         }
       ],
       "gravity_taps": []
     },
     {
-      "ink": 80,
-      "ticks": 474,
+      "ink": 185,
+      "ticks": 493,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 132,
-          "y0": 244,
-          "x1": 104,
-          "y1": 220
+          "x0": 17,
+          "y0": 38,
+          "x1": 97,
+          "y1": 59
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 185,
+      "ticks": 920,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 18,
+          "y0": 36,
+          "x1": 97,
+          "y1": 59
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 185,
+      "ticks": 428,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 18,
+          "y0": 36,
+          "x1": 98,
+          "y1": 57
         }
       ],
       "gravity_taps": []

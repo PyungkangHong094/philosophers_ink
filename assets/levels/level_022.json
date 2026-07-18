@@ -69,12 +69,12 @@
   ],
   "gimmicks": [],
   "ink_budget": {
-    "chalk": 100,
+    "chalk": 340,
     "heat": 0,
-    "frost": 200
+    "frost": 0
   },
   "star_thresholds": {
-    "two_star": 265,
+    "two_star": 285,
     "three_star": 230
   },
   "optimal_ink": null

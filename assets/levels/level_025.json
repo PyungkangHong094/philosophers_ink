@@ -77,12 +77,12 @@
     }
   ],
   "ink_budget": {
-    "chalk": 500,
+    "chalk": 380,
     "heat": 0,
     "frost": 0
   },
   "star_thresholds": {
-    "two_star": 304,
+    "two_star": 299,
     "three_star": 218
   },
   "optimal_ink": null

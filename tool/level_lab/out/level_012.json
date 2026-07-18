@@ -3,95 +3,82 @@
   "name": "물의 등장",
   "chapter": 2,
   "solvable": true,
-  "min_ink": 0,
-  "effort": 1,
-  "rollouts": 15,
-  "elapsed_ms": 5475,
+  "min_ink": 165,
+  "effort": 12,
+  "rollouts": 359,
+  "elapsed_ms": 220042,
   "budget": {
-    "chalk": 75,
+    "chalk": 400,
     "heat": 0,
     "frost": 0
   },
   "solutions": [
     {
-      "ink": 0,
-      "ticks": 296,
-      "strokes": [],
-      "gravity_taps": []
-    },
-    {
-      "ink": 0,
-      "ticks": 296,
+      "ink": 165,
+      "ticks": 1253,
       "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 68,
-          "y0": 292,
-          "x1": 64,
-          "y1": 308
-        }
-      ],
-      "gravity_taps": []
-    },
-    {
-      "ink": 0,
-      "ticks": 296,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 88,
-          "y0": 8,
-          "x1": 80,
-          "y1": 316
-        }
-      ],
-      "gravity_taps": []
-    },
-    {
-      "ink": 0,
-      "ticks": 296,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 80,
-          "y0": 40,
-          "x1": 80,
-          "y1": 300
-        },
-        {
-          "ink": "chalk",
-          "x0": 68,
-          "y0": 96,
-          "x1": 84,
-          "y1": 308
-        }
-      ],
-      "gravity_taps": []
-    },
-    {
-      "ink": 20,
-      "ticks": 296,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 128,
-          "y0": 292,
-          "x1": 24,
-          "y1": 276
-        },
-        {
-          "ink": "chalk",
-          "x0": 60,
-          "y0": 96,
-          "x1": 64,
-          "y1": 292
-        },
         {
           "ink": "chalk",
           "x0": 92,
-          "y0": 40,
-          "x1": 92,
-          "y1": 48
+          "y0": 69,
+          "x1": 17,
+          "y1": 58
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 165,
+      "ticks": 953,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 92,
+          "y0": 69,
+          "x1": 18,
+          "y1": 56
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 165,
+      "ticks": 634,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 93,
+          "y0": 67,
+          "x1": 18,
+          "y1": 56
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 166,
+      "ticks": 708,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 92,
+          "y0": 70,
+          "x1": 17,
+          "y1": 58
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 167,
+      "ticks": 435,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 93,
+          "y0": 67,
+          "x1": 18,
+          "y1": 54
         }
       ],
       "gravity_taps": []
