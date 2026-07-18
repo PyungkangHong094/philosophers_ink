@@ -52,6 +52,13 @@
       "w": 160,
       "h": 2,
       "material": "WALL"
+    },
+    {
+      "x": 44,
+      "y": 0,
+      "w": 4,
+      "h": 100,
+      "material": "WALL"
     }
   ],
   "gimmicks": [
@@ -61,13 +68,13 @@
     }
   ],
   "ink_budget": {
-    "chalk": 500,
+    "chalk": 231,
     "heat": 0,
     "frost": 0
   },
   "star_thresholds": {
-    "two_star": 419,
-    "three_star": 338
+    "two_star": 194,
+    "three_star": 156
   },
   "optimal_ink": null
 }
