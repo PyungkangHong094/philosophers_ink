@@ -5,26 +5,77 @@
     "chapter": 2,
     "difficulty": 6,
     "teaches": [],
-    "tags": ["water", "ice", "temp_zone", "cool", "state_flask", "operatio"],
+    "tags": [
+      "water",
+      "ice",
+      "state_flask",
+      "solid",
+      "liquid",
+      "operatio"
+    ],
     "optimal_ink": null,
     "solutions_verified": 2,
     "hint_stroke": null
   },
   "background": "#E9E5DB",
   "emitters": [
-    { "x": 74, "y": 2, "width": 13, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0 }
+    {
+      "x": 74,
+      "y": 2,
+      "width": 12,
+      "material": "WATER",
+      "rate": 2,
+      "total": null,
+      "ash_ratio": 0
+    }
   ],
   "flasks": [
-    { "x": 18, "y": 290, "w": 38, "h": 14, "goal": 35, "material": null, "state": "liquid", "pure": false },
-    { "x": 104, "y": 290, "w": 38, "h": 14, "goal": 35, "material": null, "state": "solid", "pure": false }
+    {
+      "x": 8,
+      "y": 286,
+      "w": 30,
+      "h": 26,
+      "goal": 30,
+      "material": null,
+      "state": "solid",
+      "pure": false
+    },
+    {
+      "x": 122,
+      "y": 286,
+      "w": 30,
+      "h": 26,
+      "goal": 30,
+      "material": null,
+      "state": "liquid",
+      "pure": false
+    }
   ],
   "terrain": [
-    { "x": 0, "y": 306, "w": 160, "h": 2, "material": "WALL" },
-    { "x": 79, "y": 240, "w": 2, "h": 40, "material": "WALL" }
+    {
+      "x": 0,
+      "y": 314,
+      "w": 160,
+      "h": 2,
+      "material": "WALL"
+    },
+    {
+      "x": 78,
+      "y": 40,
+      "w": 4,
+      "h": 44,
+      "material": "WALL"
+    }
   ],
-  "gimmicks": [
-    { "type": "temp_zone", "params": { "x": 96, "y": 175, "w": 48, "h": 8, "kind": "cool", "probability": 0.12 } }
-  ],
-  "ink_budget": { "chalk": 95, "heat": 0, "frost": 60 },
-  "star_thresholds": { "two_star": 88, "three_star": 63 }
+  "gimmicks": [],
+  "ink_budget": {
+    "chalk": 100,
+    "heat": 0,
+    "frost": 200
+  },
+  "star_thresholds": {
+    "two_star": 265,
+    "three_star": 230
+  },
+  "optimal_ink": null
 }

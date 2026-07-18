@@ -5,26 +5,69 @@
     "chapter": 2,
     "difficulty": 6,
     "teaches": [],
-    "tags": ["gravity_flip", "water", "timing"],
+    "tags": [
+      "gravity_flip",
+      "water",
+      "timing"
+    ],
     "optimal_ink": null,
     "solutions_verified": 2,
     "hint_stroke": null
   },
   "background": "#E9E5DB",
   "emitters": [
-    { "x": 74, "y": 40, "width": 12, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0 }
+    {
+      "x": 76,
+      "y": 2,
+      "width": 6,
+      "material": "WATER",
+      "rate": 3,
+      "total": null,
+      "ash_ratio": 0
+    }
   ],
   "flasks": [
-    { "x": 60, "y": 8, "w": 40, "h": 28, "goal": 45, "material": null, "state": null, "pure": false }
+    {
+      "x": 10,
+      "y": 8,
+      "w": 28,
+      "h": 26,
+      "goal": 40,
+      "material": null,
+      "state": null,
+      "pure": false
+    }
   ],
   "terrain": [
-    { "x": 40, "y": 270, "w": 4, "h": 30, "material": "WALL" },
-    { "x": 116, "y": 270, "w": 4, "h": 30, "material": "WALL" },
-    { "x": 0, "y": 300, "w": 160, "h": 4, "material": "WALL" }
+    {
+      "x": 50,
+      "y": 140,
+      "w": 4,
+      "h": 180,
+      "material": "WALL"
+    },
+    {
+      "x": 0,
+      "y": 316,
+      "w": 160,
+      "h": 2,
+      "material": "WALL"
+    }
   ],
   "gimmicks": [
-    { "type": "gravity_flip", "params": {} }
+    {
+      "type": "gravity_flip",
+      "params": {}
+    }
   ],
-  "ink_budget": { "chalk": 68, "heat": 0, "frost": 0 },
-  "star_thresholds": { "two_star": 64, "three_star": 46 }
+  "ink_budget": {
+    "chalk": 500,
+    "heat": 0,
+    "frost": 0
+  },
+  "star_thresholds": {
+    "two_star": 419,
+    "three_star": 338
+  },
+  "optimal_ink": null
 }

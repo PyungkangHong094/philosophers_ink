@@ -4,23 +4,60 @@
     "name": "눈꽃 플라스크",
     "chapter": 2,
     "difficulty": 4,
-    "teaches": ["state_flask"],
-    "tags": ["frost", "state_flask", "solid"],
+    "teaches": [
+      "state_flask"
+    ],
+    "tags": [
+      "frost",
+      "state_flask",
+      "solid"
+    ],
     "optimal_ink": null,
     "solutions_verified": 2,
     "hint_stroke": null
   },
   "background": "#E9E5DB",
   "emitters": [
-    { "x": 74, "y": 2, "width": 13, "material": "WATER", "rate": 1, "total": null, "ash_ratio": 0 }
+    {
+      "x": 74,
+      "y": 2,
+      "width": 10,
+      "material": "WATER",
+      "rate": 3,
+      "total": null,
+      "ash_ratio": 0
+    }
   ],
   "flasks": [
-    { "x": 68, "y": 282, "w": 24, "h": 18, "goal": 28, "material": null, "state": "solid", "pure": false }
+    {
+      "x": 60,
+      "y": 286,
+      "w": 32,
+      "h": 26,
+      "goal": 30,
+      "material": null,
+      "state": "solid",
+      "pure": false
+    }
   ],
   "terrain": [
-    { "x": 0, "y": 306, "w": 160, "h": 2, "material": "WALL" }
+    {
+      "x": 0,
+      "y": 314,
+      "w": 160,
+      "h": 2,
+      "material": "WALL"
+    }
   ],
   "gimmicks": [],
-  "ink_budget": { "chalk": 80, "heat": 0, "frost": 70 },
-  "star_thresholds": { "two_star": 120, "three_star": 86 }
+  "ink_budget": {
+    "chalk": 60,
+    "heat": 0,
+    "frost": 300
+  },
+  "star_thresholds": {
+    "two_star": 284,
+    "three_star": 207
+  },
+  "optimal_ink": null
 }

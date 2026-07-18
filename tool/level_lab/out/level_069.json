@@ -3,95 +3,85 @@
   "name": "순수한 불",
   "chapter": 4,
   "solvable": true,
-  "min_ink": 4,
-  "effort": 8,
-  "rollouts": 858,
-  "elapsed_ms": 509983,
+  "min_ink": 256,
+  "effort": 880,
+  "rollouts": 2349,
+  "elapsed_ms": 656428,
   "budget": {
-    "chalk": 18,
+    "chalk": 300,
     "heat": 0,
-    "frost": 36
+    "frost": 300
   },
   "solutions": [
     {
-      "ink": 4,
-      "ticks": 790,
+      "ink": 256,
+      "ticks": 396,
       "strokes": [
         {
           "ink": "frost",
-          "x0": 13,
-          "y0": 255,
-          "x1": 13,
-          "y1": 255
+          "x0": 19,
+          "y0": 150,
+          "x1": 106,
+          "y1": 237
         }
       ],
       "gravity_taps": []
     },
     {
-      "ink": 6,
-      "ticks": 590,
+      "ink": 258,
+      "ticks": 396,
       "strokes": [
         {
           "ink": "frost",
-          "x0": 13,
-          "y0": 255,
-          "x1": 14,
-          "y1": 255
+          "x0": 19,
+          "y0": 150,
+          "x1": 106,
+          "y1": 238
         }
       ],
       "gravity_taps": []
     },
     {
-      "ink": 6,
-      "ticks": 649,
+      "ink": 260,
+      "ticks": 385,
       "strokes": [
         {
           "ink": "frost",
-          "x0": 13,
-          "y0": 254,
-          "x1": 13,
-          "y1": 255
+          "x0": 17,
+          "y0": 150,
+          "x1": 106,
+          "y1": 237
         }
       ],
       "gravity_taps": []
     },
     {
-      "ink": 6,
-      "ticks": 820,
+      "ink": 262,
+      "ticks": 396,
       "strokes": [
         {
           "ink": "frost",
-          "x0": 13,
-          "y0": 255,
-          "x1": 12,
-          "y1": 255
+          "x0": 19,
+          "y0": 150,
+          "x1": 108,
+          "y1": 239
         }
       ],
       "gravity_taps": []
     },
     {
-      "ink": 6,
-      "ticks": 820,
+      "ink": 263,
+      "ticks": 387,
       "strokes": [
         {
           "ink": "frost",
-          "x0": 12,
-          "y0": 255,
-          "x1": 13,
-          "y1": 255
+          "x0": 19,
+          "y0": 149,
+          "x1": 108,
+          "y1": 239
         }
       ],
       "gravity_taps": []
     }
-  ],
-  "probes": {
-    "no_ink_chalk": {
-      "solvable": true,
-      "min_ink": 4
-    },
-    "no_ink_frost": {
-      "solvable": false,
-      "min_ink": null
-    }
-  }
+  ]
 }

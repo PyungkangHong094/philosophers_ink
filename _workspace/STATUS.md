@@ -42,7 +42,16 @@
 - 플러그인 워크어라운드 원복은 3파일 전부: `git checkout -- pubspec.yaml pubspec.lock windows/flutter/generated_plugins.cmake` (pub get은 cmake를 못 되돌림)
 - 튜닝 파라미터(constants.dart): pHeat/pCold=0.12, liquidDispersion=4, gasDispersion=3, iceSlipChance=0.45 — M1 체감 튜닝 대상
 
+## 레벨 랩 (2026-07-18 도입 — docs/LEVEL_LAB.md)
+
+- L1 솔버(57f5de9) → L2 전수 스윕(60bcf2f): 치즈 30+9개·교육 비필수·익스플로잇 실측 색출
+- 수술 웨이브 1(챕터 1, 44b275f) + 웨이브 2(챕터 2~4, 35레벨): 치즈 봉쇄 실측 35/35,
+  교육 필수화 프로브(반전·잉크) 통과, 별점 실측/추정 승격 — 77레벨 불변식 위반 0
+- 미결: 029 탭 치즈 재수술(ch2b 진행 중), 솔버 한계 27레벨 사람 실플레이 검증,
+  L4 분포 감사(프로브 예산 ≥1,500롤아웃 기준 반영)
+
 ## 다음 단계
 
+- 029 재수술 마감 → L4 분포 감사 리포트
 - M6 출시 준비: google_mobile_ads·in_app_purchase 설치·통합, 스토어 에셋, 출시 전 체크리스트
-- 이연: sim 상전이 이벤트 훅(onPhaseChange — 결빙 crackle·증발 puff SFX용, sim 에이전트 사용량 한도로 보류), 보너스 레벨(LEVELS.md 정의 선행 필요), optimal_ink 실측 승격(손 플레이테스트)
+- 이연: sim 상전이 이벤트 훅(onPhaseChange — SFX용), 보너스 레벨(LEVELS.md 정의 선행 필요), 솔버 한계 레벨 손 플레이테스트

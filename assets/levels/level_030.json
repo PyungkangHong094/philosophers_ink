@@ -5,26 +5,93 @@
     "chapter": 2,
     "difficulty": 6,
     "teaches": [],
-    "tags": ["portal", "frost", "ice", "prima", "bridge"],
+    "tags": [
+      "portal",
+      "frost",
+      "ice",
+      "prima",
+      "bridge"
+    ],
     "optimal_ink": null,
     "solutions_verified": 2,
     "hint_stroke": null
   },
   "background": "#E9E5DB",
   "emitters": [
-    { "x": 10, "y": 2, "width": 8, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0 },
-    { "x": 20, "y": 2, "width": 8, "material": "PRIMA", "rate": 3, "total": null, "ash_ratio": 0 }
+    {
+      "x": 12,
+      "y": 2,
+      "width": 6,
+      "material": "WATER",
+      "rate": 3,
+      "total": null,
+      "ash_ratio": 0
+    },
+    {
+      "x": 24,
+      "y": 2,
+      "width": 6,
+      "material": "PRIMA",
+      "rate": 4,
+      "total": null,
+      "ash_ratio": 0
+    }
   ],
   "flasks": [
-    { "x": 118, "y": 286, "w": 30, "h": 14, "goal": 25, "material": "PRIMA", "state": null, "pure": false }
+    {
+      "x": 120,
+      "y": 286,
+      "w": 30,
+      "h": 14,
+      "goal": 25,
+      "material": "PRIMA",
+      "state": null,
+      "pure": false
+    }
   ],
   "terrain": [
-    { "x": 0, "y": 300, "w": 70, "h": 4, "material": "WALL" },
-    { "x": 110, "y": 300, "w": 50, "h": 4, "material": "WALL" }
+    {
+      "x": 0,
+      "y": 300,
+      "w": 70,
+      "h": 4,
+      "material": "WALL"
+    },
+    {
+      "x": 110,
+      "y": 300,
+      "w": 50,
+      "h": 4,
+      "material": "WALL"
+    }
   ],
   "gimmicks": [
-    { "type": "portal", "params": { "entry": { "x": 6, "y": 100, "w": 12, "h": 5 }, "exit": { "x": 78, "y": 160, "w": 12, "h": 5 } } }
+    {
+      "type": "portal",
+      "params": {
+        "entry": {
+          "x": 6,
+          "y": 100,
+          "w": 12,
+          "h": 6
+        },
+        "exit": {
+          "x": 78,
+          "y": 150,
+          "w": 12,
+          "h": 6
+        }
+      }
+    }
   ],
-  "ink_budget": { "chalk": 61, "heat": 0, "frost": 44 },
-  "star_thresholds": { "two_star": 99, "three_star": 71 }
+  "ink_budget": {
+    "chalk": 500,
+    "heat": 0,
+    "frost": 200
+  },
+  "star_thresholds": {
+    "two_star": 490,
+    "three_star": 352
+  },
+  "optimal_ink": null
 }

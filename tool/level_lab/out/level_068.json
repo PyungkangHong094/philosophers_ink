@@ -3,86 +3,85 @@
   "name": "유리 성",
   "chapter": 4,
   "solvable": true,
-  "min_ink": 4,
-  "effort": 10,
-  "rollouts": 423,
-  "elapsed_ms": 263252,
+  "min_ink": 240,
+  "effort": 12,
+  "rollouts": 501,
+  "elapsed_ms": 154318,
   "budget": {
     "chalk": 0,
     "heat": 0,
-    "frost": 63
+    "frost": 400
   },
   "solutions": [
     {
-      "ink": 4,
-      "ticks": 572,
-      "strokes": [
-        {
-          "ink": "frost",
-          "x0": 88,
-          "y0": 261,
-          "x1": 88,
-          "y1": 261
-        }
-      ],
-      "gravity_taps": []
-    },
-    {
-      "ink": 6,
-      "ticks": 496,
-      "strokes": [
-        {
-          "ink": "frost",
-          "x0": 88,
-          "y0": 261,
-          "x1": 88,
-          "y1": 260
-        }
-      ],
-      "gravity_taps": []
-    },
-    {
-      "ink": 6,
-      "ticks": 407,
-      "strokes": [
-        {
-          "ink": "frost",
-          "x0": 90,
-          "y0": 264,
-          "x1": 90,
-          "y1": 263
-        }
-      ],
-      "gravity_taps": []
-    },
-    {
-      "ink": 6,
-      "ticks": 417,
-      "strokes": [
-        {
-          "ink": "frost",
-          "x0": 90,
-          "y0": 262,
-          "x1": 90,
-          "y1": 263
-        }
-      ],
-      "gravity_taps": []
-    },
-    {
-      "ink": 6,
+      "ink": 240,
       "ticks": 406,
       "strokes": [
         {
           "ink": "frost",
-          "x0": 90,
-          "y0": 262,
-          "x1": 90,
-          "y1": 261
+          "x0": 19,
+          "y0": 169,
+          "x1": 100,
+          "y1": 251
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 244,
+      "ticks": 403,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 19,
+          "y0": 169,
+          "x1": 100,
+          "y1": 253
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 250,
+      "ticks": 370,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 19,
+          "y0": 169,
+          "x1": 104,
+          "y1": 254
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 252,
+      "ticks": 392,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 19,
+          "y0": 169,
+          "x1": 105,
+          "y1": 254
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 252,
+      "ticks": 376,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 18,
+          "y0": 169,
+          "x1": 104,
+          "y1": 254
         }
       ],
       "gravity_taps": []
     }
-  ],
-  "probes": {}
+  ]
 }

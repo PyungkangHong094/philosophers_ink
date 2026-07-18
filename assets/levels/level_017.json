@@ -4,23 +4,81 @@
     "name": "첫 마법",
     "chapter": 2,
     "difficulty": 3,
-    "teaches": ["frost_rune"],
-    "tags": ["frost", "water", "ice"],
+    "teaches": [
+      "frost_rune"
+    ],
+    "tags": [
+      "frost",
+      "water",
+      "ice"
+    ],
     "optimal_ink": null,
     "solutions_verified": 2,
     "hint_stroke": null
   },
   "background": "#E9E5DB",
   "emitters": [
-    { "x": 30, "y": 2, "width": 12, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0 }
+    {
+      "x": 16,
+      "y": 2,
+      "width": 6,
+      "material": "WATER",
+      "rate": 4,
+      "total": null,
+      "ash_ratio": 0
+    }
   ],
   "flasks": [
-    { "x": 100, "y": 288, "w": 44, "h": 14, "goal": 45, "material": null, "state": null, "pure": false }
+    {
+      "x": 100,
+      "y": 196,
+      "w": 34,
+      "h": 16,
+      "goal": 42,
+      "material": null,
+      "state": null,
+      "pure": false
+    }
   ],
   "terrain": [
-    { "x": 0, "y": 306, "w": 160, "h": 2, "material": "WALL" }
+    {
+      "x": 0,
+      "y": 314,
+      "w": 160,
+      "h": 2,
+      "material": "WALL"
+    },
+    {
+      "x": 96,
+      "y": 212,
+      "w": 44,
+      "h": 3,
+      "material": "WALL"
+    },
+    {
+      "x": 96,
+      "y": 188,
+      "w": 3,
+      "h": 26,
+      "material": "WALL"
+    },
+    {
+      "x": 137,
+      "y": 188,
+      "w": 3,
+      "h": 26,
+      "material": "WALL"
+    }
   ],
   "gimmicks": [],
-  "ink_budget": { "chalk": 80, "heat": 0, "frost": 90 },
-  "star_thresholds": { "two_star": 72, "three_star": 52 }
+  "ink_budget": {
+    "chalk": 0,
+    "heat": 0,
+    "frost": 400
+  },
+  "star_thresholds": {
+    "two_star": 278,
+    "three_star": 200
+  },
+  "optimal_ink": null
 }

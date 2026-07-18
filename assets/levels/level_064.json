@@ -26,5 +26,5 @@
     { "type": "gravity_flip" }
   ],
   "ink_budget": { "chalk": 18, "heat": 0, "frost": 27 },
-  "star_thresholds": { "two_star": 40, "three_star": 35 }
+  "star_thresholds": { "two_star": 24, "three_star": 15 }
 }

@@ -5,25 +5,72 @@
     "chapter": 4,
     "difficulty": 7,
     "teaches": [],
-    "tags": ["lava", "frost", "stone", "wall", "chalk"],
+    "tags": [
+      "lava",
+      "frost",
+      "stone",
+      "wall",
+      "mural"
+    ],
     "optimal_ink": null,
     "solutions_verified": 2,
     "hint_stroke": null
   },
   "background": "#8E2A20",
   "emitters": [
-    { "x": 20, "y": 2, "width": 120, "material": "LAVA", "rate": 3, "total": null, "ash_ratio": 0 },
-    { "x": 72, "y": 250, "width": 16, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0 }
+    {
+      "x": 20,
+      "y": 2,
+      "width": 120,
+      "material": "LAVA",
+      "rate": 3,
+      "total": null,
+      "ash_ratio": 0
+    }
   ],
   "flasks": [
-    { "x": 58, "y": 288, "w": 44, "h": 24, "goal": 30, "material": "WATER", "state": "liquid", "pure": false }
+    {
+      "x": 40,
+      "y": 286,
+      "w": 80,
+      "h": 26,
+      "goal": 40,
+      "material": "STONE",
+      "state": "solid",
+      "pure": false
+    }
   ],
   "terrain": [
-    { "x": 0, "y": 314, "w": 160, "h": 2, "material": "WALL" },
-    { "x": 30, "y": 200, "w": 3, "h": 40, "material": "WALL" },
-    { "x": 127, "y": 200, "w": 3, "h": 40, "material": "WALL" }
+    {
+      "x": 0,
+      "y": 314,
+      "w": 160,
+      "h": 2,
+      "material": "WALL"
+    },
+    {
+      "x": 36,
+      "y": 258,
+      "w": 4,
+      "h": 56,
+      "material": "WALL"
+    },
+    {
+      "x": 120,
+      "y": 258,
+      "w": 4,
+      "h": 56,
+      "material": "WALL"
+    }
   ],
   "gimmicks": [],
-  "ink_budget": { "chalk": 12, "heat": 0, "frost": 30 },
-  "star_thresholds": { "two_star": 37, "three_star": 32 }
+  "ink_budget": {
+    "chalk": 0,
+    "heat": 0,
+    "frost": 60
+  },
+  "star_thresholds": {
+    "two_star": 50,
+    "three_star": 40
+  }
 }

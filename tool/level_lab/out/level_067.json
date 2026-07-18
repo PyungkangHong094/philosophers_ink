@@ -3,95 +3,85 @@
   "name": "용암 정원",
   "chapter": 4,
   "solvable": true,
-  "min_ink": 4,
-  "effort": 7,
-  "rollouts": 269,
-  "elapsed_ms": 183594,
+  "min_ink": 220,
+  "effort": 5,
+  "rollouts": 1428,
+  "elapsed_ms": 398256,
   "budget": {
-    "chalk": 10,
+    "chalk": 300,
     "heat": 0,
-    "frost": 51
+    "frost": 300
   },
   "solutions": [
     {
-      "ink": 4,
-      "ticks": 724,
+      "ink": 220,
+      "ticks": 417,
+      "strokes": [
+        {
+          "ink": "frost",
+          "x0": 90,
+          "y0": 196,
+          "x1": 18,
+          "y1": 124
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 220,
+      "ticks": 383,
       "strokes": [
         {
           "ink": "frost",
           "x0": 88,
-          "y0": 24,
-          "x1": 88,
-          "y1": 24
+          "y0": 197,
+          "x1": 16,
+          "y1": 125
         }
       ],
       "gravity_taps": []
     },
     {
-      "ink": 6,
-      "ticks": 388,
+      "ink": 220,
+      "ticks": 419,
       "strokes": [
         {
           "ink": "frost",
-          "x0": 86,
-          "y0": 261,
-          "x1": 86,
-          "y1": 262
+          "x0": 88,
+          "y0": 197,
+          "x1": 18,
+          "y1": 124
         }
       ],
       "gravity_taps": []
     },
     {
-      "ink": 6,
-      "ticks": 432,
+      "ink": 221,
+      "ticks": 383,
       "strokes": [
         {
           "ink": "frost",
-          "x0": 82,
-          "y0": 257,
-          "x1": 81,
-          "y1": 257
+          "x0": 88,
+          "y0": 197,
+          "x1": 17,
+          "y1": 124
         }
       ],
       "gravity_taps": []
     },
     {
-      "ink": 6,
-      "ticks": 424,
+      "ink": 225,
+      "ticks": 404,
       "strokes": [
         {
           "ink": "frost",
-          "x0": 82,
-          "y0": 257,
-          "x1": 83,
-          "y1": 257
-        }
-      ],
-      "gravity_taps": []
-    },
-    {
-      "ink": 6,
-      "ticks": 450,
-      "strokes": [
-        {
-          "ink": "frost",
-          "x0": 84,
-          "y0": 257,
-          "x1": 83,
-          "y1": 257
+          "x0": 88,
+          "y0": 197,
+          "x1": 15,
+          "y1": 123
         }
       ],
       "gravity_taps": []
     }
-  ],
-  "probes": {
-    "no_ink_chalk": {
-      "solvable": true,
-      "min_ink": 6
-    },
-    "no_ink_frost": {
-      "solvable": false,
-      "min_ink": null
-    }
-  }
+  ]
 }

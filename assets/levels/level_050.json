@@ -5,32 +5,70 @@
     "chapter": 3,
     "difficulty": 7,
     "teaches": [],
-    "tags": ["ice", "heat_line", "water", "temp_zone", "demolition"],
-    "optimal_ink": { "heat": 30 },
+    "tags": [
+      "ice",
+      "heat_line",
+      "steam",
+      "temp_zone",
+      "demolition"
+    ],
+    "optimal_ink": null,
     "solutions_verified": 2,
     "hint_stroke": null
   },
   "background": "#E4B94D",
   "emitters": [
-    { "x": 73, "y": 2, "width": 14, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0 }
+    {
+      "x": 73,
+      "y": 2,
+      "width": 14,
+      "material": "WATER",
+      "rate": 2,
+      "total": null,
+      "ash_ratio": 0
+    }
   ],
   "flasks": [
-    { "x": 104, "y": 286, "w": 48, "h": 24, "goal": 40, "material": "WATER", "state": null, "pure": false }
+    {
+      "x": 58,
+      "y": 6,
+      "w": 44,
+      "h": 18,
+      "goal": 26,
+      "material": null,
+      "state": "gas",
+      "pure": false
+    }
   ],
   "terrain": [
-    { "x": 0, "y": 314, "w": 160, "h": 2, "material": "WALL" },
-    { "x": 24, "y": 104, "w": 84, "h": 5, "material": "WALL" },
-    { "x": 104, "y": 88, "w": 5, "h": 21, "material": "WALL" },
-    { "x": 66, "y": 170, "w": 84, "h": 5, "material": "WALL" },
-    { "x": 66, "y": 154, "w": 5, "h": 21, "material": "WALL" },
-    { "x": 24, "y": 236, "w": 84, "h": 5, "material": "WALL" },
-    { "x": 104, "y": 220, "w": 5, "h": 21, "material": "WALL" }
+    {
+      "x": 0,
+      "y": 314,
+      "w": 160,
+      "h": 2,
+      "material": "WALL"
+    }
   ],
   "gimmicks": [
-    { "type": "temp_zone", "params": { "x": 74, "y": 86, "w": 32, "h": 6, "kind": "cool", "probability": null } },
-    { "type": "temp_zone", "params": { "x": 70, "y": 152, "w": 32, "h": 6, "kind": "cool", "probability": null } },
-    { "type": "temp_zone", "params": { "x": 74, "y": 218, "w": 32, "h": 6, "kind": "cool", "probability": null } }
+    {
+      "type": "temp_zone",
+      "params": {
+        "x": 70,
+        "y": 150,
+        "w": 24,
+        "h": 6,
+        "kind": "cool",
+        "probability": null
+      }
+    }
   ],
-  "ink_budget": { "chalk": 0, "heat": 45, "frost": 0 },
-  "star_thresholds": { "two_star": 40, "three_star": 35 }
+  "ink_budget": {
+    "chalk": 0,
+    "heat": 45,
+    "frost": 0
+  },
+  "star_thresholds": {
+    "two_star": 40,
+    "three_star": 35
+  }
 }

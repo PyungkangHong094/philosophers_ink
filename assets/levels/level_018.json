@@ -5,25 +5,88 @@
     "chapter": 2,
     "difficulty": 4,
     "teaches": [],
-    "tags": ["frost", "water", "ice", "prima"],
+    "tags": [
+      "frost",
+      "water",
+      "ice",
+      "prima"
+    ],
     "optimal_ink": null,
     "solutions_verified": 2,
     "hint_stroke": null
   },
   "background": "#E9E5DB",
   "emitters": [
-    { "x": 10, "y": 2, "width": 10, "material": "PRIMA", "rate": 3, "total": null, "ash_ratio": 0 },
-    { "x": 70, "y": 2, "width": 10, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0 }
+    {
+      "x": 16,
+      "y": 2,
+      "width": 6,
+      "material": "PRIMA",
+      "rate": 4,
+      "total": null,
+      "ash_ratio": 0
+    },
+    {
+      "x": 70,
+      "y": 2,
+      "width": 6,
+      "material": "WATER",
+      "rate": 4,
+      "total": null,
+      "ash_ratio": 0
+    }
   ],
   "flasks": [
-    { "x": 120, "y": 290, "w": 34, "h": 14, "goal": 40, "material": "PRIMA", "state": null, "pure": false }
+    {
+      "x": 100,
+      "y": 196,
+      "w": 34,
+      "h": 16,
+      "goal": 38,
+      "material": "PRIMA",
+      "state": null,
+      "pure": false
+    }
   ],
   "terrain": [
-    { "x": 0, "y": 306, "w": 160, "h": 2, "material": "WALL" },
-    { "x": 0, "y": 220, "w": 50, "h": 3, "material": "WALL" },
-    { "x": 112, "y": 220, "w": 20, "h": 3, "material": "WALL" }
+    {
+      "x": 0,
+      "y": 314,
+      "w": 160,
+      "h": 2,
+      "material": "WALL"
+    },
+    {
+      "x": 96,
+      "y": 212,
+      "w": 44,
+      "h": 3,
+      "material": "WALL"
+    },
+    {
+      "x": 96,
+      "y": 188,
+      "w": 3,
+      "h": 26,
+      "material": "WALL"
+    },
+    {
+      "x": 137,
+      "y": 188,
+      "w": 3,
+      "h": 26,
+      "material": "WALL"
+    }
   ],
   "gimmicks": [],
-  "ink_budget": { "chalk": 40, "heat": 0, "frost": 130 },
-  "star_thresholds": { "two_star": 136, "three_star": 98 }
+  "ink_budget": {
+    "chalk": 400,
+    "heat": 0,
+    "frost": 200
+  },
+  "star_thresholds": {
+    "two_star": 370,
+    "three_star": 266
+  },
+  "optimal_ink": null
 }

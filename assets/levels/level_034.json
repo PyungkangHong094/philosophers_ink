@@ -23,6 +23,6 @@
     { "x": 100, "y": 130, "w": 4, "h": 186, "material": "WALL" }
   ],
   "gimmicks": [],
-  "ink_budget": { "chalk": 16, "heat": 20, "frost": 0 },
-  "star_thresholds": { "two_star": 16, "three_star": 12 }
+  "ink_budget": { "chalk": 0, "heat": 40, "frost": 0 },
+  "star_thresholds": { "two_star": 32, "three_star": 23 }
 }
