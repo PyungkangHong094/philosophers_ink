@@ -130,16 +130,22 @@ class GameState {
     tickCount++;
   }
 
-  /// 방출: 각 방출구가 intervalTicks마다 밴드의 빈 칸을 자기 물질로 채운다.
-  /// ashRatio>0이면 결정성 RNG로 일부 셀을 ASH로 치환(재 방출구). 유한 방출구는
-  /// 배치한 셀 수만큼 잔량을 깎고 소진되면 멈춘다 (GDD 5.2·6).
+  /// 방출: 낱알 흩뿌림 (2026-07-19 사용자 디렉션 — "일렬 막대" 방지).
+  ///
+  /// 이전에는 intervalTicks마다 밴드 전체(한 줄)를 동시에 채워 낙하 스트림이
+  /// 가로 막대들의 행렬로 보였다. 지금은 **매 틱** 평균 처리량(width/intervalTicks)을
+  /// 유지하며 밴드 내 결정성 RNG가 고른 무작위 열에 낱알을 떨어뜨린다 —
+  /// 원작(sugar, sugar)의 알갱이 stream 질감. ashRatio·유한 잔량 규칙은 동일.
   void _emit() {
     for (final e in emitters) {
       if (e.exhausted) continue;
-      if (tickCount % e.intervalTicks != 0) continue;
-      for (var i = 0; i < e.width; i++) {
+      final expected = e.width / e.intervalTicks;
+      var count = expected.floor();
+      final frac = expected - count;
+      if (frac > 0 && rng.nextDouble() < frac) count++;
+      for (var n = 0; n < count; n++) {
         if (e.exhausted) break;
-        final x = e.x + i;
+        final x = e.x + (e.width <= 1 ? 0 : rng.nextInt(e.width));
         if (!grid.inBounds(x, e.y)) continue;
         if (grid.get(x, e.y) != Material.empty.index) continue;
         final id = (e.ashRatio > 0 && rng.nextDouble() < e.ashRatio)
