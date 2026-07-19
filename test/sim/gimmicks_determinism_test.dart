@@ -109,8 +109,9 @@ void main() {
     // 배치별 평균의 **최솟값**으로 판정한다. flutter_test는 파일을 병렬 아이솔레이트로
     // 돌리므로 단순 평균은 머신 포화 시 벽시계 노이즈로 위양성을 낸다 (lava_reaction_test와
     // 동일 방식). 경합이 덜 낀 배치의 최솟값이 실제 처리량을 대표한다.
-    const batches = 6;
-    const itersPerBatch = 50;
+    // 배치 수·길이를 늘려(10×80) 경합 심한 환경에서도 깨끗한 배치가 하나는 잡히게 한다.
+    const batches = 10;
+    const itersPerBatch = 80;
     var minPerTickMs = double.infinity;
     var lastAvg = 0.0;
     for (var b = 0; b < batches; b++) {

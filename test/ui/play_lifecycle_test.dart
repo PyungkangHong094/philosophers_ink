@@ -14,7 +14,8 @@ import 'package:philosophers_ink/ui/game/play_screen.dart';
 import 'package:philosophers_ink/ui/settings_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// 재생 상태를 추적하는 테스트용 오디오. 루프 활성 여부와 정지 호출 횟수를 기록한다.
+/// 재생 상태를 추적하는 테스트용 오디오. 루프(BGM) 활성 여부와 정지 호출 횟수를 기록한다.
+/// (그레인·앰비언트는 원샷이라 정지 대상이 아님 — 유일한 루프는 BGM.)
 class _RecordingAudio implements AudioService {
   bool loopActive = false;
   int stopAllCount = 0;
@@ -25,13 +26,17 @@ class _RecordingAudio implements AudioService {
   @override
   Future<void> dispose() async {}
   @override
-  void configure({required bool enabled, required double volume}) {}
+  void configure({
+    required bool enabled,
+    required double volume,
+    required bool bgmEnabled,
+  }) {}
   @override
   void uiTap() {}
   @override
   void stroke() {}
   @override
-  void flaskFill(FlaskState? phase) {}
+  void flaskFill(FlaskState? phase, {double progress = 0}) {}
   @override
   void clearStinger() {}
   @override
@@ -39,8 +44,16 @@ class _RecordingAudio implements AudioService {
   @override
   void fail() {}
   @override
-  void setAmbientDensity(double normalized) {
-    if (normalized > 0) loopActive = true;
+  void phaseTransition(PhaseSfx kind) {}
+  @override
+  void setAmbience({
+    required double particle,
+    required double water,
+    required double steam,
+  }) {}
+  @override
+  void setBgmChapter(int chapter) {
+    loopActive = chapter > 0; // BGM 루프 시작(테스트에선 켜짐만 추적).
   }
 
   @override
@@ -94,8 +107,7 @@ void main() {
     await tester.pumpWidget(host(rec));
     await tester.pump(const Duration(milliseconds: 16));
 
-    // 루프가 재생 중이라고 가정.
-    rec.setAmbientDensity(1.0);
+    // PlayScreen init이 setBgmChapter로 BGM 루프를 켰다.
     expect(rec.loopActive, isTrue);
 
     // PlayScreen을 트리에서 제거 → dispose.
@@ -110,8 +122,7 @@ void main() {
     await tester.pumpWidget(host(rec));
     await tester.pump(const Duration(milliseconds: 16));
 
-    rec.setAmbientDensity(1.0);
-    expect(rec.loopActive, isTrue);
+    expect(rec.loopActive, isTrue); // BGM 루프 켜짐
 
     tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
     await tester.pump();

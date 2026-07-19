@@ -32,6 +32,11 @@ import 'pause_overlay.dart';
 /// 첫 조작 가이드 종류.
 enum _GuideKind { none, stroke, gravity }
 
+// 상전이 SFX 매핑용 물질 ID (Material enum 인덱스 — switch case는 const int 필요).
+const int _kIce = 5; // Material.ice
+const int _kSteam = 7; // Material.steam
+const int _kStone = 10; // Material.stone
+
 enum _Phase { playing, cleared, failed }
 
 class _Outcome {
@@ -107,14 +112,37 @@ class _PlayScreenState extends State<PlayScreen>
   @override
   void initState() {
     super.initState();
-    // 플라스크 착수 이벤트 → 착수 틱(카운트업 동기, GDD 9.2). 상별 피치.
+    // 플라스크 착수 이벤트 → 착수 틱(카운트업 동기, GDD 9.2). 상별 피치 + 채움 진행도로 램프.
     _session = LevelSession(
       widget.entry.level,
-      onSettle: (e) => widget.audio.flaskFill(e.phase),
+      onSettle: (e) {
+        final flasks = _session.flasks.flasks;
+        final goal = (e.flaskIndex >= 0 && e.flaskIndex < flasks.length)
+            ? flasks[e.flaskIndex].spec.goal
+            : 0;
+        final count = (e.flaskIndex >= 0 && e.flaskIndex < flasks.length)
+            ? flasks[e.flaskIndex].count
+            : 0;
+        final progress = goal > 0 ? count / goal : 0.0;
+        widget.audio.flaskFill(e.phase, progress: progress);
+      },
     );
+    // 상전이 이벤트 → 결빙 crackle·증발 puff·반응 sizzle (LevelSession 패스스루, 관찰만 —
+    // 결정성 무영향). 전이 결과 물질(materialTo)로 종류를 구분: ICE 결빙, STEAM 증발, STONE 반응.
+    // (WATER로의 전이 = 녹음/응결은 전용 SFX 없음 → null.)
+    _session.onPhaseChange = (materialFrom, materialTo, x, y) {
+      final PhaseSfx? sfx = switch (materialTo) {
+        _kIce => PhaseSfx.crackle,
+        _kSteam => PhaseSfx.puff,
+        _kStone => PhaseSfx.sizzle,
+        _ => null,
+      };
+      if (sfx != null) widget.audio.phaseTransition(sfx);
+    };
     _loop = GameLoop(onTick: () => _session.tick());
     _ticker = createTicker(_onFrame)..start();
     WidgetsBinding.instance.addObserver(this); // 앱 백그라운드 전환 감지.
+    widget.audio.setBgmChapter(widget.entry.chapter); // 챕터 팔레트 BGM (기본 OFF).
     _setupOnboarding();
   }
 
@@ -212,24 +240,23 @@ class _PlayScreenState extends State<PlayScreen>
   void _onFrame(Duration elapsed) {
     // 일시정지·클리어·실패 중에는 시뮬을 멈춘다. GameLoop이 누적기를
     // maxFrameAccumSeconds로 클램프하므로 복귀 시 큰 델타로 튀지 않는다.
-    if (!_simRunning) {
-      widget.audio.stopAmbient();
-      return;
-    }
+    // (그레인은 원샷이라 setAmbience 호출을 멈추면 수십~백 ms 내 자연 소멸 — 별도 정지 불필요.
+    //  BGM은 일시정지 중에도 유지한다.)
+    if (!_simRunning) return;
 
     _loop.advance(elapsed);
     _frameTick.value++;
 
-    // 물질 앰비언트 그레인 — 활성 셀 밀도로 볼륨 변조 (샘플 스로틀, GDD 9.2).
-    // 기본 OFF(드론 "지잉" 방지) — 켜질 때만 그리드를 스캔한다.
-    if (SfxSpec.ambientGrainEnabled &&
-        ++_ambientFrame % SfxSpec.grainSampleEveryFrames == 0) {
-      widget.audio.setAmbientDensity(_ambientDensity());
+    // 물질 앰비언트/파티클 그레인 — 활성 밀도로 짧은 그레인을 확률 발사 (샘플 스로틀, GDD 9.2).
+    // 연속 루프가 아니므로 드론이 되지 않는다.
+    if (++_ambientFrame % GrainPlay.sampleEveryFrames == 0) {
+      final d = _ambientDensities();
+      widget.audio.setAmbience(
+          particle: d.particle, water: d.water, steam: d.steam);
     }
 
     if (_session.isFailed) {
       _outcome.value = const _Outcome(_Phase.failed);
-      widget.audio.stopAmbient();
       widget.audio.fail();
     } else if (_session.isCleared) {
       final stars = _session.result.stars;
@@ -237,7 +264,7 @@ class _PlayScreenState extends State<PlayScreen>
       _explainStars = widget.onboarding.markSeenOnce(OnboardingKey.firstClear);
       _outcome.value = _Outcome(_Phase.cleared, stars: stars);
       _recordResult(stars);
-      widget.audio.stopAmbient();
+      // 클리어 스팅어가 BGM을 덕킹한다(GDD 9.2). 그레인은 시뮬 정지로 자연 소멸.
       if (isOperatioLevel(widget.entry.id)) {
         widget.audio.operatioStinger();
       } else {
@@ -271,10 +298,13 @@ class _PlayScreenState extends State<PlayScreen>
     if (placed > 0) widget.audio.stroke(); // 드로잉 획음 (내부 스로틀).
   }
 
-  /// 활성 셀 밀도(0~1) — 동적 카테고리(입자·액체·기체) 셀 수 / 기준. 앰비언트 그레인 변조.
-  double _ambientDensity() {
+  /// 활성 밀도 3종(0~1) — 파티클(동적 입자/액체/기체 총합)·물(WATER)·증기(STEAM).
+  /// 그리드 1회 스캔. 파티클 그레인은 낙하·퇴적음, 물/증기는 물질 앰비언트(GDD 9.2 레이어).
+  ({double particle, double water, double steam}) _ambientDensities() {
     final cells = _session.game.grid.cells;
-    var n = 0;
+    const water = 6; // Material.water.index
+    const steam = 7; // Material.steam.index
+    var dyn = 0, w = 0, s = 0;
     for (var i = 0; i < cells.length; i++) {
       final c = cells[i];
       if (c == 0) continue;
@@ -282,13 +312,19 @@ class _PlayScreenState extends State<PlayScreen>
         case MaterialCategory.particle:
         case MaterialCategory.liquid:
         case MaterialCategory.gas:
-          n++;
+          dyn++;
         case MaterialCategory.none:
         case MaterialCategory.staticSolid:
           break;
       }
+      if (c == water) w++;
+      if (c == steam) s++;
     }
-    return (n / SfxSpec.grainRefCells).clamp(0.0, 1.0);
+    return (
+      particle: (dyn / GrainPlay.densityRefCells).clamp(0.0, 1.0),
+      water: (w / GrainPlay.ambientRefCells).clamp(0.0, 1.0),
+      steam: (s / GrainPlay.ambientRefCells).clamp(0.0, 1.0),
+    );
   }
 
   void _onPanStart(DragStartDetails d) {

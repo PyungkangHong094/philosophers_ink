@@ -6,16 +6,13 @@ import 'gimmicks.dart';
 import 'grid.dart';
 import 'materials.dart';
 
-/// 상전이가 일어난 계기 — SFX·VFX가 소리/이펙트를 고를 때 쓴다 (M5 폴리시).
-/// heated=가열 전이(예: 얼음→물, 물→증기), cooled=냉각 전이(물→얼음, 증기→물, 용암→돌),
-/// reacted=LAVA+WATER 반응 산출(돌·증기).
-enum PhaseChangeKind { heated, cooled, reacted }
-
-/// 상전이 지점을 **관찰만** 하는 옵셔널 콜백. [material]=전이 결과 물질 ID,
-/// [kind]=전이 계기, ([x],[y])=셀 좌표. 결정성 계약: 콜백은 RNG·그리드 상태를 건드리면
+/// 상전이 지점을 **관찰만** 하는 옵셔널 콜백 (M5 폴리시, SFX·VFX용).
+/// [materialFrom]=전이 전 물질 ID, [materialTo]=전이 후 물질 ID, ([x],[y])=셀 좌표.
+/// (from,to)로 이벤트 종류를 구분한다 — 예: WATER→ICE 결빙 crackle, WATER→STEAM 증발 puff,
+/// LAVA→STONE·WATER→STEAM 용암+물 치익. 결정성 계약: 콜백은 RNG·그리드 상태를 건드리면
 /// 안 된다(관찰 전용). 콜백 호출 순서는 결정적(고정 스캔 순서)이다. null이면 호출 비용 0.
 typedef PhaseChangeCallback = void Function(
-    int material, PhaseChangeKind kind, int x, int y);
+    int materialFrom, int materialTo, int x, int y);
 
 /// 카테고리별 이동 규칙 + 화염/서리 선 상전이 (GDD 3.3·4.1). 순수 Dart.
 ///
@@ -113,8 +110,8 @@ class Rules {
     if (grid.get(wx, wy) != Material.water.index) return false;
     grid.set(lx, ly, Material.stone.index);
     grid.set(wx, wy, Material.steam.index);
-    onPhaseChange?.call(Material.stone.index, PhaseChangeKind.reacted, lx, ly);
-    onPhaseChange?.call(Material.steam.index, PhaseChangeKind.reacted, wx, wy);
+    onPhaseChange?.call(Material.lava.index, Material.stone.index, lx, ly);
+    onPhaseChange?.call(Material.water.index, Material.steam.index, wx, wy);
     return true;
   }
 
@@ -128,7 +125,6 @@ class Rules {
       final heat = zone.kind == TemperatureZoneKind.heat;
       final p = zone.probability ??
           (heat ? SimConstants.pHeat : SimConstants.pCold);
-      final kind = heat ? PhaseChangeKind.heated : PhaseChangeKind.cooled;
       final w = grid.width;
       for (final idx in zone.cellIndices) {
         final id = grid.cells[idx];
@@ -138,7 +134,7 @@ class Rules {
           grid.cells[idx] = target.index;
           // 존은 셀을 선형 인덱스로 들고 있으니 콜백이 있을 때만 좌표를 환산한다.
           if (onPhaseChange != null) {
-            onPhaseChange!(target.index, kind, idx % w, idx ~/ w);
+            onPhaseChange!(id, target.index, idx % w, idx ~/ w);
           }
         }
       }
@@ -222,8 +218,7 @@ class Rules {
     if (target == null) return; // 전이 불가 물질이면 RNG도 소비하지 않는다
     if (rng.nextDouble() < p) {
       grid.set(x, y, target.index);
-      onPhaseChange?.call(
-          target.index, heat ? PhaseChangeKind.heated : PhaseChangeKind.cooled, x, y);
+      onPhaseChange?.call(id, target.index, x, y);
     }
   }
 

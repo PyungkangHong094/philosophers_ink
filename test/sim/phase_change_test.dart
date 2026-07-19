@@ -7,16 +7,16 @@ import 'package:philosophers_ink/sim/grid.dart';
 import 'package:philosophers_ink/sim/materials.dart';
 import 'package:philosophers_ink/sim/rules.dart';
 
-/// 한 상전이 이벤트 기록.
-typedef _Event = (int material, PhaseChangeKind kind, int x, int y);
+/// 한 상전이 이벤트 기록: (materialFrom, materialTo, x, y).
+typedef _Event = (int from, int to, int x, int y);
 
 void main() {
   group('상전이 콜백 이벤트 (M5 폴리시)', () {
-    test('빙결 온도 존: WATER→ICE 시 (ICE, cooled, x, y) 발생', () {
+    test('빙결 온도 존: WATER→ICE 이벤트 (from=WATER, to=ICE, 좌표)', () {
       final grid = Grid(1, 1)..set(0, 0, Material.water.index);
       final events = <_Event>[];
       final rules = Rules(DeterministicRng(1))
-        ..onPhaseChange = (m, k, x, y) => events.add((m, k, x, y));
+        ..onPhaseChange = (f, t, x, y) => events.add((f, t, x, y));
       final zone = TemperatureZone.rect(
         gridWidth: 1,
         x: 0,
@@ -29,14 +29,14 @@ void main() {
         rules.step(grid, zones: [zone]);
       }
       expect(events, isNotEmpty);
-      expect(events.first, (Material.ice.index, PhaseChangeKind.cooled, 0, 0));
+      expect(events.first, (Material.water.index, Material.ice.index, 0, 0));
     });
 
-    test('화로 온도 존: WATER→STEAM 시 (STEAM, heated, x, y) 발생', () {
+    test('화로 온도 존: WATER→STEAM 이벤트 (from=WATER, to=STEAM, 좌표)', () {
       final grid = Grid(1, 1)..set(0, 0, Material.water.index);
       final events = <_Event>[];
       final rules = Rules(DeterministicRng(1))
-        ..onPhaseChange = (m, k, x, y) => events.add((m, k, x, y));
+        ..onPhaseChange = (f, t, x, y) => events.add((f, t, x, y));
       final zone = TemperatureZone.rect(
         gridWidth: 1,
         x: 0,
@@ -49,25 +49,25 @@ void main() {
         rules.step(grid, zones: [zone]);
       }
       expect(events, isNotEmpty);
-      expect(events.first, (Material.steam.index, PhaseChangeKind.heated, 0, 0));
+      expect(events.first, (Material.water.index, Material.steam.index, 0, 0));
     });
 
-    test('서리 룬 선: 인접 WATER→ICE 시 좌표 정확히 보고', () {
+    test('서리 룬 선: 인접 WATER→ICE 시 from/to·좌표 정확히 보고', () {
       // (0,0) 서리 선, (0,1) 물. 물 셀 좌표로 이벤트가 와야 한다.
       final grid = Grid(1, 2)
         ..set(0, 0, Material.coldLine.index)
         ..set(0, 1, Material.water.index);
       final events = <_Event>[];
       final rules = Rules(DeterministicRng(1))
-        ..onPhaseChange = (m, k, x, y) => events.add((m, k, x, y));
+        ..onPhaseChange = (f, t, x, y) => events.add((f, t, x, y));
       for (var i = 0; i < 100 && grid.get(0, 1) != Material.ice.index; i++) {
         rules.step(grid);
       }
       expect(events, isNotEmpty);
-      expect(events.first, (Material.ice.index, PhaseChangeKind.cooled, 0, 1));
+      expect(events.first, (Material.water.index, Material.ice.index, 0, 1));
     });
 
-    test('LAVA+WATER 반응: (STONE, reacted) + (STEAM, reacted) 두 이벤트', () {
+    test('LAVA+WATER 반응: LAVA→STONE + WATER→STEAM 두 이벤트', () {
       final grid = Grid(3, 4);
       for (var x = 0; x < 3; x++) {
         grid.set(x, 3, Material.wall.index);
@@ -77,12 +77,16 @@ void main() {
         ..set(1, 2, Material.water.index);
       final events = <_Event>[];
       final rules = Rules(DeterministicRng(1))
-        ..onPhaseChange = (m, k, x, y) => events.add((m, k, x, y));
+        ..onPhaseChange = (f, t, x, y) => events.add((f, t, x, y));
       rules.step(grid);
       expect(events.length, 2);
-      expect(events.contains((Material.stone.index, PhaseChangeKind.reacted, 1, 1)),
+      expect(
+          events.contains(
+              (Material.lava.index, Material.stone.index, 1, 1)),
           isTrue);
-      expect(events.contains((Material.steam.index, PhaseChangeKind.reacted, 1, 2)),
+      expect(
+          events.contains(
+              (Material.water.index, Material.steam.index, 1, 2)),
           isTrue);
     });
   });
@@ -118,7 +122,7 @@ void main() {
 
       final gObs = freezeScene();
       var count = 0;
-      gObs.onPhaseChange = (m, k, x, y) => count++; // 관찰만
+      gObs.onPhaseChange = (f, t, x, y) => count++; // 관찰만
       for (var i = 0; i < 200; i++) {
         gObs.tick();
       }

@@ -10,6 +10,7 @@ import '../core/game_state.dart';
 import '../level/gimmick_builder.dart';
 import '../level/level_model.dart';
 import '../sim/emitter.dart';
+import '../sim/rules.dart' show PhaseChangeCallback;
 import 'flask.dart';
 import 'ink_budget.dart';
 import 'ink_controller.dart';
@@ -60,6 +61,11 @@ class LevelSession {
 
   /// 이 레벨에 중력 반전 버튼 기믹이 있는가 (게임플레이가 버튼 노출 판단).
   bool get hasGravityFlip => gimmicks.hasGravityFlip;
+
+  /// 상전이 관찰 콜백 패스스루 (M5 폴리시). shell이 결빙·증발 SFX를 여기에 배선한다.
+  /// (materialFrom, materialTo, x, y). 관찰 전용·결정성 무영향, null이면 비용 0.
+  set onPhaseChange(PhaseChangeCallback? cb) => game.onPhaseChange = cb;
+  PhaseChangeCallback? get onPhaseChange => game.onPhaseChange;
 
   /// 현재 중력이 반전(위)되어 있는가.
   bool get gravityInverted => game.gravityInverted;
