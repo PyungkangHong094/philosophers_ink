@@ -11,6 +11,7 @@ import 'package:philosophers_ink/meta/chapters.dart';
 import 'package:philosophers_ink/meta/level_catalog.dart';
 import 'package:philosophers_ink/meta/onboarding.dart';
 import 'package:philosophers_ink/meta/progress.dart';
+import 'package:philosophers_ink/monetize/monetization.dart';
 import 'package:philosophers_ink/ui/app.dart';
 import 'package:philosophers_ink/ui/game/ink_palette_bar.dart';
 import 'package:philosophers_ink/ui/game/play_screen.dart';
@@ -40,11 +41,13 @@ LevelEntry _entry(int id, int chapter) => LevelEntry(
 
 void main() {
   late SettingsController settings;
+  late Monetization monetization;
 
   setUp(() async {
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
     settings = SettingsController(ProgressStore(prefs), const {});
+    monetization = Monetization.create(ProgressStore(prefs), forceStub: true);
   });
 
   Future<void> pumpScreen(
@@ -61,6 +64,7 @@ void main() {
           catalog: catalog ?? LevelCatalog(const []),
           audio: const SilentAudioService(),
           onboarding: OnboardingState(),
+          monetization: monetization,
           child: screen,
         ),
       ),
@@ -86,6 +90,7 @@ void main() {
         catalog: LevelCatalog([_entry(1, 1)]),
         audio: const SilentAudioService(),
         onboarding: OnboardingState(),
+        monetization: monetization,
         child: const MaterialApp(home: TitleScreen()),
       ),
     );
@@ -145,6 +150,7 @@ void main() {
         settings: settings,
         audio: const SilentAudioService(),
         onboarding: OnboardingState(),
+        monetization: monetization,
       ),
     );
     // 잉크 팔레트(우측 상단 컴팩트) + 대형 레벨 번호.
@@ -166,6 +172,7 @@ void main() {
         settings: settings,
         audio: const SilentAudioService(),
         onboarding: OnboardingState(),
+        monetization: monetization,
       ),
     );
     final screen = tester.getSize(find.byType(PlayScreen));

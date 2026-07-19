@@ -10,6 +10,7 @@ import 'level/loader.dart';
 import 'meta/level_catalog.dart';
 import 'meta/progress.dart';
 import 'meta/progress_store.dart';
+import 'monetize/monetization.dart';
 import 'ui/app.dart';
 import 'ui/game/play_screen.dart';
 import 'ui/settings_controller.dart';
@@ -65,18 +66,21 @@ class _DevApp extends StatelessWidget {
       level: level,
     );
     const audio = SilentAudioService();
+    final monetization = Monetization.create(store, forceStub: true);
     return InkServices(
       settings: settings,
       progress: GameProgress(),
       catalog: LevelCatalog([entry]),
       audio: audio,
       onboarding: onboarding,
+      monetization: monetization,
       child: PlayScreen(
         entry: entry,
         progress: GameProgress(),
         settings: settings,
         audio: audio,
         onboarding: onboarding,
+        monetization: monetization,
       ),
     );
   }

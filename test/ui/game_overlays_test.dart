@@ -10,6 +10,7 @@ import 'package:philosophers_ink/meta/level_catalog.dart';
 import 'package:philosophers_ink/meta/onboarding.dart';
 import 'package:philosophers_ink/meta/progress.dart';
 import 'package:philosophers_ink/meta/progress_store.dart';
+import 'package:philosophers_ink/monetize/monetization.dart';
 import 'package:philosophers_ink/ui/game/clear_overlay.dart';
 import 'package:philosophers_ink/ui/game/pause_overlay.dart';
 import 'package:philosophers_ink/ui/game/play_screen.dart';
@@ -109,6 +110,8 @@ void main() {
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
     final settings = SettingsController(ProgressStore(prefs), const {});
+    final monetization =
+        Monetization.create(ProgressStore(prefs), forceStub: true);
     final entry = LevelEntry(
       id: 21,
       chapter: 2,
@@ -139,6 +142,7 @@ void main() {
         settings: settings,
         audio: const SilentAudioService(),
         onboarding: OnboardingState(),
+        monetization: monetization,
       ),
     ));
     await tester.pump(const Duration(milliseconds: 16));

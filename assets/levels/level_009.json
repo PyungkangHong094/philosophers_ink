@@ -11,7 +11,7 @@
     ],
     "optimal_ink": null,
     "solutions_verified": 2,
-    "hint_stroke": null
+    "hint_stroke": [ { "ink": "chalk", "x0": 55, "y0": 81, "x1": 84, "y1": 52 } ]
   },
   "background": "#1D1418",
   "emitters": [

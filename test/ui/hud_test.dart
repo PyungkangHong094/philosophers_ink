@@ -9,6 +9,7 @@ import 'package:philosophers_ink/meta/level_catalog.dart';
 import 'package:philosophers_ink/meta/onboarding.dart';
 import 'package:philosophers_ink/meta/progress.dart';
 import 'package:philosophers_ink/meta/progress_store.dart';
+import 'package:philosophers_ink/monetize/monetization.dart';
 import 'package:philosophers_ink/ui/game/hud_format.dart';
 import 'package:philosophers_ink/ui/game/ink_palette_bar.dart';
 import 'package:philosophers_ink/ui/game/play_screen.dart';
@@ -40,11 +41,14 @@ void main() {
 
   group('인게임 초시계·팔레트', () {
     late SettingsController settings;
+    late Monetization monetization;
 
     setUp(() async {
       SharedPreferences.setMockInitialValues({});
       final prefs = await SharedPreferences.getInstance();
       settings = SettingsController(ProgressStore(prefs), const {});
+      monetization =
+          Monetization.create(ProgressStore(prefs), forceStub: true);
     });
 
     LevelEntry makeEntry() => LevelEntry(
@@ -69,6 +73,7 @@ void main() {
           settings: settings,
           audio: const SilentAudioService(),
           onboarding: OnboardingState(),
+          monetization: monetization,
         ),
       ));
       await tester.pump(const Duration(milliseconds: 16));

@@ -138,7 +138,10 @@ class LevelSelectScreen extends StatelessWidget {
     final next = _nextInChapter(entry, services.catalog);
     VoidCallback? onNext;
     if (next != null) {
-      onNext = () {
+      // 레벨 클리어 → 다음 레벨 이동 "사이"에 전면광고(빈도 정책·광고 제거 시 no-op, GDD 12).
+      onNext = () async {
+        await services.monetization.onLevelCleared();
+        if (!navigator.mounted) return;
         final size = MediaQuery.of(navigator.context).size;
         _launch(navigator.context, next, size.center(Offset.zero),
             replace: true);
@@ -155,6 +158,7 @@ class LevelSelectScreen extends StatelessWidget {
         settings: services.settings,
         audio: services.audio,
         onboarding: services.onboarding,
+        monetization: services.monetization,
         onNext: onNext,
       ),
     );

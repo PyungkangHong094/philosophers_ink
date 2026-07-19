@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="philosophers_ink"
+        android:label="현자의 잉크"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -8,6 +8,7 @@
             android:exported="true"
             android:launchMode="singleTop"
             android:taskAffinity=""
+            android:screenOrientation="portrait"
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
@@ -30,6 +31,11 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <!-- AdMob 앱 ID (GDD 12). 현재 Google 공식 테스트 앱 ID —
+             출시 전 실제 AdMob 앱 ID로 교체(lib/monetize/monetize_constants.dart AdUnits.androidAppId 와 일치). -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713" />
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

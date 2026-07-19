@@ -42,7 +42,8 @@ Map<String, dynamic> levelToMap(Level level) {
       'optimal_ink':
           meta.optimalInk == null ? null : _inkMapToJson(meta.optimalInk!),
       'solutions_verified': meta.solutionsVerified,
-      'hint_stroke': meta.hintStroke,
+      'hint_stroke':
+          meta.hintStroke == null ? null : [for (final s in meta.hintStroke!) s.toJson()],
     },
     'background': _colorToHex(level.background),
     'emitters': [

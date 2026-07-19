@@ -75,6 +75,30 @@ void validateLevel(Level level, {String source = 'level'}) {
   if (level.timeLimitSeconds != null && level.timeLimitSeconds! <= 0) {
     problems.add('time_limit_s는 양수여야 한다 (got ${level.timeLimitSeconds})');
   }
+  // 힌트 스트로크(GDD 12장): 있으면 비어있지 않아야 하고, 각 선분 끝점이 그리드 안,
+  // 잉크 종류가 이 챕터에서 해금돼 있어야 한다(힌트가 미해금 잉크를 보이면 거짓말).
+  final hints = level.meta.hintStroke;
+  if (hints != null) {
+    if (hints.isEmpty) {
+      problems.add('meta.hint_stroke가 빈 배열 — 힌트 없음은 null이어야 한다');
+    }
+    for (var i = 0; i < hints.length; i++) {
+      final s = hints[i];
+      final tag = 'meta.hint_stroke[$i]';
+      for (final (name, px, py) in [
+        ('시작', s.x0, s.y0),
+        ('끝', s.x1, s.y1),
+      ]) {
+        if (px < 0 || px >= w || py < 0 || py >= h) {
+          problems.add('$tag $name점($px,$py)이 그리드(${w}x$h) 밖');
+        }
+      }
+      final unlock = _inkUnlockChapter[s.ink]!;
+      if (chapter < unlock) {
+        problems.add('$tag 잉크 ${s.ink.name}은 챕터 $unlock부터 해금 (레벨 챕터 $chapter)');
+      }
+    }
+  }
 
   // --- 방출구 ---
   if (level.emitters.isEmpty) {

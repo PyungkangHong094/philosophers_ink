@@ -16,11 +16,12 @@ import '../../audio/sound_tokens.dart';
 import '../../core/constants.dart';
 import '../../core/game_loop.dart';
 import '../../gameplay/level_session.dart';
-import '../../level/level_model.dart' show FlaskState;
+import '../../level/level_model.dart' show FlaskState, HintStroke;
 import '../../meta/chapters.dart';
 import '../../meta/level_catalog.dart';
 import '../../meta/onboarding.dart';
 import '../../meta/progress.dart';
+import '../../monetize/monetization.dart';
 import '../../render/world_painter.dart';
 import '../../sim/materials.dart';
 import '../onboarding/onboarding_text.dart';
@@ -55,6 +56,7 @@ class PlayScreen extends StatefulWidget {
   final SettingsController settings;
   final AudioService audio;
   final OnboardingState onboarding;
+  final Monetization monetization;
 
   /// "다음 레벨" 콜백. null이면 다음이 없거나 잠김 — 버튼 숨김.
   final VoidCallback? onNext;
@@ -66,6 +68,7 @@ class PlayScreen extends StatefulWidget {
     required this.settings,
     required this.audio,
     required this.onboarding,
+    required this.monetization,
     this.onNext,
   });
 
@@ -106,6 +109,10 @@ class _PlayScreenState extends State<PlayScreen>
   Timer? _guideTimer;
   Timer? _gaugeTimer;
 
+  // 힌트(리워드 광고) — 정답 스트로크 1개를 고스트 라인으로 (GDD 12).
+  bool _hintVisible = false;
+  bool _hintPending = false; // 광고 요청 중 중복 탭 방지.
+
   // 잉크 소진 넛지 (P2) — 모든 잉크 0 + 미클리어로 8초 방치 시 재시작 유도.
   bool _exhaustNudge = false;
   bool _exhaustScheduled = false;
@@ -119,6 +126,33 @@ class _PlayScreenState extends State<PlayScreen>
   static const Duration _gaugeDwell = Duration(milliseconds: 1200);
 
   bool get _isTutorialChapter => widget.entry.chapter == 1;
+
+  /// 힌트 버튼 노출 조건 (GDD 12): 정답 스트로크가 있고 작업(OPERATIO) 레벨이 아닐 때.
+  /// hint_stroke null·빈 배열 또는 11배수 작업 레벨은 힌트 비활성.
+  bool get _hintAvailable {
+    if (isOperatioLevel(widget.entry.id)) return false;
+    final s = widget.entry.level.meta.hintStroke;
+    return s != null && s.isNotEmpty;
+  }
+
+  /// 힌트 요청 — 리워드 광고(스텁: 즉시 성공). 보상 시 고스트 라인 노출. 미준비면 안내.
+  Future<void> _requestHint() async {
+    if (_hintVisible || _hintPending) return;
+    _hintPending = true;
+    final ok = await widget.monetization.requestHint();
+    _hintPending = false;
+    if (!mounted) return;
+    if (ok) {
+      setState(() => _hintVisible = true);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('힌트를 지금 불러올 수 없어요'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
+  }
 
   @override
   void initState() {
@@ -410,6 +444,7 @@ class _PlayScreenState extends State<PlayScreen>
     _lastCell = null;
     _recorded = false;
     _paused = false;
+    _hintVisible = false; // 재시작 시 고스트 힌트 숨김.
     // 잉크 소진 넛지 해제 (재시작으로 잉크 복원).
     _exhaustTimer?.cancel();
     _exhaustScheduled = false;
@@ -473,6 +508,18 @@ class _PlayScreenState extends State<PlayScreen>
               ),
             ),
           ),
+          // 힌트 고스트 라인 (정답 스트로크 1개, GDD 12). 골드 아닌 중립 parchment —
+          // 힌트는 성취가 아니므로 골드 희소성 예외 아님. 리워드 광고 성공 시에만 노출.
+          if (_hintVisible && _hintAvailable)
+            Positioned.fill(
+              child: IgnorePointer(
+                child: CustomPaint(
+                  painter: _HintGhostPainter(
+                    widget.entry.level.meta.hintStroke!,
+                  ),
+                ),
+              ),
+            ),
           // 대형 레벨 번호 (배경 위 타이포, GDD 8.3).
           Positioned(
             top: topPad + InkSpace.sm,
@@ -515,6 +562,15 @@ class _PlayScreenState extends State<PlayScreen>
                       onTap: _retry,
                     ),
                     const SizedBox(width: InkSpace.sm),
+                    // 힌트(리워드 광고) — 정답 스트로크가 있고 작업 레벨이 아닐 때만.
+                    if (_hintAvailable && !_hintVisible) ...[
+                      _HudIconButton(
+                        icon: Icons.lightbulb_outline,
+                        label: '힌트',
+                        onTap: _requestHint,
+                      ),
+                      const SizedBox(width: InkSpace.sm),
+                    ],
                     _HudIconButton(
                       icon: Icons.pause,
                       label: '일시정지',
@@ -640,6 +696,13 @@ class _PlayScreenState extends State<PlayScreen>
               onToggleMute: () =>
                   setState(() => widget.settings.sound = !widget.settings.sound),
               thresholdLine: starThresholdLine(widget.entry.level),
+              // 힌트가 아직 안 뜬 경우에만 일시정지에서도 요청 가능(계속 + 힌트).
+              onHint: (_hintAvailable && !_hintVisible)
+                  ? () {
+                      setState(() => _paused = false);
+                      _requestHint();
+                    }
+                  : null,
             ),
         ],
       ),
@@ -721,6 +784,56 @@ class _FlaskLabelCache {
     }
     _entries.clear();
   }
+}
+
+/// 힌트 고스트 라인 — 정답 힌트 스트로크(그리드 선분들)를 화면 좌표로 매핑해 반투명
+/// parchment 선으로 그린다 (GDD 12 리워드 힌트). 각 [HintStroke]는 독립 선분
+/// (x0,y0)-(x1,y1). 셀 중심 기준, 두께는 셀 크기 비례.
+/// 골드 아님 — 힌트는 성취가 아니므로 중립색으로 골드 희소성을 지킨다.
+class _HintGhostPainter extends CustomPainter {
+  final List<HintStroke> strokes;
+  _HintGhostPainter(this.strokes);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (strokes.isEmpty) return;
+    final vp = GridViewport.fit(
+        size, SimConstants.gridWidth, SimConstants.gridHeight);
+    Offset toScreen(int x, int y) => Offset(
+          vp.offsetX + (x + 0.5) * vp.scale,
+          vp.offsetY + (y + 0.5) * vp.scale,
+        );
+    final path = Path();
+    for (final s in strokes) {
+      final a = toScreen(s.x0, s.y0);
+      final b = toScreen(s.x1, s.y1);
+      path.moveTo(a.dx, a.dy);
+      path.lineTo(b.dx, b.dy);
+    }
+    // 소프트 글로우 → 코어 라인 2패스 (고스트 느낌).
+    canvas.drawPath(
+      path,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeCap = StrokeCap.round
+        ..strokeJoin = StrokeJoin.round
+        ..strokeWidth = (vp.scale * 1.6).clamp(3.0, 8.0)
+        ..color = InkColor.parchment.withValues(alpha: 0.16)
+        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 3),
+    );
+    canvas.drawPath(
+      path,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeCap = StrokeCap.round
+        ..strokeJoin = StrokeJoin.round
+        ..strokeWidth = (vp.scale * 0.8).clamp(1.5, 4.0)
+        ..color = InkColor.parchment.withValues(alpha: 0.5),
+    );
+  }
+
+  @override
+  bool shouldRepaint(_HintGhostPainter old) => old.strokes != strokes;
 }
 
 /// 목표 용기를 **윗면 개방 U자 비커 실루엣**으로 그린다 (실플레이 피드백 — "여기에 받아라"의

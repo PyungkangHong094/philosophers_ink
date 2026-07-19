@@ -12,6 +12,7 @@ import '../meta/level_catalog.dart';
 import '../meta/onboarding.dart';
 import '../meta/progress.dart';
 import '../meta/progress_store.dart';
+import '../monetize/monetization.dart';
 import 'screens/title_screen.dart';
 import 'settings_controller.dart';
 import 'tokens.dart';
@@ -23,6 +24,7 @@ class InkServices extends InheritedWidget {
   final LevelCatalog catalog;
   final AudioService audio;
   final OnboardingState onboarding;
+  final Monetization monetization;
 
   const InkServices({
     super.key,
@@ -31,6 +33,7 @@ class InkServices extends InheritedWidget {
     required this.catalog,
     required this.audio,
     required this.onboarding,
+    required this.monetization,
     required super.child,
   });
 
@@ -46,16 +49,24 @@ class InkServices extends InheritedWidget {
       progress != old.progress ||
       catalog != old.catalog ||
       audio != old.audio ||
-      onboarding != old.onboarding;
+      onboarding != old.onboarding ||
+      monetization != old.monetization;
 }
 
 class InkApp extends StatelessWidget {
   /// 오디오 서비스 주입 (테스트에서 [SilentAudioService]). null이면 실제 SoLoud.
   final AudioService? audioOverride;
-  const InkApp({super.key, this.audioOverride});
+
+  /// 수익화 파사드 주입 (테스트). null이면 환경(kDebugMode=스텁)에 맞춰 조립.
+  final Monetization? monetizationOverride;
+
+  const InkApp({super.key, this.audioOverride, this.monetizationOverride});
 
   @override
-  Widget build(BuildContext context) => _Bootstrap(audioOverride: audioOverride);
+  Widget build(BuildContext context) => _Bootstrap(
+        audioOverride: audioOverride,
+        monetizationOverride: monetizationOverride,
+      );
 }
 
 /// MaterialApp 셸. [InkServices]는 반드시 이 바깥(위)에 있어야 한다 —
@@ -85,7 +96,8 @@ class _MaterialShell extends StatelessWidget {
 
 class _Bootstrap extends StatefulWidget {
   final AudioService? audioOverride;
-  const _Bootstrap({this.audioOverride});
+  final Monetization? monetizationOverride;
+  const _Bootstrap({this.audioOverride, this.monetizationOverride});
 
   @override
   State<_Bootstrap> createState() => _BootstrapState();
@@ -97,6 +109,7 @@ class _BootstrapState extends State<_Bootstrap> {
   LevelCatalog? _catalog;
   AudioService? _audio;
   OnboardingState? _onboarding;
+  Monetization? _monetization;
   Object? _error;
 
   @override
@@ -119,6 +132,10 @@ class _BootstrapState extends State<_Bootstrap> {
         () => audio.configure(
             enabled: settings.sound, volume: settings.volume),
       );
+      // 수익화(광고·IAP) — kDebugMode/시뮬레이터에선 스텁. 초기화 실패해도 게임을 막지 않는다.
+      final monetization =
+          widget.monetizationOverride ?? Monetization.create(store);
+      await monetization.init();
       if (!mounted) return;
       setState(() {
         _settings = settings;
@@ -126,6 +143,7 @@ class _BootstrapState extends State<_Bootstrap> {
         _catalog = catalog;
         _audio = audio;
         _onboarding = store.loadOnboarding();
+        _monetization = monetization;
       });
     } catch (e) {
       if (mounted) setState(() => _error = e);
@@ -143,11 +161,13 @@ class _BootstrapState extends State<_Bootstrap> {
     final catalog = _catalog;
     final audio = _audio;
     final onboarding = _onboarding;
+    final monetization = _monetization;
     if (settings == null ||
         progress == null ||
         catalog == null ||
         audio == null ||
-        onboarding == null) {
+        onboarding == null ||
+        monetization == null) {
       return const _MaterialShell(
         home: _Splash(
           child: SizedBox(
@@ -169,6 +189,7 @@ class _BootstrapState extends State<_Bootstrap> {
       catalog: catalog,
       audio: audio,
       onboarding: onboarding,
+      monetization: monetization,
       child: const _MaterialShell(home: TitleScreen()),
     );
   }

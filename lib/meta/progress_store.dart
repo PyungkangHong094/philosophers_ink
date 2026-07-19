@@ -16,6 +16,7 @@ class ProgressStore {
   static const String _progressKey = 'ink.progress.v1';
   static const String _settingsKey = 'ink.settings.v1';
   static const String _onboardingKey = 'ink.onboarding.v1';
+  static const String _adsRemovedKey = 'ink.adsRemoved.v1';
 
   final SharedPreferences _prefs;
   ProgressStore(this._prefs);
@@ -74,5 +75,12 @@ class ProgressStore {
 
   void _saveOnboarding(OnboardingState s) {
     _prefs.setString(_onboardingKey, jsonEncode(s.toJsonList()));
+  }
+
+  /// 광고 제거 단품 소유 여부 (IAP 영속 — GDD 12). 기본 false.
+  bool loadAdsRemoved() => _prefs.getBool(_adsRemovedKey) ?? false;
+
+  void saveAdsRemoved(bool value) {
+    _prefs.setBool(_adsRemovedKey, value);
   }
 }

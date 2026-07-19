@@ -266,15 +266,30 @@ class _Parser {
     );
   }
 
-  List<List<int>>? _parseHintStroke(dynamic v) {
+  /// `[{"ink":"chalk","x0":..,"y0":..,"x1":..,"y1":..},...]` → 힌트 스트로크 목록.
+  /// null이면 힌트 없음. 잉크 키·좌표 위반은 조용히 넘기지 않고 problems에 모은다.
+  List<HintStroke>? _parseHintStroke(dynamic v) {
     if (v == null) return null;
     final l = _list(v, 'meta.hint_stroke');
     if (l == null) return null;
-    final out = <List<int>>[];
+    final out = <HintStroke>[];
     for (var i = 0; i < l.length; i++) {
-      final pt = _list(l[i], 'meta.hint_stroke[$i]');
-      if (pt == null) continue;
-      out.add([for (var j = 0; j < pt.length; j++) _int(pt[j], 'meta.hint_stroke[$i][$j]')]);
+      final path = 'meta.hint_stroke[$i]';
+      final m = _obj(l[i], path);
+      if (m == null) continue;
+      final inkKey = _str(m['ink'], '$path.ink');
+      final ink = inkTypeFromKey(inkKey);
+      if (ink == null) {
+        _err('$path.ink', '알 수 없는 잉크 "$inkKey" (chalk|heat|frost)');
+        continue;
+      }
+      out.add(HintStroke(
+        ink: ink,
+        x0: _int(m['x0'], '$path.x0'),
+        y0: _int(m['y0'], '$path.y0'),
+        x1: _int(m['x1'], '$path.x1'),
+        y1: _int(m['y1'], '$path.y1'),
+      ));
     }
     return out;
   }

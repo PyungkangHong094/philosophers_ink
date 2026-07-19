@@ -1,5 +1,5 @@
 {
-  "meta": { "id": 2, "name": "건너편", "chapter": 1, "difficulty": 1, "teaches": [], "tags": ["tutorial","slope"], "optimal_ink": null, "solutions_verified": 2, "hint_stroke": null },
+  "meta": { "id": 2, "name": "건너편", "chapter": 1, "difficulty": 1, "teaches": [], "tags": ["tutorial","slope"], "optimal_ink": null, "solutions_verified": 2, "hint_stroke": [ { "ink": "chalk", "x0": 7, "y0": 139, "x1": 126, "y1": 258 } ] },
   "background": "#1D1418",
   "emitters": [ { "x": 6, "y": 2, "width": 4, "material": "PRIMA", "rate": 5, "total": null, "ash_ratio": 0 } ],
   "flasks": [ { "x": 128, "y": 288, "w": 20, "h": 24, "goal": 40, "material": null, "state": null, "pure": false } ],

@@ -1,5 +1,5 @@
 {
-  "meta": { "id": 1, "name": "첫 획", "chapter": 1, "difficulty": 1, "teaches": ["chalk","prima"], "tags": ["tutorial","chalk","prima"], "optimal_ink": null, "solutions_verified": 2, "hint_stroke": null },
+  "meta": { "id": 1, "name": "첫 획", "chapter": 1, "difficulty": 1, "teaches": ["chalk","prima"], "tags": ["tutorial","chalk","prima"], "optimal_ink": null, "solutions_verified": 2, "hint_stroke": [ { "ink": "chalk", "x0": 19, "y0": 181, "x1": 107, "y1": 270 } ] },
   "background": "#1D1418",
   "emitters": [ { "x": 18, "y": 2, "width": 4, "material": "PRIMA", "rate": 5, "total": null, "ash_ratio": 0 } ],
   "flasks": [ { "x": 108, "y": 290, "w": 20, "h": 22, "goal": 35, "material": null, "state": null, "pure": false } ],

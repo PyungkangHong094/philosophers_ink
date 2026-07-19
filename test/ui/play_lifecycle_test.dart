@@ -10,6 +10,7 @@ import 'package:philosophers_ink/meta/level_catalog.dart';
 import 'package:philosophers_ink/meta/onboarding.dart';
 import 'package:philosophers_ink/meta/progress.dart';
 import 'package:philosophers_ink/meta/progress_store.dart';
+import 'package:philosophers_ink/monetize/monetization.dart';
 import 'package:philosophers_ink/ui/game/play_screen.dart';
 import 'package:philosophers_ink/ui/settings_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -73,11 +74,13 @@ LevelEntry _entry() => LevelEntry(
 
 void main() {
   late SettingsController settings;
+  late Monetization monetization;
 
   setUp(() async {
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
     settings = SettingsController(ProgressStore(prefs), const {});
+    monetization = Monetization.create(ProgressStore(prefs), forceStub: true);
   });
 
   Widget host(AudioService audio) => MaterialApp(
@@ -87,6 +90,7 @@ void main() {
           settings: settings,
           audio: audio,
           onboarding: OnboardingState(),
+          monetization: monetization,
         ),
       );
 

@@ -8,6 +8,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../level/editor/editor_screen.dart';
+import '../../monetize/iap_service.dart';
+import '../../monetize/monetization.dart';
 import '../app.dart';
 import '../tokens.dart';
 import '../widgets.dart';
@@ -38,45 +40,58 @@ class SettingsScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: InkSpace.md),
-              _ToggleRow(
-                label: '소리',
-                caption: '효과음·앰비언트',
-                value: settings.sound,
-                onChanged: (v) => settings.sound = v,
-              ),
-              if (settings.sound)
-                _VolumeRow(
-                  value: settings.volume,
-                  onChanged: (v) => settings.volume = v,
-                  onChangeEnd: (_) => InkServices.of(context).audio.uiTap(),
+              // 행이 화면보다 길어지면(작은 기기·큰 글꼴) 스크롤 — 오버플로 방지.
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _ToggleRow(
+                        label: '소리',
+                        caption: '효과음·앰비언트',
+                        value: settings.sound,
+                        onChanged: (v) => settings.sound = v,
+                      ),
+                      if (settings.sound)
+                        _VolumeRow(
+                          value: settings.volume,
+                          onChanged: (v) => settings.volume = v,
+                          onChangeEnd: (_) =>
+                              InkServices.of(context).audio.uiTap(),
+                        ),
+                      _ToggleRow(
+                        label: '햅틱',
+                        caption: '진동 피드백',
+                        value: settings.haptics,
+                        onChanged: (v) => settings.haptics = v,
+                      ),
+                      _ToggleRow(
+                        label: '모션 줄이기',
+                        caption: '전환·애니메이션 최소화',
+                        value: settings.reducedMotion,
+                        onChanged: (v) => settings.reducedMotion = v,
+                      ),
+                      _ActionRow(
+                        label: '안내 다시 보기',
+                        caption: '목표·조작·별점 안내를 처음부터 다시 보기',
+                        actionLabel: '초기화',
+                        onTap: () {
+                          InkServices.of(context).onboarding.reset();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('안내를 초기화했어요'),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        },
+                      ),
+                      _MonetizationSection(
+                          monetization:
+                              InkServices.of(context).monetization),
+                    ],
+                  ),
                 ),
-              _ToggleRow(
-                label: '햅틱',
-                caption: '진동 피드백',
-                value: settings.haptics,
-                onChanged: (v) => settings.haptics = v,
               ),
-              _ToggleRow(
-                label: '모션 줄이기',
-                caption: '전환·애니메이션 최소화',
-                value: settings.reducedMotion,
-                onChanged: (v) => settings.reducedMotion = v,
-              ),
-              _ActionRow(
-                label: '안내 다시 보기',
-                caption: '목표·조작·별점 안내를 처음부터 다시 보기',
-                actionLabel: '초기화',
-                onTap: () {
-                  InkServices.of(context).onboarding.reset();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('안내를 초기화했어요'),
-                      duration: Duration(seconds: 2),
-                    ),
-                  );
-                },
-              ),
-              const Spacer(),
               if (kDebugMode)
                 Padding(
                   padding: const EdgeInsets.all(InkSpace.lg),
@@ -92,6 +107,100 @@ class SettingsScreen extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// 수익화 섹션 (GDD 12) — 광고 제거 구매 + 구매 복원. 스토어 미연결 시 우아한 실패.
+/// 구매 완료면 구매 행을 상태 표시로 바꾼다. 골드 요소 없음(무채).
+class _MonetizationSection extends StatelessWidget {
+  final Monetization monetization;
+  const _MonetizationSection({required this.monetization});
+
+  static String _message(IapOutcome o) => switch (o) {
+        IapOutcome.purchased => '광고를 제거했어요',
+        IapOutcome.restored => '구매를 복원했어요',
+        IapOutcome.nothingToRestore => '복원할 구매 내역이 없어요',
+        IapOutcome.storeUnavailable => '스토어에 연결할 수 없어요',
+        IapOutcome.canceled => '구매를 취소했어요',
+        IapOutcome.error => '구매를 처리하지 못했어요',
+      };
+
+  Future<void> _run(
+      BuildContext context, Future<IapOutcome> Function() action) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final outcome = await action();
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(_message(outcome)),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: monetization,
+      builder: (context, _) => Column(
+        children: [
+          if (monetization.adsRemoved)
+            const _InfoRow(
+              label: '광고 제거',
+              caption: '구매 완료 · 전면광고 없이 플레이',
+              status: '완료',
+            )
+          else
+            _ActionRow(
+              label: '광고 제거',
+              caption: '전면광고 없이 플레이하기',
+              actionLabel: '구매',
+              onTap: () => _run(context, monetization.purchaseRemoveAds),
+            ),
+          _ActionRow(
+            label: '구매 복원',
+            caption: '이전에 구매한 항목 되살리기',
+            actionLabel: '복원',
+            onTap: () => _run(context, monetization.restorePurchases),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 상태 표시 행 — 우측에 비활성 상태 라벨(골드 아님). 헤어라인 구분.
+class _InfoRow extends StatelessWidget {
+  final String label;
+  final String caption;
+  final String status;
+  const _InfoRow(
+      {required this.label, required this.caption, required this.status});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: const BoxConstraints(minHeight: InkSpace.touchTarget),
+      padding: const EdgeInsets.symmetric(
+          horizontal: InkSpace.lg, vertical: InkSpace.sm),
+      decoration: const BoxDecoration(
+        border: Border(bottom: BorderSide(color: InkColor.hairline)),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(label,
+                    style: InkText.body.copyWith(color: InkColor.parchment)),
+                Text(caption, style: InkText.caption),
+              ],
+            ),
+          ),
+          Text(status, style: InkText.caption.copyWith(color: InkColor.text2)),
+        ],
       ),
     );
   }

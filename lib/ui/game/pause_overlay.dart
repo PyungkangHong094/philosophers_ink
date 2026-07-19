@@ -22,6 +22,9 @@ class PauseOverlay extends StatelessWidget {
   /// 이 레벨의 별점 임계 1줄 ("★★ ≤ 42 · ★★★ ≤ 30"). null이면 미검증 — 표시 안 함.
   final String? thresholdLine;
 
+  /// 힌트 요청(리워드 광고) 콜백. null이면 힌트 불가·이미 표시 중 — 버튼 숨김 (GDD 12).
+  final VoidCallback? onHint;
+
   const PauseOverlay({
     super.key,
     required this.eyebrow,
@@ -31,6 +34,7 @@ class PauseOverlay extends StatelessWidget {
     required this.muted,
     required this.onToggleMute,
     this.thresholdLine,
+    this.onHint,
   });
 
   @override
@@ -61,6 +65,13 @@ class PauseOverlay extends StatelessWidget {
               SizedBox(
                   width: 220,
                   child: InkGhostButton(label: '다시 하기', onTap: onRetry)),
+              if (onHint != null) ...[
+                const SizedBox(height: InkSpace.sm),
+                SizedBox(
+                    width: 220,
+                    child:
+                        InkGhostButton(label: '힌트 보기', onTap: onHint)),
+              ],
               const SizedBox(height: InkSpace.sm),
               SizedBox(
                   width: 220,

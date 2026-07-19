@@ -1,5 +1,5 @@
 {
-  "meta": { "id": 4, "name": "막힌 길", "chapter": 1, "difficulty": 2, "teaches": [], "tags": ["terrain","wall","detour"], "optimal_ink": null, "solutions_verified": 2, "hint_stroke": null },
+  "meta": { "id": 4, "name": "막힌 길", "chapter": 1, "difficulty": 2, "teaches": [], "tags": ["terrain","wall","detour"], "optimal_ink": null, "solutions_verified": 2, "hint_stroke": [ { "ink": "chalk", "x0": 18, "y0": 162, "x1": 116, "y1": 260 } ] },
   "background": "#1D1418",
   "emitters": [ { "x": 16, "y": 2, "width": 4, "material": "PRIMA", "rate": 5, "total": null, "ash_ratio": 0 } ],
   "flasks": [ { "x": 118, "y": 290, "w": 20, "h": 22, "goal": 35, "material": null, "state": null, "pure": false } ],

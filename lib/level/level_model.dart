@@ -80,8 +80,10 @@ class LevelMeta {
   /// 검증된 상이한 해법 수 (LEVELS 3장 원칙: 최소 2).
   final int solutionsVerified;
 
-  /// 힌트용 정답 스트로크 좌표열. 작업 레벨은 null (LEVELS 7장).
-  final List<List<int>>? hintStroke;
+  /// 힌트용 정답 스트로크 (GDD 12장 리워드 힌트). 셸이 잉크색 고스트 라인으로 렌더한다.
+  /// null이면 힌트 없음 — 미검증·미베이크·OPERATIO(힌트 비활성) 레벨 (LEVELS 7장).
+  /// 각 원소는 잉크 종류 + 선분 좌표. 중력 탭은 힌트에 포함하지 않는다(스트로크만).
+  final List<HintStroke>? hintStroke;
 
   const LevelMeta({
     required this.id,
@@ -101,6 +103,78 @@ class LevelMeta {
     if (o == null) return null;
     return o.values.fold<int>(0, (a, b) => a + b);
   }
+}
+
+/// 잉크 종류(JSON 표기, 예 "chalk") → InkType. 알 수 없으면 null.
+InkType? inkTypeFromKey(String key) => switch (key) {
+      'chalk' => InkType.chalk,
+      'heat' => InkType.heat,
+      'frost' => InkType.frost,
+      _ => null,
+    };
+
+/// InkType → JSON 키 (직렬화 라운드트립용).
+String inkTypeKey(InkType t) => switch (t) {
+      InkType.chalk => 'chalk',
+      InkType.heat => 'heat',
+      InkType.frost => 'frost',
+    };
+
+/// 힌트 스트로크 1개 (GDD 12장). 레벨 랩 솔버가 찾은 최소 잉크 해의 선분을 그대로
+/// 굽는다 — 셸이 이 좌표를 잉크 색 고스트 라인으로 렌더한다. 좌표는 그리드 셀 단위,
+/// (x0,y0)–(x1,y1) 선분. 솔버 StrokePrimitive와 1:1 대응(라운드트립 무손실).
+class HintStroke {
+  final InkType ink;
+  final int x0;
+  final int y0;
+  final int x1;
+  final int y1;
+
+  const HintStroke({
+    required this.ink,
+    required this.x0,
+    required this.y0,
+    required this.x1,
+    required this.y1,
+  });
+
+  /// `{"ink":"chalk","x0":..,"y0":..,"x1":..,"y1":..}` → HintStroke. 잉크 키가
+  /// 유효하지 않으면 null(호출자가 파싱 에러로 처리).
+  static HintStroke? fromJson(Map<String, dynamic> m) {
+    final ink = inkTypeFromKey(m['ink'] as String? ?? '');
+    if (ink == null) return null;
+    int coord(Object? v) => v is int ? v : (v as num).toInt();
+    return HintStroke(
+      ink: ink,
+      x0: coord(m['x0']),
+      y0: coord(m['y0']),
+      x1: coord(m['x1']),
+      y1: coord(m['y1']),
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'ink': inkTypeKey(ink),
+        'x0': x0,
+        'y0': y0,
+        'x1': x1,
+        'y1': y1,
+      };
+
+  @override
+  bool operator ==(Object other) =>
+      other is HintStroke &&
+      other.ink == ink &&
+      other.x0 == x0 &&
+      other.y0 == y0 &&
+      other.x1 == x1 &&
+      other.y1 == y1;
+
+  @override
+  int get hashCode => Object.hash(ink, x0, y0, x1, y1);
+
+  @override
+  String toString() => 'HintStroke(${ink.name} $x0,$y0->$x1,$y1)';
 }
 
 /// 방출구 (GDD 10.6). sim의 EmitterConfig로 매핑되는 방출 스펙.
