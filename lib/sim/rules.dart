@@ -275,8 +275,8 @@ class Rules {
     final dy = _gravitySign;
     if (_tryMove(grid, x, y, x, y + dy)) return;
     final firstDx = rng.nextBool() ? -1 : 1;
-    if (_tryMove(grid, x, y, x + firstDx, y + dy)) return;
-    if (_tryMove(grid, x, y, x - firstDx, y + dy)) return;
+    if (_tryMoveDiagonal(grid, x, y, firstDx, dy)) return;
+    if (_tryMoveDiagonal(grid, x, y, -firstDx, dy)) return;
 
     if (propsOf(id).granularSlip) {
       // 안식각 낮음: 낙하가 막히면 확률적으로 옆 빈칸으로 한 칸 미끄러진다.
@@ -293,8 +293,8 @@ class Rules {
     final dy = _gravitySign;
     if (_tryMove(grid, x, y, x, y + dy)) return;
     final firstDx = rng.nextBool() ? -1 : 1;
-    if (_tryMove(grid, x, y, x + firstDx, y + dy)) return;
-    if (_tryMove(grid, x, y, x - firstDx, y + dy)) return;
+    if (_tryMoveDiagonal(grid, x, y, firstDx, dy)) return;
+    if (_tryMoveDiagonal(grid, x, y, -firstDx, dy)) return;
     _spreadHorizontal(grid, x, y, propsOf(grid.get(x, y)).dispersion);
   }
 
@@ -303,8 +303,8 @@ class Rules {
     final dy = -_gravitySign; // 기체는 중력 반대로 뜬다 → 반전 시 가라앉는다
     if (_tryMove(grid, x, y, x, y + dy)) return;
     final firstDx = rng.nextBool() ? -1 : 1;
-    if (_tryMove(grid, x, y, x + firstDx, y + dy)) return;
-    if (_tryMove(grid, x, y, x - firstDx, y + dy)) return;
+    if (_tryMoveDiagonal(grid, x, y, firstDx, dy)) return;
+    if (_tryMoveDiagonal(grid, x, y, -firstDx, dy)) return;
     _spreadHorizontal(grid, x, y, propsOf(grid.get(x, y)).dispersion);
   }
 
@@ -332,6 +332,21 @@ class Rules {
     _moveStamp[grid.index(dest, y)] = _tick;
     return true;
   }
+
+  /// 대각 이동 (x,y)→(x+dx, y+dy). **모서리 끼어들기(corner-cut) 금지**: 직교 이웃
+  /// (x+dx, y)와 (x, y+dy) 중 하나 이상이 비어 있을 때만 허용한다. 둘 다 막혀 있으면
+  /// 대각 이음매를 뚫지 못한다 — 사선 석필 선(Bresenham 대각)이 새는 P1 버그의 근본 차단.
+  /// 입자·액체·기체(중력 미러 포함)가 이 규칙을 일관 적용한다.
+  bool _tryMoveDiagonal(Grid grid, int x, int y, int dx, int dy) {
+    if (!_isEmptyCell(grid, x + dx, y) && !_isEmptyCell(grid, x, y + dy)) {
+      return false; // 두 직교 이웃 모두 막힘 → 모서리 통과 불가
+    }
+    return _tryMove(grid, x, y, x + dx, y + dy);
+  }
+
+  /// 범위 내이고 EMPTY인 셀인가. 경계 밖은 (벽처럼) 비어 있지 않은 것으로 본다.
+  bool _isEmptyCell(Grid grid, int x, int y) =>
+      grid.inBounds(x, y) && grid.get(x, y) == Material.empty.index;
 
   /// 목표 셀이 범위 내이고 EMPTY면 이동 + 목적지 스탬프. 성공 시 true.
   bool _tryMove(Grid grid, int fromX, int fromY, int toX, int toY) {
