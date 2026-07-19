@@ -7,7 +7,6 @@ library;
 
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
@@ -20,7 +19,6 @@ import '../../meta/chapters.dart';
 import '../../meta/level_catalog.dart';
 import '../../meta/onboarding.dart';
 import '../../meta/progress.dart';
-import '../../render/palette.dart';
 import '../../render/world_painter.dart';
 import '../../sim/materials.dart';
 import '../onboarding/onboarding_text.dart';
@@ -70,9 +68,6 @@ class _PlayScreenState extends State<PlayScreen>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late LevelSession _session;
   late final GameLoop _loop;
-  late final Palette _palette;
-  late final WorldImageSource _imageSource;
-  late final Uint8List _rgba;
   late final Ticker _ticker;
 
   final ValueNotifier<_Outcome> _outcome =
@@ -116,12 +111,6 @@ class _PlayScreenState extends State<PlayScreen>
     _session = LevelSession(
       widget.entry.level,
       onSettle: (e) => widget.audio.flaskFill(e.phase),
-    );
-    _palette = Palette();
-    _rgba = Uint8List(SimConstants.gridWidth * SimConstants.gridHeight * 4);
-    _imageSource = WorldImageSource(
-      width: SimConstants.gridWidth,
-      height: SimConstants.gridHeight,
     );
     _loop = GameLoop(onTick: () => _session.tick());
     _ticker = createTicker(_onFrame)..start();
@@ -201,7 +190,6 @@ class _PlayScreenState extends State<PlayScreen>
     widget.audio.stopAll(); // 화면 이탈 시 루프성 재생(앰비언트 등) 전부 정지 — 전역 잔존 방지.
     _ticker.dispose(); // 프레임 정지 먼저 — 이후 세션을 건드리지 않는다.
     _session.dispose(); // InkController(ChangeNotifier) 등 세션 소유 자원 해제 (감사 P2-2).
-    _imageSource.dispose();
     _outcome.dispose();
     _frameTick.dispose();
     _flaskLabels.dispose();
@@ -230,8 +218,6 @@ class _PlayScreenState extends State<PlayScreen>
     }
 
     _loop.advance(elapsed);
-    _palette.writeRgba(_session.game.grid.cells, _rgba);
-    _imageSource.update(_rgba);
     _frameTick.value++;
 
     // 물질 앰비언트 그레인 — 활성 셀 밀도로 볼륨 변조 (샘플 스로틀, GDD 9.2).
@@ -395,7 +381,12 @@ class _PlayScreenState extends State<PlayScreen>
                   onTapUp: _onTapUp,
                   child: CustomPaint(
                     size: Size.infinite,
-                    painter: WorldPainter(_imageSource),
+                    painter: WorldPointsPainter(
+                      cells: _session.game.grid.cells,
+                      gridWidth: SimConstants.gridWidth,
+                      gridHeight: SimConstants.gridHeight,
+                      repaint: _frameTick,
+                    ),
                   ),
                 );
               },

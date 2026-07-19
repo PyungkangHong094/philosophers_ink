@@ -3,6 +3,8 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/widgets.dart';
 
+import '../sim/materials.dart';
+
 /// 논리 그리드 ↔ 화면 좌표 변환. 정수배 스케일 + 센터링 (GDD 8.2·10.3).
 ///
 /// 페인터와 입력 매핑이 **같은** 뷰포트를 써야 그은 자리에 정확히 셀이 찍힌다.
@@ -134,4 +136,70 @@ class WorldPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(WorldPainter oldDelegate) => oldDelegate.source != source;
+}
+
+/// 그리드를 직접 순회해 **둥근 잉크 방울**로 그리는 페인터 (사용자 디렉션 2026-07-19).
+///
+/// 동적 물질(입자·액체·기체)은 원형 점 — "잉크 방울" 픽션 정합. 정적 잉크·벽
+/// (staticSolid)은 각진 사각 유지 — 그은 선·지형의 명료함. 물질별 drawRawPoints
+/// 단일 콜이라 이미지 디코드 경로(WorldImageSource)보다 프레임 비용이 낮다.
+/// EMPTY는 그리지 않아 레벨 배경(Scaffold)이 비친다.
+class WorldPointsPainter extends CustomPainter {
+  final Uint8List cells;
+  final int gridWidth;
+  final int gridHeight;
+
+  WorldPointsPainter({
+    required this.cells,
+    required this.gridWidth,
+    required this.gridHeight,
+    required Listenable repaint,
+  }) : super(repaint: repaint);
+
+  /// 원형 점이 이웃과 살짝 겹치게 하는 지름 배율 — 웅덩이·더미가 갈라져 보이지 않게.
+  static const double _roundOverlap = 1.25;
+
+  static final List<Paint> _round = _buildPaints(StrokeCap.round);
+  static final List<Paint> _square = _buildPaints(StrokeCap.square);
+
+  static List<Paint> _buildPaints(StrokeCap cap) => [
+        for (final p in kMaterialTable)
+          Paint()
+            ..color = Color(0xFF000000 | (p.argb & 0x00FFFFFF))
+              .withAlpha((p.argb >> 24) & 0xFF)
+            ..strokeCap = cap
+            ..style = PaintingStyle.stroke,
+      ];
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final vp = GridViewport.fit(size, gridWidth, gridHeight);
+    final s = vp.scale.toDouble();
+    final buckets = List<List<double>?>.filled(kMaterialTable.length, null);
+    for (var i = 0; i < cells.length; i++) {
+      final id = cells[i];
+      if (id == 0) continue; // EMPTY
+      final b = buckets[id] ??= <double>[];
+      final gx = i % gridWidth;
+      final gy = i ~/ gridWidth;
+      b
+        ..add(vp.offsetX + (gx + 0.5) * s)
+        ..add(vp.offsetY + (gy + 0.5) * s);
+    }
+    for (var id = 1; id < buckets.length; id++) {
+      final b = buckets[id];
+      if (b == null) continue;
+      final isStatic = categoryOf(id) == MaterialCategory.staticSolid;
+      final paint = (isStatic ? _square : _round)[id]
+        ..strokeWidth = isStatic ? s : s * _roundOverlap;
+      canvas.drawRawPoints(
+          ui.PointMode.points, Float32List.fromList(b), paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(WorldPointsPainter old) =>
+      old.cells != cells ||
+      old.gridWidth != gridWidth ||
+      old.gridHeight != gridHeight;
 }
