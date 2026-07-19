@@ -113,8 +113,10 @@ void validateLevel(Level level, {String source = 'level'}) {
   for (var i = 0; i < level.flasks.length; i++) {
     final f = level.flasks[i];
     final tag = 'flasks[$i]';
-    if (f.w < 1 || f.h < 1) {
-      problems.add('$tag 크기(${f.w}x${f.h})는 1 이상이어야 한다');
+    // 개방형 비커(GDD 5.1 입구 규칙): 좌·우 벽 + 내부 + 바닥 벽이 필요하므로
+    // 폭 ≥3(좌벽·내부·우벽), 높이 ≥2(내부·바닥벽)여야 내부 판정 영역이 생긴다.
+    if (f.w < 3 || f.h < 2) {
+      problems.add('$tag 크기(${f.w}x${f.h})는 최소 3x2 (개방형 비커 내부 확보)');
     }
     if (f.x < 0 || f.y < 0 || f.x + f.w > w || f.y + f.h > h) {
       problems.add('$tag 영역(${f.x},${f.y} ${f.w}x${f.h})이 그리드(${w}x$h) 밖');

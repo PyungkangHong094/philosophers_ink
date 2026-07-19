@@ -3,20 +3,23 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:philosophers_ink/gameplay/level_session.dart';
 import 'package:philosophers_ink/level/level_model.dart';
 
-/// 상단 방출구가 열 5로 물질을 흘리고, 열 5·행 8에 1×1 플라스크를 둔 테스트 레벨.
+/// 상단 방출구(열 5~7)가 물질을 흘리고, 그 아래 개방형 비커를 둔 테스트 레벨.
+/// 비커 rect (4,3,5,8): 좌벽 col4·우벽 col8·바닥 row10, 상단(row3) 개방, 내부 cols5~7.
+/// 방출구 열이 비커 내부 열과 정렬돼 물질이 입구로 낙하한다.
 Level _level({
   int goal = 5,
   bool pure = false,
   Material emit = Material.prima,
   Map<InkType, int>? optimal,
   List<TerrainRect> terrain = const [],
+  FlaskMouth mouth = FlaskMouth.up,
 }) =>
     Level(
       meta: LevelMeta(
           id: 1, name: 't', chapter: 1, difficulty: 1, optimalInk: optimal),
       background: 0xFF000000,
-      emitters: [EmitterSpec(x: 5, y: 0, material: emit, rate: 1)],
-      flasks: [FlaskSpec(x: 5, y: 8, w: 1, h: 1, goal: goal, pure: pure)],
+      emitters: [EmitterSpec(x: 5, y: 0, width: 3, material: emit, rate: 1)],
+      flasks: [FlaskSpec(x: 4, y: 3, w: 5, h: 8, goal: goal, pure: pure, mouth: mouth)],
       terrain: terrain,
       inkBudget: const {InkType.chalk: 100},
     );
@@ -62,6 +65,113 @@ void main() {
       _tickN(s, 40);
       expect(s.isCleared, isTrue);
       expect(s.result.stars, 3, reason: '사용 0 ≤ floor(20*1.15)=23');
+    });
+  });
+
+  group('개방형 비커 벽 (GDD 5.1 입구 규칙)', () {
+    test('좌·우·바닥이 벽으로 스탬프되고 윗변(입구)은 개방', () {
+      final s = LevelSession(_level());
+      final g = s.game.grid;
+      // 비커 rect (4,3,5,8): 좌 col4, 우 col8, 바닥 row10.
+      for (var yy = 3; yy <= 10; yy++) {
+        expect(g.get(4, yy), Material.wall.index, reason: '좌벽 col4');
+        expect(g.get(8, yy), Material.wall.index, reason: '우벽 col8');
+      }
+      for (var xx = 4; xx <= 8; xx++) {
+        expect(g.get(xx, 10), Material.wall.index, reason: '바닥 row10');
+      }
+      // 상단 입구(row3) 내부 열은 개방.
+      for (var xx = 5; xx <= 7; xx++) {
+        expect(g.get(xx, 3), Material.empty.index, reason: '입구 개방 col$xx');
+      }
+    });
+
+    test('reset 후에도 비커 벽이 재스탬프된다', () {
+      final s = LevelSession(_level());
+      s.reset();
+      final g = s.game.grid;
+      expect(g.get(4, 6), Material.wall.index);
+      expect(g.get(8, 6), Material.wall.index);
+      expect(g.get(6, 10), Material.wall.index);
+    });
+
+    test('입구로 낙하한 물질이 내부에 착수해 카운트되고 클리어된다', () {
+      final s = LevelSession(_level(goal: 5));
+      _tickN(s, 60);
+      expect(s.flasks.flasks.single.count, 5);
+      expect(s.isCleared, isTrue);
+    });
+
+    test('물질 흐름이 비커 벽을 뚫거나 지우지 못한다 (측면·바닥 차단)', () {
+      final s = LevelSession(_level(goal: 5));
+      _tickN(s, 60);
+      final g = s.game.grid;
+      expect(g.get(4, 9), Material.wall.index, reason: '좌벽 유지');
+      expect(g.get(8, 9), Material.wall.index, reason: '우벽 유지');
+      expect(g.get(6, 10), Material.wall.index, reason: '바닥 유지');
+    });
+
+    test('벽 바깥(rect 밖) 물질은 판정 대상이 아니다', () {
+      final s = LevelSession(_level(goal: 100)); // 클리어 방지
+      final g = s.game.grid;
+      // 좌벽(col4) 바로 왼쪽(col3)은 rect 밖 — 판정 스캔에 포함되지 않는다.
+      g.set(3, 9, Material.water.index);
+      s.flasks.update(g);
+      expect(s.flasks.flasks.single.count, 0, reason: 'rect 밖 물질 미카운트');
+      expect(g.get(3, 9), Material.water.index, reason: '소비도 안 됨');
+    });
+
+    test('mouth:down은 좌·우·윗변을 벽으로, 바닥을 개방한다 (천장 부착 ∩자)', () {
+      final s = LevelSession(_level(mouth: FlaskMouth.down));
+      final g = s.game.grid;
+      // rect (4,3,5,8): 좌 col4, 우 col8, 윗변 row3(뚜껑), 바닥 row10(개방).
+      for (var yy = 3; yy <= 10; yy++) {
+        expect(g.get(4, yy), Material.wall.index, reason: '좌벽');
+        expect(g.get(8, yy), Material.wall.index, reason: '우벽');
+      }
+      for (var xx = 4; xx <= 8; xx++) {
+        expect(g.get(xx, 3), Material.wall.index, reason: '윗변 뚜껑');
+      }
+      // 바닥(row10) 내부 열은 개방.
+      for (var xx = 5; xx <= 7; xx++) {
+        expect(g.get(xx, 10), Material.empty.index, reason: '바닥 개방 col$xx');
+      }
+    });
+
+    test('mouth:down 내부 물질은 카운트, 뚜껑(윗변)은 벽이라 미카운트', () {
+      final s = LevelSession(_level(mouth: FlaskMouth.down, goal: 10));
+      final g = s.game.grid;
+      g.set(6, 9, Material.water.index); // 내부(개방 바닥 근처)
+      s.flasks.update(g);
+      expect(s.flasks.flasks.single.count, 1, reason: '내부 동적 물질 카운트');
+      expect(g.get(6, 3), Material.wall.index, reason: '윗변은 뚜껑 벽');
+    });
+
+    test('mouth:down + 반전 중력: 상승 물질이 아래 입구로 진입해 카운트된다', () {
+      // 천장 부착 비커(∩자) + 중력 반전 기믹. 반전 시 입자는 위로 상승한다.
+      final level = Level(
+        meta: LevelMeta(id: 1, name: 't', chapter: 1, difficulty: 1),
+        background: 0xFF000000,
+        emitters: [
+          EmitterSpec(x: 5, y: 0, width: 3, material: Material.prima, rate: 1),
+        ],
+        flasks: [
+          FlaskSpec(x: 4, y: 3, w: 5, h: 8, goal: 3, mouth: FlaskMouth.down),
+        ],
+        gimmicks: const [GimmickSpec(type: GimmickType.gravityFlip)],
+        inkBudget: const {InkType.chalk: 0},
+      );
+      final s = LevelSession(level);
+      expect(s.hasGravityFlip, isTrue);
+      s.setGravityInverted(true);
+      // 아래 입구(바닥 row10) 밑에 물질을 놓는다 — 반전 중력에서 위로 상승해 입구로 진입.
+      for (var xx = 5; xx <= 7; xx++) {
+        s.game.grid.set(xx, 20, Material.prima.index);
+      }
+      _tickN(s, 40);
+      expect(s.flasks.flasks.single.count, 3,
+          reason: '상승 물질이 아래 입구로 진입·카운트');
+      expect(s.isCleared, isTrue);
     });
   });
 

@@ -2,96 +2,15 @@
   "level": 11,
   "name": "하소",
   "chapter": 1,
-  "solvable": true,
-  "min_ink": 86,
-  "effort": 56,
-  "rollouts": 2382,
-  "elapsed_ms": 1900611,
+  "solvable": false,
+  "min_ink": null,
+  "effort": null,
+  "rollouts": 2700,
+  "elapsed_ms": 1895346,
   "budget": {
-    "chalk": 300,
+    "chalk": 146,
     "heat": 0,
     "frost": 0
   },
-  "solutions": [
-    {
-      "ink": 86,
-      "ticks": 783,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 76,
-          "y0": 159,
-          "x1": 45,
-          "y1": 184
-        }
-      ],
-      "gravity_taps": [
-        467
-      ]
-    },
-    {
-      "ink": 88,
-      "ticks": 783,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 75,
-          "y0": 158,
-          "x1": 45,
-          "y1": 184
-        }
-      ],
-      "gravity_taps": [
-        467
-      ]
-    },
-    {
-      "ink": 90,
-      "ticks": 783,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 75,
-          "y0": 158,
-          "x1": 45,
-          "y1": 186
-        }
-      ],
-      "gravity_taps": [
-        467
-      ]
-    },
-    {
-      "ink": 90,
-      "ticks": 783,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 74,
-          "y0": 156,
-          "x1": 45,
-          "y1": 184
-        }
-      ],
-      "gravity_taps": [
-        467
-      ]
-    },
-    {
-      "ink": 92,
-      "ticks": 781,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 74,
-          "y0": 156,
-          "x1": 43,
-          "y1": 182
-        }
-      ],
-      "gravity_taps": [
-        467
-      ]
-    }
-  ]
+  "solutions": []
 }

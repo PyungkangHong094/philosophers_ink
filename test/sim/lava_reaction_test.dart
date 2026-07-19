@@ -59,7 +59,8 @@ void main() {
     });
 
     test('돌은 가열·냉각에 불변 (재용융 런칭 범위 제외, GDD 3.1 각주)', () {
-      final grid = Grid(1, 1);
+      final grid = Grid(1, 2);
+      grid.set(0, 1, Material.wall.index); // 바닥 — 돌이 소멸하지 않게
       grid.set(0, 0, Material.stone.index);
       final heat = TemperatureZone.rect(
         gridWidth: 1,
@@ -87,7 +88,8 @@ void main() {
 
   group('LAVA 냉각 → STONE (GDD 3.1)', () {
     test('빙결 존이 용암을 돌로 굳힌다', () {
-      final grid = Grid(1, 1);
+      final grid = Grid(1, 2);
+      grid.set(0, 1, Material.wall.index); // 바닥 — 용암이 흐르거나 소멸하지 않게
       grid.set(0, 0, Material.lava.index);
       final cool = TemperatureZone.rect(
         gridWidth: 1,
@@ -105,9 +107,10 @@ void main() {
     });
 
     test('서리 룬 선이 인접 용암을 돌로 굳힌다', () {
-      final grid = Grid(1, 2);
+      final grid = Grid(1, 3);
       grid.set(0, 0, Material.coldLine.index);
-      grid.set(0, 1, Material.lava.index); // 바닥이라 못 흐름
+      grid.set(0, 1, Material.lava.index);
+      grid.set(0, 2, Material.wall.index); // 바닥 — 용암이 소멸하지 않게
       final rules = Rules(DeterministicRng(1));
       for (var i = 0; i < 100; i++) {
         rules.step(grid);
@@ -135,12 +138,16 @@ void main() {
 
     test('한 반응당 정확히 두 셀만 변환 (다중 인접 물 중 첫 하나만)', () {
       // 용암을 물 4개가 둘러쌈. 고정 이웃 순서(상 먼저)로 위쪽 물만 반응.
-      final grid = Grid(3, 3);
-      grid.set(1, 1, Material.lava.index);
-      grid.set(1, 0, Material.water.index); // 상 (첫 후보)
-      grid.set(1, 2, Material.water.index); // 하
-      grid.set(0, 1, Material.water.index); // 좌
-      grid.set(2, 1, Material.water.index); // 우
+      // 중앙에 배치 + 바닥 벽으로 한 스텝 내 가장자리 소멸이 없게 한다(카운트 보존).
+      final grid = Grid(3, 5);
+      for (var x = 0; x < 3; x++) {
+        grid.set(x, 4, Material.wall.index); // 바닥
+      }
+      grid.set(1, 2, Material.lava.index);
+      grid.set(1, 1, Material.water.index); // 상 (첫 후보)
+      grid.set(1, 3, Material.water.index); // 하
+      grid.set(0, 2, Material.water.index); // 좌
+      grid.set(2, 2, Material.water.index); // 우
       final rules = Rules(DeterministicRng(1));
       // 반응만 관찰하기 위해 첫 스텝 직후 카운트 (이동으로 위치는 변할 수 있음).
       rules.step(grid);
@@ -154,7 +161,8 @@ void main() {
     test('반응 생성 STONE·STEAM이 이후 자연 거동한다 (돌 낙하, 증기 상승)', () {
       final grid = Grid(3, 12);
       for (var x = 0; x < 3; x++) {
-        grid.set(x, 11, Material.wall.index);
+        grid.set(x, 11, Material.wall.index); // 바닥
+        grid.set(x, 0, Material.wall.index); // 천장 — 증기가 상단으로 소멸하지 않게
       }
       grid.set(1, 5, Material.lava.index);
       grid.set(1, 6, Material.water.index);

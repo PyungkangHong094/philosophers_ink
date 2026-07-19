@@ -39,6 +39,7 @@ void _expectSameLevel(Level a, Level b) {
     expect(b.flasks[i].material, a.flasks[i].material);
     expect(b.flasks[i].state, a.flasks[i].state);
     expect(b.flasks[i].pure, a.flasks[i].pure);
+    expect(b.flasks[i].mouth, a.flasks[i].mouth);
   }
 
   expect(b.terrain.length, a.terrain.length);

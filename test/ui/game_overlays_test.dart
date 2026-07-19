@@ -38,9 +38,13 @@ void main() {
         onRetry: () {},
         onHome: () {},
         reducedMotion: true,
+        elapsedLabel: '01:23',
       )));
       await tester.pump(const Duration(milliseconds: 300));
 
+      // 소요 시간 1줄.
+      expect(find.text('소요 시간 01:23'), findsOneWidget);
+      expect(tester.getSize(find.text('소요 시간 01:23')).width, greaterThan(0));
       // CTA는 대문자 처리되므로 상향 매칭.
       expect(find.text('다음 레벨'.toUpperCase()), findsOneWidget);
       expect(find.text('다시 하기'.toUpperCase()), findsOneWidget);

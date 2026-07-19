@@ -29,6 +29,7 @@ import '../settings_controller.dart';
 import '../tokens.dart';
 import 'clear_overlay.dart';
 import 'exhaust_nudge.dart';
+import 'hud_format.dart';
 import 'ink_palette_bar.dart';
 import 'pause_overlay.dart';
 
@@ -100,6 +101,7 @@ class _PlayScreenState extends State<PlayScreen>
   bool _gaugeEmphasize = false;
   bool _sawFirstInput = false;
   bool _explainStars = false; // 이번 클리어가 첫 클리어라 별점 설명을 노출하는가.
+  int _clearTicks = 0; // 클리어 시점의 시뮬 틱(소요 시간 표시).
   Timer? _goalTimer;
   Timer? _guideTimer;
   Timer? _gaugeTimer;
@@ -258,8 +260,9 @@ class _PlayScreenState extends State<PlayScreen>
     _frameTick.value++;
 
     // 물질 앰비언트/파티클 그레인 — 활성 밀도로 짧은 그레인을 확률 발사 (샘플 스로틀, GDD 9.2).
-    // 연속 루프가 아니므로 드론이 되지 않는다.
-    if (++_ambientFrame % GrainPlay.sampleEveryFrames == 0) {
+    // 기본 OFF: 저역 웅웅거림("우웅") 실플레이 피드백 — 이벤트 SFX만 유지 (sound_tokens 참조).
+    if (GrainPlay.ambientLayersDefaultEnabled &&
+        ++_ambientFrame % GrainPlay.sampleEveryFrames == 0) {
       final d = _ambientDensities();
       widget.audio.setAmbience(
           particle: d.particle, water: d.water, steam: d.steam);
@@ -270,6 +273,7 @@ class _PlayScreenState extends State<PlayScreen>
       widget.audio.fail();
     } else if (_session.isCleared) {
       final stars = _session.result.stars;
+      _clearTicks = _session.game.tickCount; // 소요 시간 캡처(정지 후 값 고정).
       // 첫 클리어면 별점 설명을 1회 노출(이후 영속으로 숨김).
       _explainStars = widget.onboarding.markSeenOnce(OnboardingKey.firstClear);
       _outcome.value = _Outcome(_Phase.cleared, stars: stars);
@@ -483,54 +487,77 @@ class _PlayScreenState extends State<PlayScreen>
               ),
             ),
           ),
-          // 상단 우측: 일시정지 + 재시작 (+ 중력 반전).
+          // 상단 우측 스택: 버튼 행 → 초시계 → 잉크 팔레트(세로 컴팩트).
           Positioned(
             top: topPad + InkSpace.sm,
             right: InkSpace.sm,
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                if (_session.hasGravityFlip) ...[
-                  _HudIconButton(
-                    icon: Icons.swap_vert,
-                    label: '중력',
-                    onTap: () {
-                      if (_canDraw) {
-                        _session.toggleGravity();
-                        widget.settings.hapticSelection();
-                        _onGravityUsed();
-                      }
-                    },
-                  ),
-                  const SizedBox(width: InkSpace.sm),
-                ],
-                _HudIconButton(
-                  icon: Icons.refresh,
-                  label: '재시작',
-                  onTap: _retry,
+                Row(
+                  children: [
+                    if (_session.hasGravityFlip) ...[
+                      _HudIconButton(
+                        icon: Icons.swap_vert,
+                        label: '중력',
+                        onTap: () {
+                          if (_canDraw) {
+                            _session.toggleGravity();
+                            widget.settings.hapticSelection();
+                            _onGravityUsed();
+                          }
+                        },
+                      ),
+                      const SizedBox(width: InkSpace.sm),
+                    ],
+                    _HudIconButton(
+                      icon: Icons.refresh,
+                      label: '재시작',
+                      onTap: _retry,
+                    ),
+                    const SizedBox(width: InkSpace.sm),
+                    _HudIconButton(
+                      icon: Icons.pause,
+                      label: '일시정지',
+                      onTap: () => setState(() => _paused = true),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: InkSpace.sm),
-                _HudIconButton(
-                  icon: Icons.pause,
-                  label: '일시정지',
-                  onTap: () => setState(() => _paused = true),
+                const SizedBox(height: InkSpace.sm),
+                // 초시계 (시뮬 틱 기반 — 일시정지·백그라운드 자동 정지, 재시작 리셋).
+                ValueListenableBuilder<int>(
+                  valueListenable: _frameTick,
+                  builder: (context, _, child) => Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: InkSpace.sm, vertical: InkSpace.xs),
+                    decoration: BoxDecoration(
+                      color: InkColor.black2.withValues(alpha: 0.85),
+                      border: Border.all(color: InkColor.hairline),
+                      borderRadius: BorderRadius.circular(InkSpace.radius),
+                    ),
+                    child: Semantics(
+                      label: '경과 시간',
+                      child: Text(
+                        formatElapsed(_session.game.tickCount),
+                        style: InkText.caption.copyWith(
+                          color: InkColor.parchment,
+                          fontFeatures: InkText.tabular,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: InkSpace.sm),
+                InkPaletteBar(
+                  controller: _session.ink,
+                  vertical: true,
+                  emphasizeCount: _gaugeEmphasize,
+                  onSelect: () {
+                    widget.settings.hapticSelection();
+                    widget.audio.uiTap();
+                  },
                 ),
               ],
-            ),
-          ),
-          // 하단 잉크 팔레트 바.
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: bottomPad + InkSpace.md,
-            child: Center(
-              child: InkPaletteBar(
-                controller: _session.ink,
-                emphasizeCount: _gaugeEmphasize,
-                onSelect: () {
-                  widget.settings.hapticSelection();
-                  widget.audio.uiTap();
-                },
-              ),
             ),
           ),
           // 목표 배너 (상단, 3초/첫 터치 후 페이드). 대형 레벨 번호 아래.
@@ -589,6 +616,7 @@ class _PlayScreenState extends State<PlayScreen>
                   onRetry: _retry,
                   onHome: _exit,
                   reducedMotion: reduced,
+                  elapsedLabel: formatElapsed(_clearTicks),
                   onStarStamped: widget.settings.hapticLight,
                   // 첫 클리어에만 별점 설명 1줄 + 이번 판 사용량/임계.
                   starHelp: _explainStars ? OnboardingCopy.starExplain : null,

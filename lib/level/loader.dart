@@ -201,6 +201,16 @@ class _Parser {
       state = flaskStateFromKey(key);
       if (state == null) _err('$path.state', '알 수 없는 상태 "$key"');
     }
+    var mouth = FlaskMouth.up;
+    if (m['mouth'] != null) {
+      final key = _str(m['mouth'], '$path.mouth');
+      final parsed = flaskMouthFromKey(key);
+      if (parsed == null) {
+        _err('$path.mouth', '알 수 없는 mouth "$key" (up|down)');
+      } else {
+        mouth = parsed;
+      }
+    }
     return FlaskSpec(
       x: _int(m['x'], '$path.x'),
       y: _int(m['y'], '$path.y'),
@@ -210,6 +220,7 @@ class _Parser {
       material: mat,
       state: state,
       pure: _bool(m['pure'], '$path.pure'),
+      mouth: mouth,
     );
   }
 

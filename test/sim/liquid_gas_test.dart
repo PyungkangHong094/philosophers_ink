@@ -72,15 +72,18 @@ void main() {
   });
 
   group('기체(STEAM) 상승', () {
-    test('증기는 위로 올라 최상단에 모인다 (액체의 상하 미러)', () {
+    test('증기는 위로 올라 천장 아래에 모인다 (액체의 상하 미러)', () {
       final grid = Grid(5, 12);
+      for (var x = 0; x < 5; x++) {
+        grid.set(x, 0, Material.wall.index); // 천장 — 없으면 상단으로 소멸(배수 규칙)
+      }
       grid.set(2, 10, Material.steam.index); // 하단 근처
       final rules = Rules(DeterministicRng(1));
       for (var i = 0; i < 16; i++) {
         rules.step(grid);
       }
-      // 최상단 행에 증기가 도달, 원위치는 비었다.
-      expect(_columnsInRow(grid, 0, Material.steam), 1);
+      // 천장 바로 아래 행(1)에 증기가 도달, 원위치는 비었다.
+      expect(_columnsInRow(grid, 1, Material.steam), 1);
       expect(grid.get(2, 10), Material.empty.index);
       // 하단부에는 증기 없음.
       for (var y = 6; y < 12; y++) {

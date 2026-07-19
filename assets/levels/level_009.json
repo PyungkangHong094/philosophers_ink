@@ -1,10 +1,67 @@
 {
-  "meta": { "id": 9, "name": "왕복 운동", "chapter": 1, "difficulty": 4, "teaches": [], "tags": ["gravity_flip","two_flask"], "optimal_ink": null, "solutions_verified": 2, "hint_stroke": null },
+  "meta": {
+    "id": 9,
+    "name": "왕복 운동",
+    "chapter": 1,
+    "difficulty": 4,
+    "teaches": [],
+    "tags": [
+      "gravity_flip",
+      "two_flask"
+    ],
+    "optimal_ink": null,
+    "solutions_verified": 2,
+    "hint_stroke": null
+  },
   "background": "#1D1418",
-  "emitters": [ { "x": 42, "y": 210, "width": 12, "material": "PRIMA", "rate": 3, "total": null, "ash_ratio": 0 } ],
-  "flasks": [ { "x": 36, "y": 290, "w": 22, "h": 22, "goal": 22, "material": null, "state": null, "pure": false }, { "x": 84, "y": 6, "w": 24, "h": 26, "goal": 26, "material": null, "state": null, "pure": false } ],
+  "emitters": [
+    {
+      "x": 42,
+      "y": 210,
+      "width": 12,
+      "material": "PRIMA",
+      "rate": 3,
+      "total": null,
+      "ash_ratio": 0
+    }
+  ],
+  "flasks": [
+    {
+      "x": 36,
+      "y": 290,
+      "w": 22,
+      "h": 22,
+      "goal": 22,
+      "material": null,
+      "state": null,
+      "pure": false
+    },
+    {
+      "x": 84,
+      "y": 6,
+      "w": 24,
+      "h": 26,
+      "goal": 26,
+      "material": null,
+      "state": null,
+      "pure": false,
+      "mouth": "down"
+    }
+  ],
   "terrain": [],
-  "gimmicks": [ { "type": "gravity_flip", "params": {} } ],
-  "ink_budget": { "chalk": 182, "heat": 0, "frost": 0 },
-  "star_thresholds": { "two_star": 144, "three_star": 105 }
+  "gimmicks": [
+    {
+      "type": "gravity_flip",
+      "params": {}
+    }
+  ],
+  "ink_budget": {
+    "chalk": 182,
+    "heat": 0,
+    "frost": 0
+  },
+  "star_thresholds": {
+    "two_star": 144,
+    "three_star": 105
+  }
 }

@@ -4,9 +4,9 @@
   "chapter": 1,
   "solvable": true,
   "min_ink": 97,
-  "effort": 236,
+  "effort": 672,
   "rollouts": 2244,
-  "elapsed_ms": 1783713,
+  "elapsed_ms": 1673166,
   "budget": {
     "chalk": 182,
     "heat": 0,
@@ -15,7 +15,7 @@
   "solutions": [
     {
       "ink": 97,
-      "ticks": 560,
+      "ticks": 1255,
       "strokes": [
         {
           "ink": "chalk",
@@ -26,44 +26,12 @@
         }
       ],
       "gravity_taps": [
-        273
+        293
       ]
     },
     {
       "ink": 100,
-      "ticks": 548,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 53,
-          "y0": 84,
-          "x1": 85,
-          "y1": 52
-        }
-      ],
-      "gravity_taps": [
-        256
-      ]
-    },
-    {
-      "ink": 100,
-      "ticks": 569,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 53,
-          "y0": 84,
-          "x1": 85,
-          "y1": 52
-        }
-      ],
-      "gravity_taps": [
-        282
-      ]
-    },
-    {
-      "ink": 100,
-      "ticks": 568,
+      "ticks": 1203,
       "strokes": [
         {
           "ink": "chalk",
@@ -74,23 +42,55 @@
         }
       ],
       "gravity_taps": [
-        282
+        293
       ]
     },
     {
       "ink": 100,
-      "ticks": 559,
+      "ticks": 1257,
       "strokes": [
         {
           "ink": "chalk",
           "x0": 53,
           "y0": 84,
-          "x1": 83,
+          "x1": 85,
+          "y1": 52
+        }
+      ],
+      "gravity_taps": [
+        293
+      ]
+    },
+    {
+      "ink": 102,
+      "ticks": 522,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 52,
+          "y0": 86,
+          "x1": 84,
+          "y1": 53
+        }
+      ],
+      "gravity_taps": [
+        293
+      ]
+    },
+    {
+      "ink": 103,
+      "ticks": 1320,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 53,
+          "y0": 84,
+          "x1": 86,
           "y1": 51
         }
       ],
       "gravity_taps": [
-        271
+        293
       ]
     }
   ]

@@ -12,20 +12,21 @@
   },
   "background": "#E9E5DB",
   "emitters": [
-    { "x": 74, "y": 2, "width": 12, "material": "PRIMA", "rate": 2, "total": null, "ash_ratio": 0 },
-    { "x": 74, "y": 2, "width": 12, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0 }
+    { "x": 74, "y": 2, "width": 6, "material": "PRIMA", "rate": 4, "total": null, "ash_ratio": 0 },
+    { "x": 74, "y": 2, "width": 6, "material": "WATER", "rate": 4, "total": null, "ash_ratio": 0 }
   ],
   "flasks": [
-    { "x": 6, "y": 286, "w": 34, "h": 26, "goal": 40, "material": "WATER", "state": null, "pure": false },
-    { "x": 120, "y": 286, "w": 34, "h": 26, "goal": 40, "material": "PRIMA", "state": null, "pure": false }
+    { "x": 6, "y": 286, "w": 30, "h": 26, "goal": 40, "material": "WATER", "state": null, "pure": false },
+    { "x": 124, "y": 286, "w": 30, "h": 26, "goal": 40, "material": "PRIMA", "state": null, "pure": false }
   ],
   "terrain": [
-    { "x": 78, "y": 60, "w": 4, "h": 30, "material": "WALL" },
+    { "x": 40, "y": 120, "w": 4, "h": 194, "material": "WALL" },
+    { "x": 116, "y": 120, "w": 4, "h": 194, "material": "WALL" },
     { "x": 0, "y": 314, "w": 160, "h": 2, "material": "WALL" }
   ],
   "gimmicks": [
     { "type": "gravity_flip", "params": {} }
   ],
-  "ink_budget": { "chalk": 80, "heat": 0, "frost": 42 },
-  "star_thresholds": { "two_star": 108, "three_star": 94 }
+  "ink_budget": { "chalk": 400, "heat": 0, "frost": 150 },
+  "star_thresholds": null
 }

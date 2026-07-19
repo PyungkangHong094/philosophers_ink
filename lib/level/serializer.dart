@@ -68,6 +68,7 @@ Map<String, dynamic> levelToMap(Level level) {
           'material': f.material == null ? null : materialName(f.material!),
           'state': f.state?.key,
           'pure': f.pure,
+          'mouth': f.mouth.key,
         },
     ],
     'terrain': [

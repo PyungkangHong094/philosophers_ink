@@ -3,67 +3,117 @@
   "name": "삼중주",
   "chapter": 1,
   "solvable": true,
-  "min_ink": 0,
-  "effort": 1,
-  "rollouts": 25,
-  "elapsed_ms": 81190,
+  "min_ink": 336,
+  "effort": 71,
+  "rollouts": 2239,
+  "elapsed_ms": 2098364,
   "budget": {
-    "chalk": 340,
+    "chalk": 678,
     "heat": 0,
     "frost": 0
   },
   "solutions": [
     {
-      "ink": 0,
-      "ticks": 784,
-      "strokes": [],
-      "gravity_taps": []
-    },
-    {
-      "ink": 340,
-      "ticks": 822,
+      "ink": 336,
+      "ticks": 1355,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 76,
+          "x0": 73,
+          "y0": 34,
+          "x1": 15,
+          "y1": 97
+        },
+        {
+          "ink": "chalk",
+          "x0": 85,
           "y0": 44,
-          "x1": 40,
-          "y1": 292
+          "x1": 129,
+          "y1": 94
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 337,
+      "ticks": 1309,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 73,
+          "y0": 34,
+          "x1": 15,
+          "y1": 97
         },
         {
           "ink": "chalk",
-          "x0": 96,
-          "y0": 124,
-          "x1": 88,
-          "y1": 280
+          "x0": 85,
+          "y0": 44,
+          "x1": 130,
+          "y1": 94
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 339,
+      "ticks": 1281,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 73,
+          "y0": 34,
+          "x1": 14,
+          "y1": 98
         },
         {
           "ink": "chalk",
-          "x0": 64,
-          "y0": 32,
-          "x1": 132,
-          "y1": 319
+          "x0": 85,
+          "y0": 44,
+          "x1": 129,
+          "y1": 94
         }
       ],
       "gravity_taps": []
     },
     {
       "ink": 340,
-      "ticks": 632,
+      "ticks": 1270,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 76,
-          "y0": 52,
-          "x1": 16,
-          "y1": 160
+          "x0": 73,
+          "y0": 32,
+          "x1": 15,
+          "y1": 97
         },
         {
           "ink": "chalk",
-          "x0": 76,
-          "y0": 52,
-          "x1": 148,
-          "y1": 160
+          "x0": 85,
+          "y0": 44,
+          "x1": 129,
+          "y1": 94
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 342,
+      "ticks": 1366,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 73,
+          "y0": 34,
+          "x1": 13,
+          "y1": 99
+        },
+        {
+          "ink": "chalk",
+          "x0": 85,
+          "y0": 44,
+          "x1": 129,
+          "y1": 94
         }
       ],
       "gravity_taps": []

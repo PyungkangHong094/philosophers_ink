@@ -5,29 +5,103 @@
     "chapter": 4,
     "difficulty": 9,
     "teaches": [],
-    "tags": ["lava", "stone", "steam", "water", "gravity_flip", "reaction"],
+    "tags": [
+      "lava",
+      "stone",
+      "steam",
+      "water",
+      "gravity_flip",
+      "reaction"
+    ],
     "optimal_ink": null,
     "solutions_verified": 2,
     "hint_stroke": null
   },
   "background": "#7A1B29",
   "emitters": [
-    { "x": 74, "y": 2, "width": 12, "material": "WATER", "rate": 2, "total": null, "ash_ratio": 0 }
+    {
+      "x": 74,
+      "y": 2,
+      "width": 12,
+      "material": "WATER",
+      "rate": 2,
+      "total": null,
+      "ash_ratio": 0
+    }
   ],
   "flasks": [
-    { "x": 60, "y": 6, "w": 40, "h": 18, "goal": 24, "material": "STONE", "state": null, "pure": false },
-    { "x": 56, "y": 288, "w": 48, "h": 24, "goal": 24, "material": "STEAM", "state": null, "pure": false }
+    {
+      "x": 60,
+      "y": 6,
+      "w": 40,
+      "h": 18,
+      "goal": 24,
+      "material": "STONE",
+      "state": null,
+      "pure": false,
+      "mouth": "down"
+    },
+    {
+      "x": 56,
+      "y": 288,
+      "w": 48,
+      "h": 24,
+      "goal": 24,
+      "material": "STEAM",
+      "state": null,
+      "pure": false
+    }
   ],
   "terrain": [
-    { "x": 0, "y": 314, "w": 160, "h": 2, "material": "WALL" },
-    { "x": 40, "y": 182, "w": 2, "h": 30, "material": "WALL" },
-    { "x": 118, "y": 182, "w": 2, "h": 30, "material": "WALL" },
-    { "x": 40, "y": 210, "w": 80, "h": 2, "material": "WALL" },
-    { "x": 42, "y": 188, "w": 76, "h": 22, "material": "LAVA" }
+    {
+      "x": 0,
+      "y": 314,
+      "w": 160,
+      "h": 2,
+      "material": "WALL"
+    },
+    {
+      "x": 40,
+      "y": 182,
+      "w": 2,
+      "h": 30,
+      "material": "WALL"
+    },
+    {
+      "x": 118,
+      "y": 182,
+      "w": 2,
+      "h": 30,
+      "material": "WALL"
+    },
+    {
+      "x": 40,
+      "y": 210,
+      "w": 80,
+      "h": 2,
+      "material": "WALL"
+    },
+    {
+      "x": 42,
+      "y": 188,
+      "w": 76,
+      "h": 22,
+      "material": "LAVA"
+    }
   ],
   "gimmicks": [
-    { "type": "gravity_flip", "params": {} }
+    {
+      "type": "gravity_flip",
+      "params": {}
+    }
   ],
-  "ink_budget": { "chalk": 27, "heat": 0, "frost": 0 },
-  "star_thresholds": { "two_star": 25, "three_star": 23 }
+  "ink_budget": {
+    "chalk": 27,
+    "heat": 0,
+    "frost": 0
+  },
+  "star_thresholds": {
+    "two_star": 25,
+    "three_star": 23
+  }
 }

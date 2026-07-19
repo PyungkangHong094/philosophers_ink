@@ -27,6 +27,21 @@ FlaskState? flaskStateFromKey(String key) => switch (key) {
       _ => null,
     };
 
+/// 플라스크 개방부 방향 (GDD 5.1 입구 규칙). up=위 개방(바닥 부착, 기본),
+/// down=아래 개방(천장 부착 — 중력 반전 레벨에서 상승 물질을 받는다, 비주얼 ∩자).
+enum FlaskMouth { up, down }
+
+extension FlaskMouthX on FlaskMouth {
+  String get key => this == FlaskMouth.up ? 'up' : 'down';
+}
+
+/// 문자열 → 개방부 방향. 알 수 없으면 null.
+FlaskMouth? flaskMouthFromKey(String key) => switch (key) {
+      'up' => FlaskMouth.up,
+      'down' => FlaskMouth.down,
+      _ => null,
+    };
+
 /// 물질 카테고리 → 착수 상. 정적(none/staticSolid)은 착수 상이 아니라 null.
 /// 입자=고체, 액체=액체, 기체=기체 (GDD 3.3 카테고리를 상으로 사상).
 FlaskState? flaskStateForCategory(MaterialCategory c) => switch (c) {
@@ -136,6 +151,9 @@ class FlaskSpec {
   /// 순수(❗) — ASH 1개라도 혼입 시 실패 (GDD 5.1).
   final bool pure;
 
+  /// 개방부 방향 (GDD 5.1). up=위 개방(기본), down=아래 개방(천장 부착). 벽 3면은 물리 벽.
+  final FlaskMouth mouth;
+
   const FlaskSpec({
     required this.x,
     required this.y,
@@ -145,6 +163,7 @@ class FlaskSpec {
     this.material,
     this.state,
     this.pure = false,
+    this.mouth = FlaskMouth.up,
   });
 }
 

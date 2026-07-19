@@ -12,6 +12,7 @@ import 'package:philosophers_ink/meta/level_catalog.dart';
 import 'package:philosophers_ink/meta/onboarding.dart';
 import 'package:philosophers_ink/meta/progress.dart';
 import 'package:philosophers_ink/ui/app.dart';
+import 'package:philosophers_ink/ui/game/ink_palette_bar.dart';
 import 'package:philosophers_ink/ui/game/play_screen.dart';
 import 'package:philosophers_ink/ui/screens/chapter_select_screen.dart';
 import 'package:philosophers_ink/ui/screens/level_select_screen.dart';
@@ -146,8 +147,8 @@ void main() {
         onboarding: OnboardingState(),
       ),
     );
-    // 잉크 팔레트 바의 석필 라벨 + 대형 레벨 번호.
-    expect(find.text('석필'), findsOneWidget);
+    // 잉크 팔레트(우측 상단 컴팩트) + 대형 레벨 번호.
+    expect(find.byType(InkPaletteBar), findsOneWidget);
     expect(find.text('1'), findsWidgets);
     // 온보딩 타이머 정리 — 위젯 제거로 dispose(타이머 취소).
     await tester.pumpWidget(const SizedBox.shrink());
@@ -168,8 +169,9 @@ void main() {
       ),
     );
     final screen = tester.getSize(find.byType(PlayScreen));
-    final label = tester.getSize(find.text('석필'));
-    expect(label.width, greaterThan(0), reason: 'HUD 라벨이 실제 크기를 가져야 한다');
+    final palette = tester.getSize(find.byType(InkPaletteBar));
+    expect(palette.width, greaterThan(0), reason: 'HUD 팔레트가 실제 크기를 가져야 한다');
+    expect(palette.height, greaterThan(0));
     final stack = tester.renderObject<RenderBox>(
       find
           .descendant(of: find.byType(PlayScreen), matching: find.byType(Stack))

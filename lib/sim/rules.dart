@@ -273,7 +273,7 @@ class Rules {
   /// [dy]=_gravitySign이라 중력 반전 시 이동 방향 전체가 미러링된다(GDD 3.3·6).
   void _updateParticle(Grid grid, int x, int y, int id) {
     final dy = _gravitySign;
-    if (_tryMove(grid, x, y, x, y + dy)) return;
+    if (_tryFallOrDespawn(grid, x, y, dy)) return;
     final firstDx = rng.nextBool() ? -1 : 1;
     if (_tryMoveDiagonal(grid, x, y, firstDx, dy)) return;
     if (_tryMoveDiagonal(grid, x, y, -firstDx, dy)) return;
@@ -291,7 +291,7 @@ class Rules {
   /// 액체: 중력 방향 → 그 대각 → 수평 확산(dispersion까지).
   void _updateLiquid(Grid grid, int x, int y) {
     final dy = _gravitySign;
-    if (_tryMove(grid, x, y, x, y + dy)) return;
+    if (_tryFallOrDespawn(grid, x, y, dy)) return;
     final firstDx = rng.nextBool() ? -1 : 1;
     if (_tryMoveDiagonal(grid, x, y, firstDx, dy)) return;
     if (_tryMoveDiagonal(grid, x, y, -firstDx, dy)) return;
@@ -299,9 +299,11 @@ class Rules {
   }
 
   /// 기체: 중력 반대 방향 → 그 대각 → 수평 확산 (액체의 상하 미러, GDD 3.3).
+  /// 기체의 이동 방향(중력 반대)이 곧 기체의 "탈출 방향"이라, 기본 중력에선 상단
+  /// 가장자리에서 소멸한다(증기가 하늘로 새는 그림, GDD 정합).
   void _updateGas(Grid grid, int x, int y) {
     final dy = -_gravitySign; // 기체는 중력 반대로 뜬다 → 반전 시 가라앉는다
-    if (_tryMove(grid, x, y, x, y + dy)) return;
+    if (_tryFallOrDespawn(grid, x, y, dy)) return;
     final firstDx = rng.nextBool() ? -1 : 1;
     if (_tryMoveDiagonal(grid, x, y, firstDx, dy)) return;
     if (_tryMoveDiagonal(grid, x, y, -firstDx, dy)) return;
@@ -347,6 +349,19 @@ class Rules {
   /// 범위 내이고 EMPTY인 셀인가. 경계 밖은 (벽처럼) 비어 있지 않은 것으로 본다.
   bool _isEmptyCell(Grid grid, int x, int y) =>
       grid.inBounds(x, y) && grid.get(x, y) == Material.empty.index;
+
+  /// 중력 방향 수직 이동 (x 고정, y+dy). 목적지가 **중력 방향 가장자리 밖**이면 셀을
+  /// 소멸(EMPTY)시킨다 — 화면 밖으로 새는 잉여 물질의 물리 구현(GDD 2·5.2). 그리드
+  /// 바닥에 무한 퇴적돼 산이 되는 문제를 해소한다. 좌우(수평) 탈출은 대상이 아니다
+  /// (여긴 x가 고정이라 y만 경계를 벗어난다). RNG 미소비 = 결정적. 이동/소멸 시 true.
+  bool _tryFallOrDespawn(Grid grid, int x, int y, int dy) {
+    final ny = y + dy;
+    if (ny < 0 || ny >= grid.height) {
+      grid.set(x, y, Material.empty.index); // 중력 방향 가장자리 밖 → 소멸
+      return true;
+    }
+    return _tryMove(grid, x, y, x, ny);
+  }
 
   /// 목표 셀이 범위 내이고 EMPTY면 이동 + 목적지 스탬프. 성공 시 true.
   bool _tryMove(Grid grid, int fromX, int fromY, int toX, int toY) {

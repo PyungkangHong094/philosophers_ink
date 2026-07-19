@@ -35,7 +35,8 @@
       "goal": 40,
       "material": null,
       "state": null,
-      "pure": false
+      "pure": false,
+      "mouth": "down"
     }
   ],
   "terrain": [

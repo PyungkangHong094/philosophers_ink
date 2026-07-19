@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:philosophers_ink/level/level_exception.dart';
 import 'package:philosophers_ink/level/level_model.dart';
 import 'package:philosophers_ink/level/loader.dart';
+import 'package:philosophers_ink/level/serializer.dart';
 
 /// 챕터 2, 상태 플라스크를 쓰는 유효 레벨 맵(변형해 불량 케이스 생성).
 Map<String, dynamic> validLevelMap() => {
@@ -55,6 +56,21 @@ void main() {
       m['background'] = '#123456';
       final level = loadLevelFromJson(jsonOf(m));
       expect(level.background, 0xFF123456);
+    });
+
+    test('mouth 미지정이면 기본 up', () {
+      final level = loadLevelFromJson(jsonOf(validLevelMap()));
+      expect(level.flasks.single.mouth, FlaskMouth.up);
+    });
+
+    test('mouth:down이 파싱되고 왕복 보존된다', () {
+      final m = validLevelMap();
+      m['flasks'][0]['mouth'] = 'down';
+      final level = loadLevelFromJson(jsonOf(m));
+      expect(level.flasks.single.mouth, FlaskMouth.down);
+      // 직렬화 왕복 무손실.
+      final round = loadLevelFromJson(serializeLevel(level));
+      expect(round.flasks.single.mouth, FlaskMouth.down);
     });
   });
 
@@ -159,6 +175,16 @@ void main() {
         () => loadLevelFromJson(jsonOf(m)),
         throwsA(predicate((e) =>
             e is LevelException && e.problems.any((p) => p.contains('순수')))),
+      );
+    });
+
+    test('알 수 없는 mouth 값이면 예외', () {
+      final m = validLevelMap();
+      m['flasks'][0]['mouth'] = 'sideways';
+      expect(
+        () => loadLevelFromJson(jsonOf(m)),
+        throwsA(predicate((e) =>
+            e is LevelException && e.problems.any((p) => p.contains('mouth')))),
       );
     });
 

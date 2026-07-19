@@ -135,6 +135,11 @@ abstract final class GrainKit {
 
 /// 상전이·그레인·앰비언트 재생 파라미터.
 abstract final class GrainPlay {
+  /// 지속 앰비언트 층(파티클 그레인·물/증기 워블) 마스터 스위치.
+  /// **기본 OFF** — 저역 웅웅거림("우웅")이 거슬린다는 실플레이 피드백(2026-07-19).
+  /// 이벤트 SFX(획·착수·상전이·스팅어)와는 무관하며, 설정 토글로만 켠다.
+  static const bool ambientLayersDefaultEnabled = false;
+
   // 상전이 SFX 볼륨 + 위치·밀도 스로틀.
   static const double crackleVol = 0.5;
   static const double puffVol = 0.45;

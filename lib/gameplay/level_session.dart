@@ -56,7 +56,7 @@ class LevelSession {
         ),
         flasks = FlaskSystem(level.flasks, onSettle: onSettle),
         ink = InkController(_budgetFromLevel(level.inkBudget)) {
-    _stampTerrain();
+    _stampStaticGeometry();
   }
 
   /// 이 레벨에 중력 반전 버튼 기믹이 있는가 (게임플레이가 버튼 노출 판단).
@@ -103,7 +103,14 @@ class LevelSession {
         frost: m[InkType.frost] ?? 0,
       );
 
-  /// 정적 지형을 그리드에 스탬프. 방출·이동은 이 셀들을 피한다(벽).
+  /// 정적 지형 + 플라스크 비커 벽을 그리드에 스탬프한다. 방출·이동은 이 셀들을 피한다(벽).
+  /// 지형 먼저, 비커 벽을 나중에 찍어 겹칠 때 비커 무결성이 이긴다.
+  void _stampStaticGeometry() {
+    _stampTerrain();
+    _stampFlaskWalls();
+  }
+
+  /// 정적 지형을 그리드에 스탬프.
   void _stampTerrain() {
     for (final t in level.terrain) {
       for (var yy = t.y; yy < t.y + t.h; yy++) {
@@ -112,6 +119,31 @@ class LevelSession {
             game.grid.set(xx, yy, t.material.index);
           }
         }
+      }
+    }
+  }
+
+  /// 각 플라스크를 개방형 비커로 만든다 (GDD 5.1 입구 규칙): rect의 벽 3면을 WALL로 심어
+  /// 물리 벽으로 세우고, 개방부 방향([FlaskMouth])만 열어 그쪽으로만 물질을 받는다. 좌·우
+  /// 벽은 방향 무관하게 전체 높이로 세우고, 개방부 반대편 가로 변(mouth up이면 바닥, down이면
+  /// 윗변)에 뚜껑 벽을 놓는다. 옆·벽면을 스치는 물질은 막혀 흡수되지 않는다. 벽 셀
+  /// (staticSolid)은 판정에서 제외되므로(익스플로잇 각주) 카운트 영역은 자연히 내부로 좁혀진다.
+  void _stampFlaskWalls() {
+    final wall = Material.wall.index;
+    for (final f in level.flasks) {
+      final left = f.x;
+      final right = f.x + f.w - 1;
+      final top = f.y;
+      final bottom = f.y + f.h - 1;
+      // 좌·우 벽 (전체 높이, 방향 무관).
+      for (var yy = top; yy <= bottom; yy++) {
+        if (game.grid.inBounds(left, yy)) game.grid.set(left, yy, wall);
+        if (game.grid.inBounds(right, yy)) game.grid.set(right, yy, wall);
+      }
+      // 개방부 반대편 뚜껑 벽: mouth up → 바닥, mouth down → 윗변.
+      final capRow = f.mouth == FlaskMouth.down ? top : bottom;
+      for (var xx = left; xx <= right; xx++) {
+        if (game.grid.inBounds(xx, capRow)) game.grid.set(xx, capRow, wall);
       }
     }
   }
@@ -142,7 +174,7 @@ class LevelSession {
     flasks.reset();
     ink.reset();
     gravityLog.clear();
-    _stampTerrain();
+    _stampStaticGeometry();
   }
 
   /// 세션이 소유한 notifier를 정리한다. 레벨 화면(play_screen)이 세션을 폐기할 때

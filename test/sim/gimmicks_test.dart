@@ -13,7 +13,7 @@ int _count(Grid grid, Material m) {
   return n;
 }
 
-/// 바닥 한 줄을 벽으로 채운다 (입자가 대각으로 새지 않도록).
+/// 지정한 행 한 줄을 벽으로 채운다 (바닥/천장 — 가장자리 소멸을 막는 경계).
 void _floor(Grid grid, int row) {
   for (var x = 0; x < grid.width; x++) {
     grid.set(x, row, Material.wall.index);
@@ -48,7 +48,9 @@ void main() {
     });
 
     test('fromMaterial=null이면 모든 이동 물질을 변환, 정적·EMPTY는 건드리지 않는다', () {
-      final grid = Grid(4, 1);
+      // 바닥을 벽으로 막아 변환 결과가 가장자리로 소멸하지 않게 한다(배수 규칙).
+      final grid = Grid(4, 2);
+      _floor(grid, 1);
       grid.set(0, 0, Material.prima.index); // 입자
       grid.set(1, 0, Material.steam.index); // 기체
       grid.set(2, 0, Material.wall.index); // 정적 → 보존
@@ -98,47 +100,52 @@ void main() {
 
   group('중력 반전 (GDD 3.3·6)', () {
     test('반전 시 입자는 위로 떠오른다', () {
+      // 천장을 벽으로 막아 떠오른 입자가 가장자리로 소멸하지 않게 한다(배수 규칙).
       final grid = Grid(3, 9);
+      _floor(grid, 0); // 천장
       grid.set(1, 4, Material.prima.index);
       final rules = Rules(DeterministicRng(1))..setGravityInverted(true);
       expect(rules.gravityInverted, isTrue);
       for (var i = 0; i < 12; i++) {
         rules.step(grid);
       }
-      // 최상단 행에 도달, 원위치는 비었다.
-      expect(grid.get(1, 0), Material.prima.index);
+      // 천장 바로 아래 행(1)에 붙는다, 원위치는 비었다.
+      expect(grid.get(1, 1), Material.prima.index);
       expect(grid.get(1, 4), Material.empty.index);
     });
 
     test('반전 시 기체는 가라앉는다', () {
       final grid = Grid(3, 9);
+      _floor(grid, 8); // 바닥(반전 시 기체가 향하는 쪽) 막기
       grid.set(1, 4, Material.steam.index);
       final rules = Rules(DeterministicRng(1))..setGravityInverted(true);
       for (var i = 0; i < 12; i++) {
         rules.step(grid);
       }
-      // 최하단 행으로 가라앉는다(바닥에서 수평 확산하므로 열은 특정하지 않는다).
-      var steamInBottomRow = 0;
+      // 바닥 바로 위 행(7)으로 가라앉는다(수평 확산하므로 열은 특정하지 않는다).
+      var steamInRow = 0;
       for (var x = 0; x < 3; x++) {
-        if (grid.get(x, 8) == Material.steam.index) steamInBottomRow++;
+        if (grid.get(x, 7) == Material.steam.index) steamInRow++;
       }
-      expect(steamInBottomRow, 1);
+      expect(steamInRow, 1);
       expect(grid.get(1, 4), Material.empty.index);
     });
 
     test('반전 해제 시 정상 중력으로 복귀한다 (입자는 다시 낙하)', () {
       final grid = Grid(3, 9);
+      _floor(grid, 0); // 천장
+      _floor(grid, 8); // 바닥
       grid.set(1, 4, Material.prima.index);
       final rules = Rules(DeterministicRng(1))..setGravityInverted(true);
       for (var i = 0; i < 12; i++) {
         rules.step(grid);
       }
-      expect(grid.get(1, 0), Material.prima.index); // 위로 붙음
+      expect(grid.get(1, 1), Material.prima.index); // 천장 아래 붙음
       rules.setGravityInverted(false);
       for (var i = 0; i < 12; i++) {
         rules.step(grid);
       }
-      expect(grid.get(1, 8), Material.prima.index); // 다시 바닥
+      expect(grid.get(1, 7), Material.prima.index); // 다시 바닥 위
       expect(rules.gravityInverted, isFalse);
     });
 
@@ -239,8 +246,9 @@ void main() {
     });
 
     test('빙결 존이 존 안의 WATER를 얼려 ICE로 만든다', () {
-      // 1x1: 물이 흘러나가지 못하게 가둬 상전이만 관찰한다.
-      final grid = Grid(1, 1);
+      // 바닥을 막아 물이 흘러나가거나 소멸하지 않게 가둬 상전이만 관찰한다.
+      final grid = Grid(1, 2);
+      grid.set(0, 1, Material.wall.index); // 바닥
       grid.set(0, 0, Material.water.index);
       final zone = TemperatureZone.rect(
         gridWidth: 1,
@@ -258,9 +266,11 @@ void main() {
     });
 
     test('존 밖의 물질은 영향받지 않는다', () {
-      final grid = Grid(5, 1);
+      final grid = Grid(5, 2);
+      _floor(grid, 1); // 바닥 — ICE가 소멸하지 않게
+      grid.set(3, 0, Material.wall.index); // 존 밖 ICE가 미끄러져 존으로 들어가지 않게 고정
       grid.set(0, 0, Material.ice.index); // 존 안
-      grid.set(4, 0, Material.ice.index); // 존 밖
+      grid.set(4, 0, Material.ice.index); // 존 밖 (벽·경계에 갇혀 이동 불가)
       final zone = TemperatureZone.rect(
         gridWidth: 5,
         x: 0,
@@ -295,7 +305,8 @@ void main() {
     });
 
     test('probability 재정의가 전이 속도를 바꾼다 (0이면 전이 없음)', () {
-      final grid = Grid(1, 1);
+      final grid = Grid(1, 2);
+      grid.set(0, 1, Material.wall.index); // 바닥 — ICE가 소멸하지 않게
       grid.set(0, 0, Material.ice.index);
       final zone = TemperatureZone.rect(
         gridWidth: 1,
@@ -327,10 +338,13 @@ void main() {
     });
 
     test('ASH는 가열·냉각에 불변 (오염원)', () {
+      // ASH를 벽으로 고정(미끄러짐·소멸 방지)하고 위 화염·아래 서리로 가열/냉각한다.
       final grid = Grid(3, 3);
-      grid.set(1, 1, Material.ash.index);
       grid.set(1, 0, Material.heatLine.index);
+      grid.set(1, 1, Material.ash.index);
       grid.set(1, 2, Material.coldLine.index);
+      grid.set(0, 2, Material.wall.index); // 대각 미끄러짐 차단
+      grid.set(2, 2, Material.wall.index);
       final rules = Rules(DeterministicRng(1));
       for (var i = 0; i < 50; i++) {
         rules.step(grid);

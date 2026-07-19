@@ -37,6 +37,9 @@ class ClearOverlay extends StatefulWidget {
   /// 이번 판 사용량/임계 1줄 (별점 설명과 함께만 노출).
   final String? usageLine;
 
+  /// 소요 시간 "MM:SS" (초시계 값). null이면 미표시.
+  final String? elapsedLabel;
+
   const ClearOverlay({
     super.key,
     required this.eyebrow,
@@ -50,6 +53,7 @@ class ClearOverlay extends StatefulWidget {
     this.onStarStamped,
     this.starHelp,
     this.usageLine,
+    this.elapsedLabel,
   });
 
   @override
@@ -143,6 +147,12 @@ class _ClearOverlayState extends State<ClearOverlay>
                   Text(widget.usageLine!,
                       style: InkText.caption.copyWith(color: InkColor.gold)),
                 ],
+              ],
+              if (widget.elapsedLabel != null) ...[
+                const SizedBox(height: InkSpace.md),
+                Text('소요 시간 ${widget.elapsedLabel}',
+                    style: InkText.caption.copyWith(
+                        fontFeatures: InkText.tabular)),
               ],
               const SizedBox(height: InkSpace.xl),
               SizedBox(
