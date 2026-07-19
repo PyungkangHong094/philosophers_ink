@@ -53,13 +53,14 @@ class PauseOverlay extends StatelessWidget {
                     style: InkText.caption.copyWith(color: InkColor.gold)),
               ],
               const SizedBox(height: InkSpace.xl),
+              // 버튼은 전부 평이한 한국어 (픽션은 타이틀·아이브로우에만).
               SizedBox(
                   width: 220,
                   child: InkGhostButton(label: '계속', onTap: onResume)),
               const SizedBox(height: InkSpace.sm),
               SizedBox(
                   width: 220,
-                  child: InkGhostButton(label: '재시작', onTap: onRetry)),
+                  child: InkGhostButton(label: '다시 하기', onTap: onRetry)),
               const SizedBox(height: InkSpace.sm),
               SizedBox(
                   width: 220,
@@ -69,7 +70,7 @@ class PauseOverlay extends StatelessWidget {
               const SizedBox(height: InkSpace.sm),
               SizedBox(
                   width: 220,
-                  child: InkGhostButton(label: '나가기', onTap: onExit)),
+                  child: InkGhostButton(label: '홈으로', onTap: onExit)),
             ],
           ),
         ),

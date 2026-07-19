@@ -6,6 +6,7 @@
 library;
 
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -15,6 +16,7 @@ import '../../audio/sound_tokens.dart';
 import '../../core/constants.dart';
 import '../../core/game_loop.dart';
 import '../../gameplay/level_session.dart';
+import '../../level/level_model.dart' show FlaskState;
 import '../../meta/chapters.dart';
 import '../../meta/level_catalog.dart';
 import '../../meta/onboarding.dart';
@@ -544,6 +546,7 @@ class _PlayScreenState extends State<PlayScreen>
                   inkGaugeLabel: _inkGaugeLabel(),
                   onNext: widget.onNext,
                   onRetry: _retry,
+                  onHome: _exit,
                   reducedMotion: reduced,
                   onStarStamped: widget.settings.hapticLight,
                   // 첫 클리어에만 별점 설명 1줄 + 이번 판 사용량/임계.
@@ -553,7 +556,8 @@ class _PlayScreenState extends State<PlayScreen>
                 );
               }
               if (o.phase == _Phase.failed) {
-                return FailOverlay(eyebrow: _eyebrow, onRetry: _retry);
+                return FailOverlay(
+                    eyebrow: _eyebrow, onRetry: _retry, onHome: _exit);
               }
               return const SizedBox.shrink();
             },
@@ -651,35 +655,105 @@ class _FlaskLabelCache {
   }
 }
 
-/// 플라스크 목표를 윤곽 + count/goal 로 그린다 (정식 HUD 버전, 셸 토큰).
+/// 목표 용기를 **윗면 개방 U자 비커 실루엣**으로 그린다 (실플레이 피드백 — "여기에 받아라"의
+/// 수집감). 상단 변 제거 + 좌우 립(주둥이) + 둥근 바닥 + 내부 수위선(채움 진행도). 카운트 숫자
+/// 유지, 조건(물질 점·상태 글자·순수 !)은 립 위. 색은 InkColor 토큰, 두께는 [_wall].
 class _FlaskHudPainter extends CustomPainter {
   final LevelSession session;
   final _FlaskLabelCache labels;
   _FlaskHudPainter(this.session, this.labels);
 
+  static const double _wall = 2.0; // 벽 두께 (단일 소스)
+
+  static String _stateChar(FlaskState s) => switch (s) {
+        FlaskState.solid => '고',
+        FlaskState.liquid => '액',
+        FlaskState.gas => '기',
+      };
+
   @override
   void paint(Canvas canvas, Size size) {
     final vp = GridViewport.fit(
         size, SimConstants.gridWidth, SimConstants.gridHeight);
-    final border = Paint()
+    final wall = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.5
+      ..strokeWidth = _wall
+      ..strokeJoin = StrokeJoin.round
       ..color = InkColor.gold;
 
     final flasks = session.flasks.flasks;
     for (var i = 0; i < flasks.length; i++) {
       final flask = flasks[i];
       final s = flask.spec;
-      final rect = Rect.fromLTWH(
-        vp.offsetX + s.x * vp.scale,
-        vp.offsetY + s.y * vp.scale,
-        s.w * vp.scale.toDouble(),
-        s.h * vp.scale.toDouble(),
-      );
-      canvas.drawRect(rect, border);
-      final label =
-          flask.isFailed ? '✕' : '${flask.count}/${s.goal}${s.pure ? '!' : ''}';
-      labels.painterFor(i, label).paint(canvas, Offset(rect.left, rect.top - 16));
+      final l = vp.offsetX + s.x * vp.scale;
+      final t = vp.offsetY + s.y * vp.scale;
+      final w = s.w * vp.scale.toDouble();
+      final h = s.h * vp.scale.toDouble();
+      final r = l + w;
+      final b = t + h;
+
+      final flare = (w * 0.12).clamp(2.0, 8.0);
+      final lipDrop = (h * 0.12).clamp(3.0, 12.0);
+      final cr = (math.min(w, h) * 0.22).clamp(2.0, 14.0);
+      final innerTop = t + lipDrop;
+
+      // 개방형 U 경로 (상단 변 없음, 좌우 립 벌어짐, 둥근 바닥).
+      final beaker = Path()
+        ..moveTo(l - flare, t)
+        ..lineTo(l, innerTop)
+        ..lineTo(l, b - cr)
+        ..quadraticBezierTo(l, b, l + cr, b)
+        ..lineTo(r - cr, b)
+        ..quadraticBezierTo(r, b, r, b - cr)
+        ..lineTo(r, innerTop)
+        ..lineTo(r + flare, t);
+
+      // 내부 수위(채움 진행도) — 비커 모양으로 클립해 둥근 바닥까지 채운다.
+      final progress =
+          s.goal > 0 ? (flask.count / s.goal).clamp(0.0, 1.0) : 0.0;
+      if (progress > 0 && !flask.isFailed) {
+        final waterY = b - progress * (b - innerTop);
+        final fillColor = s.material != null
+            ? Color(propsOf(s.material!.index).argb)
+            : InkColor.gold;
+        canvas.save();
+        canvas.clipPath(beaker);
+        canvas.drawRect(
+          Rect.fromLTRB(l, waterY, r, b),
+          Paint()..color = fillColor.withValues(alpha: 0.28),
+        );
+        canvas.drawLine(
+          Offset(l, waterY),
+          Offset(r, waterY),
+          Paint()
+            ..color = fillColor.withValues(alpha: 0.9)
+            ..strokeWidth = 1.5,
+        );
+        canvas.restore();
+      }
+
+      canvas.drawPath(beaker, wall);
+
+      // 립 위: 물질 점 + 카운트/목표 + 상태 글자(+ 순수 !).
+      final label = flask.isFailed
+          ? '✕'
+          : '${flask.count}/${s.goal}'
+              '${s.state != null ? ' ${_stateChar(s.state!)}' : ''}'
+              '${s.pure ? ' !' : ''}';
+      final tp = labels.painterFor(i, label);
+      final labelY = t - flare - 14;
+      var labelX = l;
+      // 물질 점 (색으로 목표 물질 암시).
+      if (s.material != null && !flask.isFailed) {
+        final dotColor = Color(propsOf(s.material!.index).argb);
+        canvas.drawCircle(
+          Offset(l + 4, labelY + tp.height / 2),
+          3,
+          Paint()..color = dotColor,
+        );
+        labelX = l + 12;
+      }
+      tp.paint(canvas, Offset(labelX, labelY));
     }
   }
 

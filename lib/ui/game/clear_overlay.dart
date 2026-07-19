@@ -23,6 +23,9 @@ class ClearOverlay extends StatefulWidget {
   final VoidCallback? onNext;
   final VoidCallback onRetry;
 
+  /// 레벨 선택(홈)으로 복귀.
+  final VoidCallback onHome;
+
   final bool reducedMotion;
 
   /// 별 1개가 스탬프될 때마다 호출 (햅틱).
@@ -42,6 +45,7 @@ class ClearOverlay extends StatefulWidget {
     required this.inkGaugeLabel,
     required this.onNext,
     required this.onRetry,
+    required this.onHome,
     required this.reducedMotion,
     this.onStarStamped,
     this.starHelp,
@@ -149,6 +153,7 @@ class _ClearOverlayState extends State<ClearOverlay>
                 ),
               ),
               const SizedBox(height: InkSpace.xl),
+              // 위계: 다음 레벨(골드 CTA, 유일 골드) > 다시 하기 > 홈으로 (고스트).
               if (widget.onNext != null) ...[
                 SizedBox(
                   width: 220,
@@ -158,7 +163,12 @@ class _ClearOverlayState extends State<ClearOverlay>
               ],
               SizedBox(
                 width: 220,
-                child: InkGhostButton(label: '다시 정제', onTap: widget.onRetry),
+                child: InkGhostButton(label: '다시 하기', onTap: widget.onRetry),
+              ),
+              const SizedBox(height: InkSpace.sm),
+              SizedBox(
+                width: 220,
+                child: InkGhostButton(label: '홈으로', onTap: widget.onHome),
               ),
             ],
           ),
@@ -207,10 +217,17 @@ class _StarParticles extends CustomPainter {
 }
 
 /// 실패(오염) 오버레이 — 재시작 유도. 별 없음, 골드 없음(무채).
+/// 타이틀·설명은 픽션 톤, 버튼은 평이한 한국어.
 class FailOverlay extends StatelessWidget {
   final String eyebrow;
   final VoidCallback onRetry;
-  const FailOverlay({super.key, required this.eyebrow, required this.onRetry});
+  final VoidCallback onHome;
+  const FailOverlay({
+    super.key,
+    required this.eyebrow,
+    required this.onRetry,
+    required this.onHome,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -232,7 +249,12 @@ class FailOverlay extends StatelessWidget {
               const SizedBox(height: InkSpace.xl),
               SizedBox(
                 width: 220,
-                child: InkGhostButton(label: '다시 정제', onTap: onRetry),
+                child: InkGhostButton(label: '다시 하기', onTap: onRetry),
+              ),
+              const SizedBox(height: InkSpace.sm),
+              SizedBox(
+                width: 220,
+                child: InkGhostButton(label: '홈으로', onTap: onHome),
               ),
             ],
           ),
