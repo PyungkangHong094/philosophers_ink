@@ -12,18 +12,19 @@ import 'wav.dart';
 double gainFromDb(double db) => math.pow(10, db / 20.0).toDouble();
 
 /// 카테고리 믹스 게인 (GDD 9.2 믹스 계층).
+///
+/// BGM은 제거됨 — 절차 sine 패드가 "우웅" 드론으로 거슬려 폐기. 진짜 BGM(챕터별 앰비언트
+/// 루프)은 M6+ 음원 에셋 확보 후 재도입한다. 그때 bgm 게인(−9~−12dB)을 여기 되살린다.
 abstract final class SfxMix {
   static const double eventDb = 0.0; // 이벤트 SFX 기준
   static const double phaseDb = -3.0; // 상전이 SFX (이벤트 계열, 약간 아래)
   static const double grainDb = -9.0; // 파티클 그레인 (보수적 — 드론 실패 재발 방지)
   static const double ambientDb = -9.0; // 물질 앰비언트
-  static const double bgmDb = -12.0; // BGM (−9~−12 중 최하)
 
   static final double event = gainFromDb(eventDb);
   static final double phase = gainFromDb(phaseDb);
   static final double grain = gainFromDb(grainDb);
   static final double ambient = gainFromDb(ambientDb);
-  static final double bgm = gainFromDb(bgmDb);
 }
 
 /// 재생 시 무작위 변주 (반복감 제거, GDD 9.2 "변주 3~5개").
@@ -169,22 +170,6 @@ abstract final class GrainPlay {
   static const int ambientRefCells = 2500;
 }
 
-/// 절차 BGM (챕터별 미니멀 앰비언트 패드). 에셋 없이 절차 드론이라 품질 한계 →
-/// **기본 OFF**, 설정 별도 토글. 클리어 시 덕킹(GDD 9.2).
-abstract final class BgmSpec {
-  static const bool defaultEnabled = false;
-
-  /// 챕터별 패드 근음(Hz). 니그레도 저음 → 루베도 약간 높게(팔레트 톤 변화 근사).
-  static const List<double> chapterRoot = [
-    98.0, // 1 니그레도 G2
-    110.0, // 2 알베도 A2
-    123.47, // 3 키트리니타스 B2
-    130.81, // 4 루베도 C3
-  ];
-  /// 패드 화음 간격(반음) — 근음 + 5도 + 옥타브(개방적).
-  static const List<double> chordSemitones = [0, 7, 12];
-  static const double padVol = 0.5; // bgm 믹스 전 기본(낮음)
-  /// 덕킹: 클리어 스팅어 동안 이 배수로 감쇠.
-  static const double duckFactor = 0.35;
-  static const int duckMs = 900;
-}
+// BGM 제거됨 (2026-07-19) — 절차 sine 패드가 "우웅" 드론으로 거슬려 폐기.
+// 진짜 BGM(챕터별 앰비언트 루프 + 클리어 덕킹)은 M6+ 음원 에셋 확보 후 재도입한다.
+// 그때 BgmSpec(챕터 근음·화음·패드 볼륨·덕킹)과 SfxMix.bgm을 여기 되살린다.

@@ -24,7 +24,6 @@ class SoLoudAudioService implements AudioService {
   bool _ready = false;
   bool _enabled = true;
   double _master = 0.8;
-  bool _bgmEnabled = BgmSpec.defaultEnabled;
 
   // 톤 파형 소스 풀 (폴리포니 — 겹치는 음이 같은 소스의 주파수를 덮어쓰지 않게).
   final List<AudioSource> _tri = [];
@@ -40,10 +39,7 @@ class SoLoudAudioService implements AudioService {
   final List<AudioSource> _water = [];
   final List<AudioSource> _steam = [];
 
-  // BGM 패드 (챕터당 화음 보이스, 루프).
-  final List<AudioSource> _padVoices = [];
-  final List<SoundHandle> _padHandles = [];
-  int _bgmChapter = 0;
+  // BGM 제거됨 — 지속 루프 음원 없음. 모든 SFX·그레인은 짧은 원샷이라 "지잉/우웅" 드론 불가.
 
   SoLoudAudioService({SoLoud? engine}) : _soloud = engine ?? SoLoud.instance;
 
@@ -70,10 +66,6 @@ class SoLoudAudioService implements AudioService {
       await _loadGrains('particle', GrainKit.particle, _particle);
       await _loadGrains('water', GrainKit.water, _water);
       await _loadGrains('steam', GrainKit.steam, _steam);
-      // BGM 패드 보이스 (화음 수만큼).
-      for (var i = 0; i < BgmSpec.chordSemitones.length; i++) {
-        _padVoices.add(await _soloud.loadWaveform(WaveForm.sin, false, 1, 0));
-      }
       _ready = true;
     } catch (e) {
       _ready = false;
@@ -92,27 +84,15 @@ class SoLoudAudioService implements AudioService {
   Future<void> dispose() async {
     if (!_ready) return;
     try {
-      _stopBgm();
       await _soloud.disposeAllSources();
     } catch (_) {}
     _ready = false;
   }
 
   @override
-  void configure({
-    required bool enabled,
-    required double volume,
-    required bool bgmEnabled,
-  }) {
+  void configure({required bool enabled, required double volume}) {
     _enabled = enabled;
     _master = volume.clamp(0.0, 1.0);
-    final bgmWas = _bgmEnabled;
-    _bgmEnabled = bgmEnabled;
-    if (!enabled || !bgmEnabled) {
-      _stopBgm();
-    } else if (enabled && bgmEnabled && !bgmWas && _bgmChapter > 0) {
-      _startBgm(_bgmChapter); // 토글 켜짐 → 재개.
-    }
   }
 
   bool get _on => _ready && _enabled && _master > 0;
@@ -239,14 +219,12 @@ class SoLoudAudioService implements AudioService {
   void clearStinger() {
     _arp(_triTone, SfxSpec.clearArp, SfxSpec.clearVol, SfxSpec.clearNoteMs,
         SfxSpec.clearStaggerMs);
-    _duckBgm();
   }
 
   @override
   void operatioStinger() {
     _arp(_sqTone, SfxSpec.operatioArp, SfxSpec.operatioVol,
         SfxSpec.operatioNoteMs, SfxSpec.operatioStaggerMs);
-    _duckBgm();
   }
 
   @override
@@ -316,66 +294,13 @@ class SoLoudAudioService implements AudioService {
     }
   }
 
-  // ---- BGM (기본 OFF, 정적 패드 — 미검증 품질) ----
+  // ---- 지속 재생 정지 ----
+  // 현재 지속 루프 음원이 없다(BGM 제거, 그레인은 원샷 자동 종료). dispose·백그라운드에서
+  // 호출되며 미래 BGM(M6+) 대비 no-op으로 유지한다.
 
   @override
-  void setBgmChapter(int chapter) {
-    _bgmChapter = chapter;
-    if (chapter <= 0) {
-      _stopBgm();
-      return;
-    }
-    if (_on && _bgmEnabled) _startBgm(chapter);
-  }
-
-  void _startBgm(int chapter) {
-    if (!_on || !_bgmEnabled || _padVoices.isEmpty) return;
-    _stopBgm();
-    final root =
-        BgmSpec.chapterRoot[(chapter - 1).clamp(0, BgmSpec.chapterRoot.length - 1)];
-    try {
-      for (var i = 0; i < _padVoices.length; i++) {
-        final semis = BgmSpec.chordSemitones[i];
-        final freq = root * math.pow(2, semis / 12.0);
-        _soloud.setWaveformFreq(_padVoices[i], freq.toDouble());
-        final v = (BgmSpec.padVol * SfxMix.bgm * _master).clamp(0.0, 1.0);
-        final h = _soloud.play(_padVoices[i], volume: 0, looping: true);
-        _soloud.fadeVolume(h, v, const Duration(milliseconds: 800));
-        _padHandles.add(h);
-      }
-    } catch (_) {}
-  }
-
-  void _stopBgm() {
-    for (final h in _padHandles) {
-      try {
-        _soloud.stop(h);
-      } catch (_) {}
-    }
-    _padHandles.clear();
-  }
-
-  void _duckBgm() {
-    if (_padHandles.isEmpty) return;
-    final v = (BgmSpec.padVol * SfxMix.bgm * _master).clamp(0.0, 1.0);
-    final ducked = v * BgmSpec.duckFactor;
-    try {
-      for (final h in _padHandles) {
-        _soloud.fadeVolume(h, ducked, const Duration(milliseconds: 120));
-      }
-      Future<void>.delayed(const Duration(milliseconds: BgmSpec.duckMs), () {
-        for (final h in _padHandles) {
-          try {
-            _soloud.fadeVolume(h, v, const Duration(milliseconds: 300));
-          } catch (_) {}
-        }
-      });
-    } catch (_) {}
-  }
+  void stopAmbient() {}
 
   @override
-  void stopAmbient() => _stopBgm(); // 그레인은 원샷 자동 종료; 루프는 BGM뿐.
-
-  @override
-  void stopAll() => _stopBgm();
+  void stopAll() {}
 }

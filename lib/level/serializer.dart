@@ -91,6 +91,7 @@ Map<String, dynamic> levelToMap(Level level) {
             'two_star': level.starThresholds!.twoStar,
             'three_star': level.starThresholds!.threeStar,
           },
+    'time_limit_s': level.timeLimitSeconds,
   };
 }
 

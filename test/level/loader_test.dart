@@ -72,6 +72,20 @@ void main() {
       final round = loadLevelFromJson(serializeLevel(level));
       expect(round.flasks.single.mouth, FlaskMouth.down);
     });
+
+    test('time_limit_s 미지정이면 null (세션이 밴드 기본값 적용)', () {
+      final level = loadLevelFromJson(jsonOf(validLevelMap()));
+      expect(level.timeLimitSeconds, isNull);
+    });
+
+    test('time_limit_s가 파싱되고 왕복 보존된다', () {
+      final m = validLevelMap();
+      m['time_limit_s'] = 120;
+      final level = loadLevelFromJson(jsonOf(m));
+      expect(level.timeLimitSeconds, 120);
+      final round = loadLevelFromJson(serializeLevel(level));
+      expect(round.timeLimitSeconds, 120);
+    });
   });
 
   group('실제 에셋 픽스처 (콘텐츠 갱신에 견고한 스모크)', () {
@@ -175,6 +189,17 @@ void main() {
         () => loadLevelFromJson(jsonOf(m)),
         throwsA(predicate((e) =>
             e is LevelException && e.problems.any((p) => p.contains('순수')))),
+      );
+    });
+
+    test('time_limit_s가 0 이하면 예외', () {
+      final m = validLevelMap();
+      m['time_limit_s'] = 0;
+      expect(
+        () => loadLevelFromJson(jsonOf(m)),
+        throwsA(predicate((e) =>
+            e is LevelException &&
+            e.problems.any((p) => p.contains('time_limit_s')))),
       );
     });
 

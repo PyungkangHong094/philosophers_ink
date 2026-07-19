@@ -13,15 +13,22 @@ Level _level({
   Map<InkType, int>? optimal,
   List<TerrainRect> terrain = const [],
   FlaskMouth mouth = FlaskMouth.up,
+  int difficulty = 1,
+  int? timeLimitSeconds,
 }) =>
     Level(
       meta: LevelMeta(
-          id: 1, name: 't', chapter: 1, difficulty: 1, optimalInk: optimal),
+          id: 1,
+          name: 't',
+          chapter: 1,
+          difficulty: difficulty,
+          optimalInk: optimal),
       background: 0xFF000000,
       emitters: [EmitterSpec(x: 5, y: 0, width: 3, material: emit, rate: 1)],
       flasks: [FlaskSpec(x: 4, y: 3, w: 5, h: 8, goal: goal, pure: pure, mouth: mouth)],
       terrain: terrain,
       inkBudget: const {InkType.chalk: 100},
+      timeLimitSeconds: timeLimitSeconds,
     );
 
 void _tickN(LevelSession s, int n) {
@@ -185,6 +192,68 @@ void main() {
       expect(s.game.grid.get(23, 21), Material.wall.index);
       s.reset();
       expect(s.game.grid.get(20, 20), Material.wall.index, reason: 'reset 후 재스탬프');
+    });
+  });
+
+  group('제한 시간 카운트다운 (GDD 2장)', () {
+    test('기본값이 난이도 밴드에서 파생된다 (×60틱/s)', () {
+      // D1–2 80s, D3–4 180s, D5–6 360s, D7–8 720s, D9–10 1440s.
+      expect(LevelSession(_level(difficulty: 1)).timeLimitTicks, 80 * 60);
+      expect(LevelSession(_level(difficulty: 4)).timeLimitTicks, 180 * 60);
+      expect(LevelSession(_level(difficulty: 5)).timeLimitTicks, 360 * 60);
+      expect(LevelSession(_level(difficulty: 8)).timeLimitTicks, 720 * 60);
+      expect(LevelSession(_level(difficulty: 10)).timeLimitTicks, 1440 * 60);
+    });
+
+    test('JSON time_limit_s가 밴드 기본값을 재정의한다', () {
+      final s = LevelSession(_level(difficulty: 1, timeLimitSeconds: 10));
+      expect(s.timeLimitTicks, 10 * 60, reason: '80s 기본값 대신 10s');
+    });
+
+    test('한도 도달 + 미클리어 → timeout 실패', () {
+      // 1초(60틱) 한도, 큰 goal로 미클리어 유지.
+      final s = LevelSession(_level(goal: 100000, timeLimitSeconds: 1));
+      for (var i = 0; i < 70; i++) {
+        s.tick();
+      }
+      expect(s.isFailed, isTrue);
+      expect(s.isTimedOut, isTrue);
+      expect(s.failureReason, LevelFailure.timeout);
+      expect(s.remainingTicks, 0);
+    });
+
+    test('한도 전에 클리어하면 이후 시간 초과해도 실패 아님', () {
+      final s = LevelSession(_level(goal: 3, timeLimitSeconds: 1));
+      for (var i = 0; i < 70; i++) {
+        s.tick();
+      }
+      expect(s.isCleared, isTrue);
+      expect(s.isTimedOut, isFalse, reason: '클리어 후 timeout 미발동');
+      expect(s.isFailed, isFalse);
+      expect(s.failureReason, isNull);
+    });
+
+    test('오염이 시간 초과보다 우선한다', () {
+      // 오염 + 시간 초과 동시: contamination 사유.
+      final s = LevelSession(
+          _level(goal: 100000, pure: true, emit: Material.ash, timeLimitSeconds: 1));
+      for (var i = 0; i < 70; i++) {
+        s.tick();
+      }
+      expect(s.isFailed, isTrue);
+      expect(s.failureReason, LevelFailure.contamination);
+    });
+
+    test('reset이 시간을 복원한다', () {
+      final s = LevelSession(_level(goal: 100000, timeLimitSeconds: 1));
+      for (var i = 0; i < 70; i++) {
+        s.tick();
+      }
+      expect(s.isTimedOut, isTrue);
+      s.reset();
+      expect(s.isTimedOut, isFalse);
+      expect(s.isFailed, isFalse);
+      expect(s.remainingTicks, s.timeLimitTicks);
     });
   });
 

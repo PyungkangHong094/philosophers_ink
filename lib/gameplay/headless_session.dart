@@ -18,7 +18,9 @@ import '../level/gimmick_builder.dart';
 import '../level/level_model.dart';
 import '../sim/emitter.dart';
 import 'flask.dart';
+import 'gameplay_constants.dart';
 import 'ink_budget.dart';
+import 'level_geometry.dart';
 
 /// 헤드리스 한 판. 소유: sim [GameState] + [FlaskSystem] 판정 + [InkBudget] 회계.
 class HeadlessSession {
@@ -28,6 +30,12 @@ class HeadlessSession {
   final InkBudget ink;
   final GimmickBundle gimmicks;
 
+  /// 제한 시간(시뮬 틱). LevelSession과 동일 규칙 — 솔버가 실게임 한도를 그대로 본다.
+  final int timeLimitTicks;
+
+  /// 제한 시간 초과 래치. reset이 되돌린다.
+  bool _timedOut = false;
+
   factory HeadlessSession(Level level) {
     final bundle =
         buildGimmicks(level.gimmicks, gridWidth: SimConstants.gridWidth);
@@ -35,7 +43,8 @@ class HeadlessSession {
   }
 
   HeadlessSession._(this.level, this.gimmicks)
-      : game = GameState(
+      : timeLimitTicks = GameplayConstants.timeLimitTicks(level),
+        game = GameState(
           emitters: _mapEmitters(level.emitters),
           gates: gimmicks.gates,
           portals: gimmicks.portals,
@@ -47,7 +56,7 @@ class HeadlessSession {
           heat: level.inkBudget[InkType.heat] ?? 0,
           frost: level.inkBudget[InkType.frost] ?? 0,
         ) {
-    _stampTerrain();
+    stampLevelGeometry(game.grid, level);
   }
 
   /// 이 레벨에 중력 반전 버튼 기믹이 있는가.
@@ -65,8 +74,17 @@ class HeadlessSession {
   /// 모든 플라스크 목표 충족 && 순수 오염 없음.
   bool get isCleared => flasks.isCleared;
 
-  /// 순수 오염 → 실패.
-  bool get isFailed => flasks.isFailed;
+  /// 실패 — 순수 오염 또는 제한 시간 초과 (LevelSession과 동일 계약).
+  bool get isFailed => flasks.isFailed || _timedOut;
+
+  /// 제한 시간 초과로 실패했는가.
+  bool get isTimedOut => _timedOut;
+
+  /// 남은 시간(시뮬 틱). 0 미만은 0으로 클램프.
+  int get remainingTicks {
+    final r = timeLimitTicks - game.tickCount;
+    return r < 0 ? 0 : r;
+  }
 
   /// 플라스크별 현재 카운트 합 (진행 정체 조기 종료 판정용).
   int get flaskProgress {
@@ -100,19 +118,24 @@ class HeadlessSession {
     return placed;
   }
 
-  /// 한 틱: 시뮬 진행 → 플라스크 판정 (순서 고정, 결정성). LevelSession.tick과 동일.
+  /// 한 틱: 시뮬 진행 → 플라스크 판정 (순서 고정, 결정성). 제한 시간 초과도 래치한다
+  /// (LevelSession.tick과 동일 계약).
   void tick() {
     game.tick();
     flasks.update(game.grid);
+    if (!_timedOut && !flasks.isCleared && game.tickCount >= timeLimitTicks) {
+      _timedOut = true;
+    }
   }
 
-  /// 재시작 안전 (GDD 10.5). 그리드·RNG·방출 잔량·플라스크·잉크·중력을 초기화하고
-  /// 지형을 재스탬프한다. game.reset()이 중력을 기본(아래)으로 되돌린다.
+  /// 재시작 안전 (GDD 10.5). 그리드·RNG·방출 잔량·플라스크·잉크·중력·시간을 초기화하고
+  /// 지형·비커 벽을 재스탬프한다. game.reset()이 중력을 기본(아래)으로 되돌린다.
   void reset() {
     game.reset();
     flasks.reset();
     ink.reset();
-    _stampTerrain();
+    _timedOut = false;
+    stampLevelGeometry(game.grid, level);
   }
 
   /// 레벨 방출구 스펙 → sim EmitterConfig (LevelSession._mapEmitters와 동일 규칙).
@@ -128,17 +151,4 @@ class HeadlessSession {
             ashRatio: e.ashRatio,
           ),
       ];
-
-  /// 정적 지형을 그리드에 스탬프 (LevelSession._stampTerrain과 동일).
-  void _stampTerrain() {
-    for (final t in level.terrain) {
-      for (var yy = t.y; yy < t.y + t.h; yy++) {
-        for (var xx = t.x; xx < t.x + t.w; xx++) {
-          if (game.grid.inBounds(xx, yy)) {
-            game.grid.set(xx, yy, t.material.index);
-          }
-        }
-      }
-    }
-  }
 }

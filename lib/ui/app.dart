@@ -113,16 +113,11 @@ class _BootstrapState extends State<_Bootstrap> {
       final audio = widget.audioOverride ?? SoLoudAudioService();
       // 오디오 초기화 실패는 내부에서 무음화(게임을 막지 않는다).
       await audio.init();
-      audio.configure(
-          enabled: settings.sound,
-          volume: settings.volume,
-          bgmEnabled: settings.bgm);
-      // 설정 변경 → 오디오 반영 (음소거·볼륨·BGM).
+      audio.configure(enabled: settings.sound, volume: settings.volume);
+      // 설정 변경 → 오디오 반영 (음소거·볼륨).
       settings.addListener(
         () => audio.configure(
-            enabled: settings.sound,
-            volume: settings.volume,
-            bgmEnabled: settings.bgm),
+            enabled: settings.sound, volume: settings.volume),
       );
       if (!mounted) return;
       setState(() {

@@ -153,7 +153,6 @@ class _PlayScreenState extends State<PlayScreen>
     _loop = GameLoop(onTick: () => _session.tick());
     _ticker = createTicker(_onFrame)..start();
     WidgetsBinding.instance.addObserver(this); // 앱 백그라운드 전환 감지.
-    widget.audio.setBgmChapter(widget.entry.chapter); // 챕터 팔레트 BGM (기본 OFF).
     _setupOnboarding();
   }
 

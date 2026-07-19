@@ -16,15 +16,14 @@ class SettingsController extends ChangeNotifier {
   bool _haptics;
   bool _sound;
   double _volume;
-  bool _bgm;
 
   SettingsController(this._store, Map<String, dynamic> initial)
       : _reducedMotion = initial['reducedMotion'] == true,
         _haptics = initial['haptics'] != false, // 기본 on
         _sound = initial['sound'] != false, // 기본 on
         _volume = ((initial['volume'] as num?)?.toDouble() ?? 0.8)
-            .clamp(0.0, 1.0),
-        _bgm = initial['bgm'] == true; // 기본 off (절차 BGM 미검증 품질)
+            .clamp(0.0, 1.0);
+  // BGM 설정 키 폐기 (절차 패드 제거) — 저장된 bgm 값은 더 이상 읽지 않는다.
 
   factory SettingsController.fromStore(ProgressStore store) =>
       SettingsController(store, store.loadSettings());
@@ -37,14 +36,10 @@ class SettingsController extends ChangeNotifier {
   /// 마스터 볼륨 0~1.
   double get volume => _volume;
 
-  /// BGM(절차 앰비언트 패드) 활성. 기본 off.
-  bool get bgm => _bgm;
-
   set reducedMotion(bool v) => _set(() => _reducedMotion = v);
   set haptics(bool v) => _set(() => _haptics = v);
   set sound(bool v) => _set(() => _sound = v);
   set volume(double v) => _set(() => _volume = v.clamp(0.0, 1.0));
-  set bgm(bool v) => _set(() => _bgm = v);
 
   void _set(VoidCallback change) {
     change();
@@ -53,7 +48,6 @@ class SettingsController extends ChangeNotifier {
       'haptics': _haptics,
       'sound': _sound,
       'volume': _volume,
-      'bgm': _bgm,
     });
     notifyListeners();
   }

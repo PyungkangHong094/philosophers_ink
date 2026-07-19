@@ -155,6 +155,9 @@ class _Parser {
       gimmicks: gimmicks,
       inkBudget: inkBudget,
       starThresholds: _parseStarThresholds(root['star_thresholds']),
+      timeLimitSeconds: root['time_limit_s'] == null
+          ? null
+          : _int(root['time_limit_s'], 'time_limit_s'),
     );
   }
 

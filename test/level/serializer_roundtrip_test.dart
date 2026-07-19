@@ -17,6 +17,7 @@ void _expectSameLevel(Level a, Level b) {
   expect(b.meta.solutionsVerified, a.meta.solutionsVerified);
   expect(b.background, a.background);
   expect(b.inkBudget, a.inkBudget);
+  expect(b.timeLimitSeconds, a.timeLimitSeconds);
 
   expect(b.emitters.length, a.emitters.length);
   for (var i = 0; i < a.emitters.length; i++) {

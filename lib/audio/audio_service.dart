@@ -21,12 +21,8 @@ abstract class AudioService {
 
   Future<void> dispose();
 
-  /// 설정 반영 — 음소거(enabled=false)·마스터 볼륨(0~1)·BGM 토글. 설정 변경마다 호출.
-  void configure({
-    required bool enabled,
-    required double volume,
-    required bool bgmEnabled,
-  });
+  /// 설정 반영 — 음소거(enabled=false)·마스터 볼륨(0~1). 설정 변경마다 호출.
+  void configure({required bool enabled, required double volume});
 
   // ---- 이벤트 SFX ----
   void uiTap();
@@ -51,13 +47,11 @@ abstract class AudioService {
     required double steam,
   });
 
-  /// 인게임 진입 시 BGM 챕터 설정(팔레트별 근음). 0이면 정지.
-  void setBgmChapter(int chapter);
-
-  /// 인게임 이탈 시 앰비언트·그레인 정지(원샷 SFX는 자연 종료).
+  /// 인게임 이탈 시 앰비언트·그레인 정지(원샷 SFX는 자연 종료). 현재 지속 루프는 없어
+  /// 사실상 no-op이지만, 계약·미래 BGM(M6+)을 위해 유지한다.
   void stopAmbient();
 
-  /// 모든 루프성/지속 재생(앰비언트·BGM)을 즉시 정지. 화면 dispose·앱 백그라운드 시 호출.
+  /// 모든 지속 재생을 즉시 정지. 화면 dispose·앱 백그라운드 시 호출(방어적 — 미래 BGM 대비).
   void stopAll();
 }
 
@@ -70,11 +64,7 @@ class SilentAudioService implements AudioService {
   @override
   Future<void> dispose() async {}
   @override
-  void configure({
-    required bool enabled,
-    required double volume,
-    required bool bgmEnabled,
-  }) {}
+  void configure({required bool enabled, required double volume}) {}
   @override
   void uiTap() {}
   @override
@@ -95,8 +85,6 @@ class SilentAudioService implements AudioService {
     required double water,
     required double steam,
   }) {}
-  @override
-  void setBgmChapter(int chapter) {}
   @override
   void stopAmbient() {}
   @override

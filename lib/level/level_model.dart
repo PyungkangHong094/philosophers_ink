@@ -274,6 +274,10 @@ class Level {
   /// 명시 별점 임계. null이면 meta.optimalInk에서 파생.
   final StarThresholds? starThresholds;
 
+  /// 제한 시간(초, GDD 2장). null이면 난이도 밴드 기본값을 세션이 적용한다.
+  /// 시간은 시뮬 틱 기반(60Hz) — 세션이 초×tickRate로 환산한다.
+  final int? timeLimitSeconds;
+
   const Level({
     required this.meta,
     required this.background,
@@ -283,5 +287,6 @@ class Level {
     this.gimmicks = const [],
     required this.inkBudget,
     this.starThresholds,
+    this.timeLimitSeconds,
   });
 }

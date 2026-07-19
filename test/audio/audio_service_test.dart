@@ -1,5 +1,5 @@
 /// 오디오 서비스 단위 테스트 — 무음 폴백 + SoLoud 미초기화 시 안전 무음(무예외) +
-/// 드론 방지 구조 가드(연속 루프는 BGM뿐, 그레인은 전부 짧은 원샷).
+/// 드론 방지 구조 가드(연속 루프 음원 자체가 없음 — BGM 제거, 그레인은 전부 짧은 원샷).
 library;
 
 import 'package:flutter_test/flutter_test.dart';
@@ -12,7 +12,7 @@ void main() {
   test('SilentAudioService는 모든 이벤트가 no-op (무예외)', () {
     const a = SilentAudioService();
     expect(() {
-      a.configure(enabled: true, volume: 0.5, bgmEnabled: true);
+      a.configure(enabled: true, volume: 0.5);
       a.uiTap();
       a.stroke();
       a.flaskFill(FlaskState.solid, progress: 0.5);
@@ -24,7 +24,6 @@ void main() {
       a.phaseTransition(PhaseSfx.puff);
       a.phaseTransition(PhaseSfx.sizzle);
       a.setAmbience(particle: 0.7, water: 0.3, steam: 0.1);
-      a.setBgmChapter(2);
       a.stopAmbient();
       a.stopAll();
     }, returnsNormally);
@@ -33,7 +32,7 @@ void main() {
   test('SoLoudAudioService는 init 없이도 안전하게 무음 (FFI 미접근)', () {
     final a = SoLoudAudioService();
     expect(() {
-      a.configure(enabled: true, volume: 1.0, bgmEnabled: true);
+      a.configure(enabled: true, volume: 1.0);
       a.uiTap();
       a.stroke();
       a.flaskFill(FlaskState.liquid, progress: 0.9);
@@ -42,7 +41,6 @@ void main() {
       a.fail();
       a.phaseTransition(PhaseSfx.sizzle);
       a.setAmbience(particle: 1.0, water: 1.0, steam: 1.0);
-      a.setBgmChapter(1);
       a.stopAmbient();
       a.stopAll();
     }, returnsNormally);
@@ -50,19 +48,14 @@ void main() {
 
   test('음소거(enabled=false) 설정 시에도 무예외', () {
     final a = SoLoudAudioService();
-    a.configure(enabled: false, volume: 0.0, bgmEnabled: false);
+    a.configure(enabled: false, volume: 0.0);
     expect(() {
       a.uiTap();
       a.setAmbience(particle: 0.5, water: 0, steam: 0);
-      a.setBgmChapter(3);
     }, returnsNormally);
   });
 
-  group('드론 방지 구조 가드 (P1 "지잉" 회귀 방지)', () {
-    test('BGM은 기본 OFF (유일한 연속 루프)', () {
-      expect(BgmSpec.defaultEnabled, isFalse);
-    });
-
+  group('드론 방지 구조 가드 (P1 "지잉/우웅" 회귀 방지)', () {
     test('모든 그레인은 짧은 원샷(≤300ms) — 지속 톤 불가', () {
       final all = [
         ...GrainKit.crackle,
@@ -88,9 +81,9 @@ void main() {
       expect(GrainKit.steam.length, inInclusiveRange(3, 5));
     });
 
-    test('믹스 계층: 이벤트 > 그레인 ≥ BGM (GDD 9.2)', () {
+    test('믹스 계층: 이벤트 > 그레인 (GDD 9.2)', () {
       expect(SfxMix.event, greaterThan(SfxMix.grain));
-      expect(SfxMix.grain, greaterThanOrEqualTo(SfxMix.bgm));
+      expect(SfxMix.grain, greaterThan(0));
     });
 
     test('착수 틱 스로틀 존재 (빠른 착수 버즈 방지)', () {

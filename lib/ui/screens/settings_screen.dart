@@ -50,13 +50,6 @@ class SettingsScreen extends StatelessWidget {
                   onChanged: (v) => settings.volume = v,
                   onChangeEnd: (_) => InkServices.of(context).audio.uiTap(),
                 ),
-              if (settings.sound)
-                _ToggleRow(
-                  label: '배경 음악',
-                  caption: '챕터별 앰비언트 패드 (실험적)',
-                  value: settings.bgm,
-                  onChanged: (v) => settings.bgm = v,
-                ),
               _ToggleRow(
                 label: '햅틱',
                 caption: '진동 피드백',

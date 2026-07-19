@@ -46,6 +46,44 @@ void main() {
       expect(s.inkUsed, 0);
     });
 
+    test('비커 벽이 스탬프된다 (LevelSession과 동일 물리 — 솔버 충실도)', () {
+      final level = _load('level_001.json');
+      final s = HeadlessSession(level);
+      final f = level.flasks.first;
+      final g = s.game.grid;
+      final left = f.x;
+      final right = f.x + f.w - 1;
+      final bottom = f.y + f.h - 1;
+      expect(g.get(left, f.y + 1), Material.wall.index, reason: '좌벽');
+      expect(g.get(right, f.y + 1), Material.wall.index, reason: '우벽');
+      expect(g.get(f.x + 1, bottom), Material.wall.index, reason: '바닥');
+    });
+
+    test('제한 시간 초과 시 timeout 실패 (LevelSession과 동일 계약)', () {
+      final level = Level(
+        meta: const LevelMeta(id: 1, name: 't', chapter: 1, difficulty: 1),
+        background: 0xFF000000,
+        emitters: [
+          EmitterSpec(x: 5, y: 0, width: 3, material: Material.prima, rate: 1),
+        ],
+        flasks: const [FlaskSpec(x: 4, y: 3, w: 5, h: 8, goal: 100000)],
+        inkBudget: const {InkType.chalk: 0},
+        timeLimitSeconds: 1, // 60틱
+      );
+      final s = HeadlessSession(level);
+      for (var t = 0; t < 70; t++) {
+        s.tick();
+      }
+      expect(s.isFailed, isTrue);
+      expect(s.isTimedOut, isTrue);
+    });
+
+    test('솔버 tickCap(≤3600)은 최소 제한(4800틱=80s)보다 작다 — 기존 해 무영향', () {
+      final s = HeadlessSession(_load('level_001.json'));
+      expect(s.timeLimitTicks, greaterThanOrEqualTo(80 * 60));
+      expect(3600, lessThan(s.timeLimitTicks));
+    });
+
     test('중력 반전은 기믹 있는 레벨에서만 동작', () {
       final noGrav = HeadlessSession(_load('level_001.json'))..reset();
       noGrav.toggleGravity();

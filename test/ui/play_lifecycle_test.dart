@@ -14,10 +14,9 @@ import 'package:philosophers_ink/ui/game/play_screen.dart';
 import 'package:philosophers_ink/ui/settings_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// 재생 상태를 추적하는 테스트용 오디오. 루프(BGM) 활성 여부와 정지 호출 횟수를 기록한다.
-/// (그레인·앰비언트는 원샷이라 정지 대상이 아님 — 유일한 루프는 BGM.)
+/// 정지 호출 횟수를 기록하는 테스트용 오디오. BGM 제거 후 지속 루프는 없지만, 생명주기
+/// 계약(화면 이탈·백그라운드에서 stopAll 호출)은 미래 BGM 대비 유지된다.
 class _RecordingAudio implements AudioService {
-  bool loopActive = false;
   int stopAllCount = 0;
   int stopAmbientCount = 0;
 
@@ -26,11 +25,7 @@ class _RecordingAudio implements AudioService {
   @override
   Future<void> dispose() async {}
   @override
-  void configure({
-    required bool enabled,
-    required double volume,
-    required bool bgmEnabled,
-  }) {}
+  void configure({required bool enabled, required double volume}) {}
   @override
   void uiTap() {}
   @override
@@ -52,19 +47,12 @@ class _RecordingAudio implements AudioService {
     required double steam,
   }) {}
   @override
-  void setBgmChapter(int chapter) {
-    loopActive = chapter > 0; // BGM 루프 시작(테스트에선 켜짐만 추적).
-  }
-
-  @override
   void stopAmbient() {
-    loopActive = false;
     stopAmbientCount++;
   }
 
   @override
   void stopAll() {
-    loopActive = false;
     stopAllCount++;
   }
 }
@@ -102,33 +90,26 @@ void main() {
         ),
       );
 
-  testWidgets('화면 이탈(dispose) 시 루프성 재생이 정지된다', (tester) async {
+  testWidgets('화면 이탈(dispose) 시 stopAll이 호출된다 (생명주기 계약)', (tester) async {
     final rec = _RecordingAudio();
     await tester.pumpWidget(host(rec));
     await tester.pump(const Duration(milliseconds: 16));
-
-    // PlayScreen init이 setBgmChapter로 BGM 루프를 켰다.
-    expect(rec.loopActive, isTrue);
 
     // PlayScreen을 트리에서 제거 → dispose.
     await tester.pumpWidget(const MaterialApp(home: SizedBox.shrink()));
 
     expect(rec.stopAllCount, greaterThan(0), reason: 'dispose가 stopAll 호출');
-    expect(rec.loopActive, isFalse, reason: '루프 정지됨');
   });
 
-  testWidgets('앱 백그라운드 전환 시 루프성 재생이 정지된다', (tester) async {
+  testWidgets('앱 백그라운드 전환 시 stopAll이 호출된다', (tester) async {
     final rec = _RecordingAudio();
     await tester.pumpWidget(host(rec));
     await tester.pump(const Duration(milliseconds: 16));
-
-    expect(rec.loopActive, isTrue); // BGM 루프 켜짐
 
     tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
     await tester.pump();
 
     expect(rec.stopAllCount, greaterThan(0), reason: '백그라운드가 stopAll 호출');
-    expect(rec.loopActive, isFalse);
     await tester.pumpWidget(const SizedBox.shrink()); // 온보딩 타이머 정리.
   });
 }

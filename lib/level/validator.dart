@@ -72,6 +72,9 @@ void validateLevel(Level level, {String source = 'level'}) {
       if (v < 0) problems.add('meta.optimal_ink.${ink.name}은 음수일 수 없다 (got $v)');
     });
   }
+  if (level.timeLimitSeconds != null && level.timeLimitSeconds! <= 0) {
+    problems.add('time_limit_s는 양수여야 한다 (got ${level.timeLimitSeconds})');
+  }
 
   // --- 방출구 ---
   if (level.emitters.isEmpty) {
