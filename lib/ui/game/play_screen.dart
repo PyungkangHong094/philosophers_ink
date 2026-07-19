@@ -28,6 +28,7 @@ import '../onboarding/onboarding_widgets.dart';
 import '../settings_controller.dart';
 import '../tokens.dart';
 import 'clear_overlay.dart';
+import 'exhaust_nudge.dart';
 import 'ink_palette_bar.dart';
 import 'pause_overlay.dart';
 
@@ -102,6 +103,12 @@ class _PlayScreenState extends State<PlayScreen>
   Timer? _goalTimer;
   Timer? _guideTimer;
   Timer? _gaugeTimer;
+
+  // 잉크 소진 넛지 (P2) — 모든 잉크 0 + 미클리어로 8초 방치 시 재시작 유도.
+  bool _exhaustNudge = false;
+  bool _exhaustScheduled = false;
+  Timer? _exhaustTimer;
+  static const Duration _exhaustDelay = Duration(seconds: 8);
 
   /// 목표 배너 자동 소멸 시간.
   static const Duration _goalDwell = Duration(seconds: 3);
@@ -216,6 +223,7 @@ class _PlayScreenState extends State<PlayScreen>
     _goalTimer?.cancel();
     _guideTimer?.cancel();
     _gaugeTimer?.cancel();
+    _exhaustTimer?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     widget.audio.stopAll(); // 화면 이탈 시 루프성 재생(앰비언트 등) 전부 정지 — 전역 잔존 방지.
     _ticker.dispose(); // 프레임 정지 먼저 — 이후 세션을 건드리지 않는다.
@@ -298,6 +306,24 @@ class _PlayScreenState extends State<PlayScreen>
         _session.game.extendStroke(strokeId, x0, y0, x1, y1, maxCells: budget);
     _session.ink.chargePlaced(placed);
     if (placed > 0) widget.audio.stroke(); // 드로잉 획음 (내부 스로틀).
+    _maybeScheduleExhaustNudge();
+  }
+
+  /// 모든 잉크를 소진했고 아직 미클리어면, 8초 뒤 재시작 넛지를 예약한다(1회).
+  /// 잉크는 되돌아오지 않으므로 한 번 소진되면 재시작 전까지 조건이 유지된다.
+  void _maybeScheduleExhaustNudge() {
+    if (_exhaustScheduled || _exhaustNudge) return;
+    final b = _session.ink.budget;
+    final exhausted = b.totalInitial > 0 && b.totalRemaining == 0;
+    if (!exhausted || _outcome.value.phase != _Phase.playing) return;
+    _exhaustScheduled = true;
+    _exhaustTimer = Timer(_exhaustDelay, () {
+      if (!mounted) return;
+      final stillExhausted = _session.ink.budget.totalRemaining == 0;
+      if (stillExhausted && _outcome.value.phase == _Phase.playing) {
+        setState(() => _exhaustNudge = true);
+      }
+    });
   }
 
   /// 활성 밀도 3종(0~1) — 파티클(동적 입자/액체/기체 총합)·물(WATER)·증기(STEAM).
@@ -381,6 +407,10 @@ class _PlayScreenState extends State<PlayScreen>
     _lastCell = null;
     _recorded = false;
     _paused = false;
+    // 잉크 소진 넛지 해제 (재시작으로 잉크 복원).
+    _exhaustTimer?.cancel();
+    _exhaustScheduled = false;
+    _exhaustNudge = false;
     _outcome.value = const _Outcome(_Phase.playing);
     setState(() {});
   }
@@ -532,6 +562,17 @@ class _PlayScreenState extends State<PlayScreen>
                       : Icons.gesture,
                   reducedMotion: reduced,
                 ),
+              ),
+            ),
+          // 잉크 소진 넛지 (P2) — 하단, 잉크 바 위. 재생 중일 때만.
+          if (_exhaustNudge && !_paused &&
+              _outcome.value.phase == _Phase.playing)
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: bottomPad + 118,
+              child: Center(
+                child: InkExhaustNudge(onRetry: _retry, reducedMotion: reduced),
               ),
             ),
           // 오버레이들.

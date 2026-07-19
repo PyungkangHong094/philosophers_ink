@@ -71,7 +71,7 @@ void main() {
     await pumpScreen(tester, const TitleScreen());
     expect(find.text('INK'), findsOneWidget);
     expect(find.text('현자의 잉크'), findsOneWidget);
-    expect(find.text('화면을 터치하여 시작'), findsOneWidget);
+    expect(find.text('화면을 터치해 시작'), findsOneWidget);
   });
 
   testWidgets('타이틀 탭 → 챕터 선택으로 내비게이션 (푸시 라우트에서 InkServices 접근 회귀)',
@@ -89,7 +89,7 @@ void main() {
       ),
     );
     await tester.pump(const Duration(milliseconds: 16));
-    await tester.tap(find.text('화면을 터치하여 시작'));
+    await tester.tap(find.text('화면을 터치해 시작'));
     // 전환 애니메이션 소화 (타이틀 반복 애니메이션 때문에 pumpAndSettle 금지).
     await tester.pump(const Duration(milliseconds: 400));
     await tester.pump(const Duration(milliseconds: 400));
@@ -112,7 +112,7 @@ void main() {
     expect(find.text('NIGREDO'), findsOneWidget);
     expect(find.text('RUBEDO'), findsOneWidget);
     // 챕터 2는 콘텐츠 없고 잠김 → 해금 안내 노출.
-    expect(find.textContaining('완료 시 해금'), findsWidgets);
+    expect(find.textContaining('완료하면 해금'), findsWidgets);
   });
 
   testWidgets('레벨 선택이 정원만큼 셀을 그리고 존재 레벨 번호를 표시한다', (tester) async {

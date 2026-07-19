@@ -1,26 +1,17 @@
 {
-  "meta": {
-    "id": 7,
-    "name": "삼중주",
-    "chapter": 1,
-    "difficulty": 4,
-    "teaches": [],
-    "tags": ["multi_flask", "distribution"],
-    "optimal_ink": null,
-    "solutions_verified": 2,
-    "hint_stroke": [[40, 200], [80, 150], [120, 200]]
-  },
+  "meta": { "id": 7, "name": "삼중주", "chapter": 1, "difficulty": 4, "teaches": [], "tags": ["multi_flask","distribution"], "optimal_ink": null, "solutions_verified": 2, "hint_stroke": null },
   "background": "#1D1418",
-  "emitters": [
-    { "x": 74, "y": 2, "width": 12, "material": "PRIMA", "rate": 2, "total": null, "ash_ratio": 0 }
-  ],
+  "emitters": [ { "x": 74, "y": 2, "width": 12, "material": "PRIMA", "rate": 3, "total": null, "ash_ratio": 0 } ],
   "flasks": [
-    { "x": 14, "y": 288, "w": 24, "h": 28, "goal": 25, "material": null, "state": null, "pure": false },
-    { "x": 68, "y": 288, "w": 24, "h": 28, "goal": 25, "material": null, "state": null, "pure": false },
-    { "x": 122, "y": 288, "w": 24, "h": 28, "goal": 25, "material": null, "state": null, "pure": false }
+    { "x": 66, "y": 290, "w": 26, "h": 24, "goal": 22, "material": null, "state": null, "pure": false },
+    { "x": 8, "y": 150, "w": 24, "h": 22, "goal": 22, "material": null, "state": null, "pure": false },
+    { "x": 126, "y": 150, "w": 24, "h": 22, "goal": 22, "material": null, "state": null, "pure": false }
   ],
-  "terrain": [],
+  "terrain": [
+    { "x": 8, "y": 172, "w": 24, "h": 4, "material": "WALL" },
+    { "x": 126, "y": 172, "w": 24, "h": 4, "material": "WALL" }
+  ],
   "gimmicks": [],
-  "ink_budget": { "chalk": 340, "heat": 0, "frost": 0 },
-  "star_thresholds": { "two_star": 297, "three_star": 254 }
+  "ink_budget": { "chalk": 678, "heat": 0, "frost": 0 },
+  "star_thresholds": { "two_star": 534, "three_star": 390 }
 }

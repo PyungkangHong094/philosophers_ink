@@ -244,7 +244,7 @@ class FailOverlay extends StatelessWidget {
               const SizedBox(height: InkSpace.md),
               Text('오염', style: InkText.headingKo),
               const SizedBox(height: InkSpace.sm),
-              Text('순수가 깨졌다. 다시 정제해야 한다.',
+              Text('순수가 깨졌어요. 다시 정제해야 해요.',
                   style: InkText.body, textAlign: TextAlign.center),
               const SizedBox(height: InkSpace.xl),
               SizedBox(

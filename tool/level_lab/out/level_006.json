@@ -3,10 +3,10 @@
   "name": "쌓임의 법칙",
   "chapter": 1,
   "solvable": true,
-  "min_ink": 292,
+  "min_ink": 293,
   "effort": 39,
-  "rollouts": 489,
-  "elapsed_ms": 260366,
+  "rollouts": 607,
+  "elapsed_ms": 701487,
   "budget": {
     "chalk": 684,
     "heat": 0,
@@ -14,22 +14,8 @@
   },
   "solutions": [
     {
-      "ink": 292,
-      "ticks": 432,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 31,
-          "y0": 153,
-          "x1": 127,
-          "y1": 255
-        }
-      ],
-      "gravity_taps": []
-    },
-    {
       "ink": 293,
-      "ticks": 331,
+      "ticks": 335,
       "strokes": [
         {
           "ink": "chalk",
@@ -42,22 +28,8 @@
       "gravity_taps": []
     },
     {
-      "ink": 294,
-      "ticks": 444,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 31,
-          "y0": 153,
-          "x1": 127,
-          "y1": 256
-        }
-      ],
-      "gravity_taps": []
-    },
-    {
       "ink": 296,
-      "ticks": 331,
+      "ticks": 335,
       "strokes": [
         {
           "ink": "chalk",
@@ -70,19 +42,46 @@
       "gravity_taps": []
     },
     {
-      "ink": 296,
-      "ticks": 469,
+      "ink": 298,
+      "ticks": 344,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 31,
-          "y0": 153,
-          "x1": 126,
-          "y1": 258
+          "x0": 30,
+          "y0": 105,
+          "x1": 116,
+          "y1": 209
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 299,
+      "ticks": 452,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 32,
+          "y0": 152,
+          "x1": 127,
+          "y1": 256
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 299,
+      "ticks": 454,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 32,
+          "y0": 152,
+          "x1": 127,
+          "y1": 255
         }
       ],
       "gravity_taps": []
     }
-  ],
-  "probes": {}
+  ]
 }

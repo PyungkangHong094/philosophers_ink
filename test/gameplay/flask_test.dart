@@ -35,7 +35,7 @@ void main() {
       expect(_countMaterial(g, Material.prima), 0, reason: '소비됨');
     });
 
-    test('goal 도달 시 완료, 초과 물질도 소비하되 카운트는 상한', () {
+    test('goal 도달 시 완료, 초과 물질은 소비하지 않고 넘친다 (넘침 규칙)', () {
       final g = _grid();
       _fill(g, 0, 0, 3, 3, Material.prima); // 9셀
       final sys = FlaskSystem(const [
@@ -44,7 +44,56 @@ void main() {
       sys.update(g);
       expect(sys.flasks.single.count, 5, reason: 'goal에서 카운트 멈춤');
       expect(sys.flasks.single.isComplete, isTrue);
-      expect(_countMaterial(g, Material.prima), 0, reason: '초과분도 소비');
+      expect(_countMaterial(g, Material.prima), 4,
+          reason: '5개만 카운트·소비, 나머지 4개는 넘쳐 그 자리에 남는다');
+    });
+  });
+
+  group('넘침 규칙 (GDD 5.1 개정)', () {
+    test('가득 찬 플라스크는 다음 틱에 더 소비하지 않는다', () {
+      final g = _grid();
+      g.set(0, 0, Material.water.index);
+      final sys = FlaskSystem(const [
+        FlaskSpec(x: 0, y: 0, w: 3, h: 3, goal: 1),
+      ]);
+      sys.update(g); // 1개 카운트 → 완료
+      expect(sys.flasks.single.count, 1);
+      expect(sys.flasks.single.isComplete, isTrue);
+
+      // 완료 후 유입 물질은 소비되지 않고 그대로 쌓인다 (넘침).
+      _fill(g, 0, 1, 3, 1, Material.water); // 아래 행에 물 3개
+      sys.update(g);
+      expect(sys.flasks.single.count, 1, reason: '카운트 증가 없음');
+      expect(_countMaterial(g, Material.water), 3, reason: '유입분 전부 잔존 = 넘침');
+    });
+
+    test('완료 후 유입 ASH는 순수 플라스크를 오염시키지 않는다', () {
+      final g = _grid();
+      g.set(0, 0, Material.water.index);
+      final sys = FlaskSystem(const [
+        FlaskSpec(x: 0, y: 0, w: 3, h: 3, goal: 1, material: Material.water, pure: true),
+      ]);
+      sys.update(g); // WATER 1개 → 완료
+      expect(sys.flasks.single.isComplete, isTrue);
+      expect(sys.flasks.single.contaminated, isFalse);
+
+      // 채운 뒤 넘치는 ASH는 무해 (오염 판정은 목표 달성 전까지만).
+      g.set(1, 1, Material.ash.index);
+      sys.update(g);
+      expect(sys.flasks.single.contaminated, isFalse, reason: '사후 ASH 무해');
+      expect(sys.isFailed, isFalse);
+      expect(_countMaterial(g, Material.ash), 1, reason: '넘친 ASH도 소비 안 함');
+    });
+
+    test('목표 도달 전 ASH 오염은 여전히 실패시킨다 (회귀 없음)', () {
+      final g = _grid();
+      g.set(0, 0, Material.ash.index);
+      final sys = FlaskSystem(const [
+        FlaskSpec(x: 0, y: 0, w: 3, h: 3, goal: 5, material: Material.water, pure: true),
+      ]);
+      sys.update(g); // 미완료 상태에서 ASH → 오염
+      expect(sys.flasks.single.contaminated, isTrue);
+      expect(sys.isFailed, isTrue);
     });
   });
 

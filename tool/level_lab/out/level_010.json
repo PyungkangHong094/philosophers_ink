@@ -6,7 +6,7 @@
   "min_ink": 437,
   "effort": 11,
   "rollouts": 626,
-  "elapsed_ms": 347565,
+  "elapsed_ms": 722336,
   "budget": {
     "chalk": 437,
     "heat": 0,
@@ -15,7 +15,7 @@
   "solutions": [
     {
       "ink": 437,
-      "ticks": 391,
+      "ticks": 373,
       "strokes": [
         {
           "ink": "chalk",
@@ -29,7 +29,7 @@
     },
     {
       "ink": 437,
-      "ticks": 441,
+      "ticks": 443,
       "strokes": [
         {
           "ink": "chalk",
@@ -43,7 +43,7 @@
     },
     {
       "ink": 437,
-      "ticks": 324,
+      "ticks": 326,
       "strokes": [
         {
           "ink": "chalk",
@@ -78,7 +78,7 @@
     },
     {
       "ink": 437,
-      "ticks": 419,
+      "ticks": 426,
       "strokes": [
         {
           "ink": "chalk",
@@ -106,7 +106,7 @@
     },
     {
       "ink": 437,
-      "ticks": 324,
+      "ticks": 326,
       "strokes": [
         {
           "ink": "chalk",
@@ -125,6 +125,5 @@
       ],
       "gravity_taps": []
     }
-  ],
-  "probes": {}
+  ]
 }

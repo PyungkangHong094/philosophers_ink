@@ -1,7 +1,7 @@
 /// 타이틀 화면 (GDD 8.4.4 타이틀).
 ///
 /// black0. 중앙 골드 플라스크 라인아트 — 내부 골드 입자 상승 + 글로우 4초 호흡. 로고는
-/// 라틴 Display 2행. 하단 "화면을 터치하여 시작" 펄스. 골드 요소: 플라스크 1개.
+/// 라틴 Display 2행. 하단 "화면을 터치해 시작" 펄스. 골드 요소: 플라스크 1개.
 /// reduced motion 시 호흡·펄스·입자 정지. 화면 어디든 탭 → 챕터 선택.
 library;
 
@@ -126,7 +126,7 @@ class _StartPulse extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final label = Text('화면을 터치하여 시작',
+    final label = Text('화면을 터치해 시작',
         style: InkText.eyebrow.copyWith(color: InkColor.text2));
     if (!animate) return label;
     return AnimatedBuilder(

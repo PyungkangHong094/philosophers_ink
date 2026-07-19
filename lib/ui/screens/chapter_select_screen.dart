@@ -1,7 +1,7 @@
 /// 챕터 선택 화면 (GDD 8.4.4 챕터 선택).
 ///
 /// 세로 카드 4장. 카드 = black2 + 헤어라인 + 좌측 챕터색 스파인. 라틴 챕터명 대형 + 한글명·
-/// 레벨 범위 + 우측 진행도(별 tabular). 잠금 카드는 text3 + "N장 완료 시 해금". 현재 챕터는
+/// 레벨 범위 + 우측 진행도(별 tabular). 잠금 카드는 text3 + "N장 완료하면 해금". 현재 챕터는
 /// 골드 보더. 골드 요소: 별 카운트 + 현재 챕터 보더.
 library;
 
@@ -222,7 +222,7 @@ class _LockLabel extends StatelessWidget {
         SizedBox(
           width: 96,
           child: Text(
-            '${chapter.number - 1}장 완료 시 해금',
+            '${chapter.number - 1}장 완료하면 해금',
             textAlign: TextAlign.end,
             style: InkText.caption.copyWith(color: InkColor.text3),
           ),

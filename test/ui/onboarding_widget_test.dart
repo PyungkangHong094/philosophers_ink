@@ -25,12 +25,12 @@ Widget _overlayHost(Widget overlay) => MaterialApp(
 void main() {
   testWidgets('목표 배너가 노출되고 실제 크기를 가진다', (tester) async {
     await tester.pumpWidget(
-      _host(const GoalBanner(text: '프리마를 플라스크에 35만큼 담아라', visible: true)),
+      _host(const GoalBanner(text: '프리마를 플라스크에 35만큼 담기', visible: true)),
     );
     await tester.pump(const Duration(milliseconds: 300));
 
-    expect(find.text('프리마를 플라스크에 35만큼 담아라'), findsOneWidget);
-    final size = tester.getSize(find.text('프리마를 플라스크에 35만큼 담아라'));
+    expect(find.text('프리마를 플라스크에 35만큼 담기'), findsOneWidget);
+    final size = tester.getSize(find.text('프리마를 플라스크에 35만큼 담기'));
     expect(size.width, greaterThan(0));
     expect(size.height, greaterThan(0));
     // 배너 컨테이너도 실제 크기.
@@ -52,15 +52,15 @@ void main() {
   testWidgets('첫 조작 가이드가 텍스트+아이콘을 크기 있게 그린다', (tester) async {
     await tester.pumpWidget(
       _host(const FirstOpGuide(
-        text: '화면에 선을 그어 길을 만들어라',
+        text: '화면에 선을 그어 길 만들기',
         icon: Icons.gesture,
         reducedMotion: true, // 반복 애니 없이 정적
       )),
     );
     await tester.pump();
-    expect(find.text('화면에 선을 그어 길을 만들어라'), findsOneWidget);
+    expect(find.text('화면에 선을 그어 길 만들기'), findsOneWidget);
     expect(find.byIcon(Icons.gesture), findsOneWidget);
-    expect(tester.getSize(find.text('화면에 선을 그어 길을 만들어라')).width,
+    expect(tester.getSize(find.text('화면에 선을 그어 길 만들기')).width,
         greaterThan(0));
     expect(tester.getSize(find.byIcon(Icons.gesture)).width, greaterThan(0));
   });
@@ -94,17 +94,17 @@ void main() {
         onRetry: () {},
         onHome: () {},
         reducedMotion: true,
-        starHelp: '잉크를 아낄수록 별이 오른다',
-        usageLine: '사용 80 · ★★★ ≤ 60',
+        starHelp: '잉크를 아낄수록 별을 더 받는다',
+        usageLine: '잉크 80 사용 · ★★★ ≤ 60',
       ),
     ));
     await tester.pump(const Duration(milliseconds: 300));
 
-    expect(find.text('잉크를 아낄수록 별이 오른다'), findsOneWidget);
-    expect(find.text('사용 80 · ★★★ ≤ 60'), findsOneWidget);
-    expect(tester.getSize(find.text('잉크를 아낄수록 별이 오른다')).width,
+    expect(find.text('잉크를 아낄수록 별을 더 받는다'), findsOneWidget);
+    expect(find.text('잉크 80 사용 · ★★★ ≤ 60'), findsOneWidget);
+    expect(tester.getSize(find.text('잉크를 아낄수록 별을 더 받는다')).width,
         greaterThan(0));
-    expect(tester.getSize(find.text('사용 80 · ★★★ ≤ 60')).height,
+    expect(tester.getSize(find.text('잉크 80 사용 · ★★★ ≤ 60')).height,
         greaterThan(0));
   });
 
@@ -123,6 +123,6 @@ void main() {
       ),
     ));
     await tester.pump(const Duration(milliseconds: 300));
-    expect(find.text('잉크를 아낄수록 별이 오른다'), findsNothing);
+    expect(find.text('잉크를 아낄수록 별을 더 받는다'), findsNothing);
   });
 }

@@ -1,7 +1,13 @@
-/// 온보딩 문구 생성 (GDD 7.2 튜토리얼 원칙 — 텍스트 최소화, 1줄, 연금술 픽션 톤). 순수 로직.
+/// 온보딩 문구 생성 (GDD 7.2 튜토리얼 원칙 — 텍스트 최소화, 1줄). 순수 로직.
 ///
 /// 플라스크 조건(개수/물질/상태/순수)에서 목표 1줄을 자동 생성하고, 별점 임계 문구를 만든다.
 /// 하드코딩 색·위젯 없음 — 위젯 계층이 이 문자열을 토큰 스타일로 그린다.
+///
+/// **어미 톤 3분할 규칙 (UI 문구 감사 확정 — 이후 문구 추가 시 준수):**
+///  - 기능 문구(목표·조작 안내, 버튼) = **명사형 -기** (예: "플라스크 3개 채우기", "선을 그어 길 만들기").
+///  - 시스템 알림(설정 스낵바·실패 안내 등) = **-어요/-했어요체** (예: "안내를 초기화했어요").
+///  - 장식 타이틀(클리어·실패 제목)만 담백한 서술체 유지 (예: "정제 완료").
+///  "-어라" 해라체 명령형은 전면 폐기. 셀 수 있는 대상(플라스크 개수)엔 "만큼"이 아니라 "개".
 library;
 
 import '../../gameplay/star_rating.dart';
@@ -38,27 +44,31 @@ String withEul(String word) {
   return '$word${hasBatchim ? '을' : '를'}';
 }
 
-/// 레벨 목표 1줄. 플라스크 조건에서 파생 (GDD 예: "프리마를 플라스크에 35만큼 담아라").
-/// 다중 플라스크는 요약 1줄로.
+/// 레벨 목표 1줄 (명사형 -기, 감사 확정). 플라스크 조건에서 파생.
+/// 다중 플라스크는 요약 1줄로. 셀 수 있는 대상(플라스크)엔 "개".
 String goalLine(Level level) => goalLineForFlasks(level.flasks);
 
 String goalLineForFlasks(List<FlaskSpec> flasks) {
-  if (flasks.isEmpty) return '플라스크를 채워라';
+  if (flasks.isEmpty) return '플라스크 채우기';
   if (flasks.length != 1) {
-    return '플라스크 ${flasks.length}곳을 조건대로 채워라';
+    return '플라스크 ${flasks.length}개를 조건대로 채우기';
   }
   final f = flasks.single;
   final String core;
   if (f.state != null) {
+    // 조사(을/를) 보완 + 명사형.
     final matPart =
         f.material != null ? '${withEul(materialDisplayKo(f.material!))} ' : '';
-    core = '$matPart${flaskStateKo(f.state!)}로 ${f.goal}만큼 담아라';
+    core = '$matPart${flaskStateKo(f.state!)}로 ${f.goal}만큼 담기';
   } else if (f.material != null) {
-    core = '${withEul(materialDisplayKo(f.material!))} 플라스크에 ${f.goal}만큼 담아라';
+    // 순수(재 없이)면 "플라스크에" 없이 간결하게 (감사안).
+    core = f.pure
+        ? '${materialDisplayKo(f.material!)} ${f.goal}만큼 담기'
+        : '${withEul(materialDisplayKo(f.material!))} 플라스크에 ${f.goal}만큼 담기';
   } else {
-    core = '플라스크를 ${f.goal}만큼 채워라';
+    core = '플라스크 ${f.goal}개 채우기';
   }
-  // 순수(❗) — 재 혼입 금지. 픽션 톤으로 접두.
+  // 순수(❗) — 재 혼입 금지.
   return f.pure ? '재 없이 $core' : core;
 }
 
@@ -79,16 +89,16 @@ String? starThresholdLine(Level level) {
   return '★★ ≤ $two · ★★★ ≤ $three';
 }
 
-/// 클리어 화면 사용량 대비 3성 임계 1줄 ("사용 182 · ★★★ ≤ 156"). 미검증이면 사용량만.
+/// 클리어 화면 사용량 대비 3성 임계 1줄 ("잉크 182 사용 · ★★★ ≤ 156"). 미검증이면 사용량만.
 String clearUsageLine(Level level, int inkUsed) {
   final three = levelStarInfo(level).threeStarThreshold;
-  if (three == null) return '사용 $inkUsed';
-  return '사용 $inkUsed · ★★★ ≤ $three';
+  if (three == null) return '잉크 $inkUsed 사용';
+  return '잉크 $inkUsed 사용 · ★★★ ≤ $three';
 }
 
-/// 고정 안내 문구 (GDD 문체 — 간결·명령형).
+/// 고정 안내 문구 (기능 문구=명사형, 알림=서술). 어미 톤 3분할 규칙은 파일 헤더 참조.
 abstract final class OnboardingCopy {
-  static const String strokeGuide = '화면에 선을 그어 길을 만들어라';
-  static const String gravityGuide = '버튼으로 중력을 뒤집어라';
-  static const String starExplain = '잉크를 아낄수록 별이 오른다';
+  static const String strokeGuide = '화면에 선을 그어 길 만들기';
+  static const String gravityGuide = '버튼으로 중력 뒤집기';
+  static const String starExplain = '잉크를 아낄수록 별을 더 받는다';
 }

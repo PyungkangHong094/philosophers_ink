@@ -3,10 +3,10 @@
   "name": "왕복 운동",
   "chapter": 1,
   "solvable": true,
-  "min_ink": 91,
-  "effort": 469,
-  "rollouts": 2228,
-  "elapsed_ms": 1424364,
+  "min_ink": 97,
+  "effort": 236,
+  "rollouts": 2244,
+  "elapsed_ms": 1783713,
   "budget": {
     "chalk": 182,
     "heat": 0,
@@ -14,90 +14,84 @@
   },
   "solutions": [
     {
-      "ink": 91,
-      "ticks": 895,
+      "ink": 97,
+      "ticks": 560,
       "strokes": [
         {
           "ink": "chalk",
           "x0": 53,
-          "y0": 83,
-          "x1": 82,
-          "y1": 54
-        }
-      ],
-      "gravity_taps": [
-        298
-      ]
-    },
-    {
-      "ink": 91,
-      "ticks": 886,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 53,
-          "y0": 83,
-          "x1": 82,
-          "y1": 54
-        }
-      ],
-      "gravity_taps": [
-        287
-      ]
-    },
-    {
-      "ink": 91,
-      "ticks": 886,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 53,
-          "y0": 83,
-          "x1": 82,
-          "y1": 54
-        }
-      ],
-      "gravity_taps": [
-        289
-      ]
-    },
-    {
-      "ink": 94,
-      "ticks": 508,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 52,
           "y0": 84,
-          "x1": 82,
-          "y1": 54
+          "x1": 84,
+          "y1": 53
         }
       ],
       "gravity_taps": [
-        298
+        273
       ]
     },
     {
-      "ink": 94,
-      "ticks": 499,
+      "ink": 100,
+      "ticks": 548,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 52,
+          "x0": 53,
           "y0": 84,
-          "x1": 82,
-          "y1": 54
+          "x1": 85,
+          "y1": 52
         }
       ],
       "gravity_taps": [
-        289
+        256
+      ]
+    },
+    {
+      "ink": 100,
+      "ticks": 569,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 53,
+          "y0": 84,
+          "x1": 85,
+          "y1": 52
+        }
+      ],
+      "gravity_taps": [
+        282
+      ]
+    },
+    {
+      "ink": 100,
+      "ticks": 568,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 53,
+          "y0": 84,
+          "x1": 83,
+          "y1": 51
+        }
+      ],
+      "gravity_taps": [
+        282
+      ]
+    },
+    {
+      "ink": 100,
+      "ticks": 559,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 53,
+          "y0": 84,
+          "x1": 83,
+          "y1": 51
+        }
+      ],
+      "gravity_taps": [
+        271
       ]
     }
-  ],
-  "probes": {
-    "no_flip": {
-      "solvable": false,
-      "min_ink": null
-    }
-  }
+  ]
 }

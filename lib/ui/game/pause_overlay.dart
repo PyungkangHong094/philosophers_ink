@@ -46,7 +46,7 @@ class PauseOverlay extends StatelessWidget {
             children: [
               InkEyebrow(eyebrow),
               const SizedBox(height: InkSpace.md),
-              Text('멈춤', style: InkText.titleKo),
+              Text('일시정지', style: InkText.titleKo),
               if (thresholdLine != null) ...[
                 const SizedBox(height: InkSpace.sm),
                 Text(thresholdLine!,

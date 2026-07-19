@@ -39,7 +39,7 @@ class SettingsScreen extends StatelessWidget {
               ),
               const SizedBox(height: InkSpace.md),
               _ToggleRow(
-                label: '사운드',
+                label: '소리',
                 caption: '효과음·앰비언트',
                 value: settings.sound,
                 onChanged: (v) => settings.sound = v,
@@ -71,13 +71,13 @@ class SettingsScreen extends StatelessWidget {
               ),
               _ActionRow(
                 label: '안내 다시 보기',
-                caption: '목표·조작·별점 안내를 처음처럼',
+                caption: '목표·조작·별점 안내를 처음부터 다시 보기',
                 actionLabel: '초기화',
                 onTap: () {
                   InkServices.of(context).onboarding.reset();
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('안내를 초기화했다'),
+                      content: Text('안내를 초기화했어요'),
                       duration: Duration(seconds: 2),
                     ),
                   );

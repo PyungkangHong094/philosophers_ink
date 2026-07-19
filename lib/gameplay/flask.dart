@@ -89,6 +89,11 @@ class FlaskSystem {
   void _updateFlask(int fi, Flask flask, Grid grid) {
     final s = flask.spec;
     final empty = Material.empty.index;
+    // 넘침 규칙 (GDD 5.1, 2026-07-19): 목표를 채운 플라스크는 더 이상 소비하지 않는다.
+    // 이후 도달하는 물질은 일반 sim 물리로 그 자리에 쌓여 넘친다("다 찼다"가 물리로 읽힘).
+    // 순수 오염 판정도 목표 달성 전까지만 유효(채운 뒤 넘치는 ASH는 무해)하므로,
+    // 완료된 플라스크는 이 판정 패스를 통째로 건너뛴다.
+    if (flask.isComplete) return;
     for (var yy = s.y; yy < s.y + s.h; yy++) {
       for (var xx = s.x; xx < s.x + s.w; xx++) {
         if (!grid.inBounds(xx, yy)) continue;
@@ -101,7 +106,7 @@ class FlaskSystem {
         // 않고 그대로 남긴다(그린 선 유지). LAVA→STONE 등 동적 반응 산출물은 입자라 카운트 유지.
         if (categoryOf(id) == MaterialCategory.staticSolid) continue;
 
-        // 순수 위반: ASH 혼입 → 오염 + 재 제거 (카운트 안 함).
+        // 순수 위반: ASH 혼입 → 오염 + 재 제거 (카운트 안 함). 목표 달성 전만 유효(위 조기 반환).
         if (s.pure && id == Material.ash.index) {
           flask.contaminated = true;
           grid.set(xx, yy, empty);
@@ -110,21 +115,21 @@ class FlaskSystem {
 
         final cat = categoryOf(id);
         if (_matches(s, id, cat)) {
-          if (flask.count < s.goal) {
-            flask.count++;
-            // 물질 테이블 조회 전 셀 ID 범위 가드 (디버그 조기 노출, 릴리즈 비용 0).
-            assert(id >= 0 && id < Material.values.length,
-                '물질 ID $id가 범위 밖 (0~${Material.values.length - 1})');
-            onSettle?.call(SettleEvent(
-              flaskIndex: fi,
-              x: xx,
-              y: yy,
-              material: Material.values[id],
-              phase: flaskStateForCategory(cat),
-            ));
-          }
-          // 목표 달성 후에도 매칭 물질은 소비해 싱크로 유지.
-          grid.set(xx, yy, empty);
+          // 여기 진입 시 count < goal 이 보장된다(목표 도달 즉시 아래에서 반환).
+          flask.count++;
+          // 물질 테이블 조회 전 셀 ID 범위 가드 (디버그 조기 노출, 릴리즈 비용 0).
+          assert(id >= 0 && id < Material.values.length,
+              '물질 ID $id가 범위 밖 (0~${Material.values.length - 1})');
+          onSettle?.call(SettleEvent(
+            flaskIndex: fi,
+            x: xx,
+            y: yy,
+            material: Material.values[id],
+            phase: flaskStateForCategory(cat),
+          ));
+          grid.set(xx, yy, empty); // 카운트한 셀만 소비
+          // 목표 도달 → 이 패스의 나머지 셀은 소비하지 않고 넘치게 둔다 (넘침 규칙).
+          if (flask.isComplete) return;
         } else if (s.state == null) {
           // 무조건/물질 플라스크의 비매칭 → 통과·소멸 (GDD 5.1).
           grid.set(xx, yy, empty);
