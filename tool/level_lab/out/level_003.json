@@ -6,7 +6,7 @@
   "min_ink": 357,
   "effort": 22,
   "rollouts": 2378,
-  "elapsed_ms": 1713848,
+  "elapsed_ms": 1402955,
   "budget": {
     "chalk": 828,
     "heat": 0,
@@ -15,7 +15,7 @@
   "solutions": [
     {
       "ink": 357,
-      "ticks": 468,
+      "ticks": 670,
       "strokes": [
         {
           "ink": "chalk",
@@ -36,7 +36,7 @@
     },
     {
       "ink": 359,
-      "ticks": 558,
+      "ticks": 738,
       "strokes": [
         {
           "ink": "chalk",
@@ -78,7 +78,7 @@
     },
     {
       "ink": 362,
-      "ticks": 440,
+      "ticks": 475,
       "strokes": [
         {
           "ink": "chalk",

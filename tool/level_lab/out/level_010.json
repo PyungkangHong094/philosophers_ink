@@ -5,8 +5,8 @@
   "solvable": true,
   "min_ink": 437,
   "effort": 11,
-  "rollouts": 875,
-  "elapsed_ms": 743052,
+  "rollouts": 888,
+  "elapsed_ms": 601510,
   "budget": {
     "chalk": 437,
     "heat": 0,
@@ -19,10 +19,10 @@
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 120,
-          "y0": 102,
-          "x1": 12,
-          "y1": 304
+          "x0": 117,
+          "y0": 95,
+          "x1": 10,
+          "y1": 301
         }
       ],
       "gravity_taps": []
@@ -78,7 +78,7 @@
     },
     {
       "ink": 437,
-      "ticks": 326,
+      "ticks": 356,
       "strokes": [
         {
           "ink": "chalk",

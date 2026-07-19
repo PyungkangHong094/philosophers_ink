@@ -3,10 +3,10 @@
   "name": "왕복 운동",
   "chapter": 1,
   "solvable": true,
-  "min_ink": 97,
+  "min_ink": 91,
   "effort": 672,
-  "rollouts": 2244,
-  "elapsed_ms": 1673166,
+  "rollouts": 2228,
+  "elapsed_ms": 1354964,
   "budget": {
     "chalk": 182,
     "heat": 0,
@@ -14,83 +14,83 @@
   },
   "solutions": [
     {
-      "ink": 97,
-      "ticks": 1255,
+      "ink": 91,
+      "ticks": 501,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 53,
-          "y0": 84,
+          "x0": 55,
+          "y0": 81,
           "x1": 84,
-          "y1": 53
-        }
-      ],
-      "gravity_taps": [
-        293
-      ]
-    },
-    {
-      "ink": 100,
-      "ticks": 1203,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 53,
-          "y0": 84,
-          "x1": 83,
-          "y1": 51
-        }
-      ],
-      "gravity_taps": [
-        293
-      ]
-    },
-    {
-      "ink": 100,
-      "ticks": 1257,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 53,
-          "y0": 84,
-          "x1": 85,
           "y1": 52
         }
       ],
       "gravity_taps": [
-        293
+        218
       ]
     },
     {
-      "ink": 102,
-      "ticks": 522,
+      "ink": 91,
+      "ticks": 492,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 52,
-          "y0": 86,
+          "x0": 55,
+          "y0": 81,
           "x1": 84,
-          "y1": 53
+          "y1": 52
         }
       ],
       "gravity_taps": [
-        293
+        207
       ]
     },
     {
-      "ink": 103,
-      "ticks": 1320,
+      "ink": 91,
+      "ticks": 494,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 53,
-          "y0": 84,
-          "x1": 86,
-          "y1": 51
+          "x0": 55,
+          "y0": 81,
+          "x1": 84,
+          "y1": 52
         }
       ],
       "gravity_taps": [
-        293
+        209
+      ]
+    },
+    {
+      "ink": 91,
+      "ticks": 503,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 55,
+          "y0": 81,
+          "x1": 84,
+          "y1": 52
+        }
+      ],
+      "gravity_taps": [
+        220
+      ]
+    },
+    {
+      "ink": 94,
+      "ticks": 500,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 54,
+          "y0": 82,
+          "x1": 84,
+          "y1": 52
+        }
+      ],
+      "gravity_taps": [
+        218
       ]
     }
   ]

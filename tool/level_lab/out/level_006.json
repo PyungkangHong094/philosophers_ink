@@ -3,10 +3,10 @@
   "name": "쌓임의 법칙",
   "chapter": 1,
   "solvable": true,
-  "min_ink": 293,
+  "min_ink": 296,
   "effort": 39,
-  "rollouts": 607,
-  "elapsed_ms": 568520,
+  "rollouts": 594,
+  "elapsed_ms": 463913,
   "budget": {
     "chalk": 684,
     "heat": 0,
@@ -14,71 +14,71 @@
   },
   "solutions": [
     {
-      "ink": 293,
-      "ticks": 335,
-      "strokes": [
-        {
-          "ink": "chalk",
-          "x0": 27,
-          "y0": 109,
-          "x1": 116,
-          "y1": 209
-        }
-      ],
-      "gravity_taps": []
-    },
-    {
       "ink": 296,
-      "ticks": 335,
+      "ticks": 370,
       "strokes": [
         {
           "ink": "chalk",
           "x0": 28,
-          "y0": 107,
+          "y0": 108,
           "x1": 116,
-          "y1": 209
+          "y1": 210
         }
       ],
       "gravity_taps": []
     },
     {
       "ink": 298,
-      "ticks": 344,
+      "ticks": 384,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 30,
+          "x0": 26,
+          "y0": 108,
+          "x1": 116,
+          "y1": 210
+        }
+      ],
+      "gravity_taps": []
+    },
+    {
+      "ink": 298,
+      "ticks": 610,
+      "strokes": [
+        {
+          "ink": "chalk",
+          "x0": 32,
           "y0": 105,
           "x1": 116,
-          "y1": 209
+          "y1": 210
         }
       ],
       "gravity_taps": []
     },
     {
       "ink": 299,
-      "ticks": 452,
+      "ticks": 358,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 32,
-          "y0": 152,
-          "x1": 127,
-          "y1": 256
+          "x0": 29,
+          "y0": 106,
+          "x1": 116,
+          "y1": 210
         }
       ],
       "gravity_taps": []
     },
     {
-      "ink": 299,
-      "ticks": 454,
+      "ink": 300,
+      "ticks": 367,
       "strokes": [
         {
           "ink": "chalk",
-          "x0": 32,
-          "y0": 152,
-          "x1": 127,
-          "y1": 255
+          "x0": 26,
+          "y0": 107,
+          "x1": 116,
+          "y1": 210
         }
       ],
       "gravity_taps": []
