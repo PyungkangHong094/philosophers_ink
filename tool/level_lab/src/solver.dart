@@ -143,8 +143,12 @@ class SolveResult {
   /// 실제 수행한 총 롤아웃 수 (샘플링+정련).
   final int rollouts;
 
-  /// 상위 해 아카이브 (잉크 오름차순).
+  /// 상위 해 아카이브 (잉크 오름차순). **아카이브 기록 가드로 재검증을 통과한 해만** 담긴다.
   final List<FoundSolution> solutions;
+
+  /// 기록 가드가 버린 해 수 — 탐색은 solved로 봤으나 fresh 세션 재검증에서 클리어되지 않아
+  /// 아카이브에서 제외된 위양성 후보 수. 0보다 크면 탐색-검증 불일치 신호(스윕 요약에 집계).
+  final int verifyFailed;
 
   final int elapsedMs;
   final Map<InkType, int> budget;
@@ -160,6 +164,7 @@ class SolveResult {
     required this.solutions,
     required this.elapsedMs,
     required this.budget,
+    this.verifyFailed = 0,
   });
 
   Map<String, dynamic> toJson() => {
@@ -170,6 +175,7 @@ class SolveResult {
         'min_ink': minInk,
         'effort': effort,
         'rollouts': rollouts,
+        'verify_failed': verifyFailed,
         'elapsed_ms': elapsedMs,
         'budget': {
           for (final e in budget.entries) inkKey(e.key): e.value,
@@ -183,6 +189,31 @@ class SolveResult {
             }
         ],
       };
+}
+
+/// 아카이브 기록 가드 (2026-07-20 위양성 포렌식 대응). 탐색이 solved로 본 해들을 잉크
+/// 오름차순으로, **완전히 새 [HeadlessSession]** 에서 [kVerifyRolloutConfig](= bake_hints와
+/// 동일 설정)로 재검증한다. 실제로 클리어되는 해만 남겨 위양성이 아카이브에 물리적으로 남지
+/// 못하게 한다. [want]개의 검증 통과 해를 확보하면 조기 종료(불필요한 롤아웃 절약).
+/// 반환: (검증 통과 해 = 잉크 오름차순, 검증에서 버린 위양성 수).
+///
+/// 탐색 롤아웃은 세션 재사용·관대한 forbidInFlask 정책을 쓰므로, 소비자(게임/베이크)가 보는
+/// 진짜 물리와 어긋날 수 있다. 이 패스가 소비자 관점의 최종 진실로 아카이브를 정직화한다.
+({List<FoundSolution> kept, int dropped}) verifySolutions(
+    Level level, List<FoundSolution> sortedByInk, int want) {
+  final kept = <FoundSolution>[];
+  var dropped = 0;
+  for (final s in sortedByInk) {
+    if (kept.length >= want) break;
+    // 후보마다 새 세션 — 세션 재사용 상태가 검증에 새지 않게 한다.
+    final r = rollout(HeadlessSession(level), s.candidate, kVerifyRolloutConfig);
+    if (r.solved) {
+      kept.add(s);
+    } else {
+      dropped++;
+    }
+  }
+  return (kept: kept, dropped: dropped);
 }
 
 /// 한 레벨을 솔브한다. [session]은 재사용(내부 reset)하고 없으면 새로 만든다.
@@ -295,19 +326,24 @@ SolveResult solveLevel(Level level, SolverConfig cfg) {
   sw.stop();
   final sols = archive.values.toList()
     ..sort((a, b) => a.ink.compareTo(b.ink));
-  final top = sols.take(cfg.topK).toList();
+
+  // --- 아카이브 기록 가드: 위양성을 아카이브에 남기지 않는다 (2026-07-20 포렌식 대응) ---
+  // 탐색이 solved로 본 해를 fresh 세션에서 재검증해, 실제로 클리어되는 topK개만 남긴다.
+  final verified = verifySolutions(level, sols, cfg.topK);
+  final top = verified.kept; // 이미 잉크 오름차순·검증 통과.
 
   return SolveResult(
     levelId: level.meta.id,
     name: level.meta.name,
     chapter: level.meta.chapter,
-    solvable: sols.isNotEmpty,
-    minInk: sols.isEmpty ? null : sols.first.ink,
-    effort: effort,
+    solvable: top.isNotEmpty,
+    minInk: top.isEmpty ? null : top.first.ink,
+    effort: top.isEmpty ? null : effort,
     rollouts: rollouts,
     solutions: top,
     elapsedMs: sw.elapsedMilliseconds,
     budget: level.inkBudget,
+    verifyFailed: verified.dropped,
   );
 }
 

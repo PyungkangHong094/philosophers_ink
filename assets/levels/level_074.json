@@ -8,7 +8,7 @@
     "tags": ["lava", "stone", "frost", "constraint", "silent"],
     "optimal_ink": null,
     "solutions_verified": 2,
-    "hint_stroke": null
+    "hint_stroke": [ { "ink": "frost", "x0": 6, "y0": 153, "x1": 27, "y1": 184 } ]
   },
   "background": "#9A2333",
   "emitters": [

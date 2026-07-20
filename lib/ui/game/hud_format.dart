@@ -7,10 +7,13 @@ library;
 import '../../core/constants.dart';
 
 /// 시뮬 틱 수 → "MM:SS" 경과 시간. 분은 최소 2자리, 60분 이상도 그대로 누적.
-String formatElapsed(int ticks) {
-  final totalSeconds = ticks ~/ SimConstants.tickRateHz;
-  final m = totalSeconds ~/ 60;
-  final s = totalSeconds % 60;
+String formatElapsed(int ticks) => formatClock(ticks ~/ SimConstants.tickRateHz);
+
+/// 초 → "MM:SS" 시계 문자열 (카운트다운 HUD·경과 시간 공용). 음수는 0으로 클램프.
+String formatClock(int totalSeconds) {
+  final t = totalSeconds < 0 ? 0 : totalSeconds;
+  final m = t ~/ 60;
+  final s = t % 60;
   return '${_pad2(m)}:${_pad2(s)}';
 }
 

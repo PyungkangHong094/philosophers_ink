@@ -71,6 +71,8 @@ void main(List<String> argv) {
 
   if (args.has('out')) {
     final outDir = args.str('out') ?? kDefaultOutDir;
+    // 프로비넌스 스탬프 — 소비자(bake_hints)가 stale 아카이브를 거부할 근거.
+    stampProvenance(json, levelPath, gitSha: currentGitSha());
     writeResultJson(outDir, result.levelId, json);
     print('  → $outDir/level_${result.levelId.toString().padLeft(3, "0")}.json');
   } else if (args.has('json')) {

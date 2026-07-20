@@ -9,6 +9,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../../gameplay/level_session.dart' show LevelFailure;
 import '../tokens.dart';
 import '../widgets.dart';
 
@@ -226,21 +227,31 @@ class _StarParticles extends CustomPainter {
       old.progress != progress || old.stars != stars;
 }
 
-/// 실패(오염) 오버레이 — 재시작 유도. 별 없음, 골드 없음(무채).
-/// 타이틀·설명은 픽션 톤, 버튼은 평이한 한국어.
+/// 실패 오버레이 — 재시작 유도. 별 없음, 골드 없음(무채).
+/// 실패 사유([failure])별로 타이틀·설명을 분기한다 (감사 Q1-2: 타임아웃에 "오염" 오답
+/// 피드백을 주던 하드코딩 제거). 타이틀은 픽션 톤, 버튼은 평이한 한국어.
 class FailOverlay extends StatelessWidget {
   final String eyebrow;
+  final LevelFailure failure;
   final VoidCallback onRetry;
   final VoidCallback onHome;
   const FailOverlay({
     super.key,
     required this.eyebrow,
+    required this.failure,
     required this.onRetry,
     required this.onHome,
   });
 
+  /// (타이틀, 설명) — 실패 사유별 문구.
+  (String, String) get _copy => switch (failure) {
+        LevelFailure.contamination => ('오염', '순수가 깨졌어요. 다시 정제해야 해요.'),
+        LevelFailure.timeout => ('시간 초과', '시간이 다 됐어요. 다시 시도해요.'),
+      };
+
   @override
   Widget build(BuildContext context) {
+    final (title, body) = _copy;
     return Positioned.fill(
       child: Container(
         color: InkColor.scrim90,
@@ -252,10 +263,9 @@ class FailOverlay extends StatelessWidget {
             children: [
               InkEyebrow(eyebrow),
               const SizedBox(height: InkSpace.md),
-              Text('오염', style: InkText.headingKo),
+              Text(title, style: InkText.headingKo),
               const SizedBox(height: InkSpace.sm),
-              Text('순수가 깨졌어요. 다시 정제해야 해요.',
-                  style: InkText.body, textAlign: TextAlign.center),
+              Text(body, style: InkText.body, textAlign: TextAlign.center),
               const SizedBox(height: InkSpace.xl),
               SizedBox(
                 width: 220,

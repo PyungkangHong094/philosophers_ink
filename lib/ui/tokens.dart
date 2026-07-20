@@ -25,6 +25,9 @@ abstract final class InkColor {
   static const Color text2 = Color(0xFF9C968A); // 보조
   static const Color text3 = Color(0xFF5E5A50); // 비활성·힌트
 
+  /// 경고 — 카운트다운 임박(≤10초) 강조 (GDD 2장). 골드 아님(골드 희소성 보존).
+  static const Color warn = Color(0xFFD9542B); // 주홍 경고
+
   // 챕터 스와치 (셸에 허용되는 유일한 유채색, GDD 7.1).
   static const Color nigredo = Color(0xFF1D1418);
   static const Color albedo = Color(0xFFE9E5DB);
@@ -33,6 +36,27 @@ abstract final class InkColor {
 
   /// 오버레이 — 일시정지/결과의 챕터색 차단막 (블러 금지, 명도로만).
   static const Color scrim90 = Color(0xE6050505); // black0 90%
+}
+
+/// 인게임 월드 오버레이 마커 색 (GDD 6·8.1). **셸 무채 규칙의 예외** — 인게임은 화려하게.
+/// 기믹·방출구 정적 표식 전용이며 셸 화면에는 등장하지 않는다. 각 색은 챕터 4색 배경 모두에서
+/// 식별되도록 페인터가 배경 명도에 맞춘 적응형 헤일로(어두운 배경엔 밝은, 밝은 배경엔 어두운
+/// 외곽선)와 함께 그린다 — 볼드한 단색 실루엣 + 명도 대비 20%+ (GDD 8.1).
+abstract final class InkGimmick {
+  /// 온도 존 — 열(화로): 주홍. 물질 테이블 LAVA/HEAT 색과 동계열.
+  static const Color heatZone = Color(0xFFE0602A);
+
+  /// 온도 존 — 냉(빙결): 청백. ICE/FROST 색과 동계열.
+  static const Color coolZone = Color(0xFF6BC4E8);
+
+  /// 포탈 페어 색 — **같은 색 = 연결된 입·출구 페어**. 페어 인덱스로 순환한다.
+  /// (셸 스와치와 겹치지 않는 인게임 전용 채도.)
+  static const List<Color> portalPairs = [
+    Color(0xFF32C8D8), // 0 시안
+    Color(0xFFD85AC0), // 1 마젠타
+    Color(0xFF8FD048), // 2 라임
+    Color(0xFFE0A93A), // 3 앰버
+  ];
 }
 
 /// 모션 duration 토큰 (GDD 8.4.5). 셸 전환은 "의식"처럼 무게감 있게.

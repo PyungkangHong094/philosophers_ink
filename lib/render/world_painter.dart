@@ -138,21 +138,87 @@ class WorldPainter extends CustomPainter {
   bool shouldRepaint(WorldPainter oldDelegate) => oldDelegate.source != source;
 }
 
+/// [WorldPointsPainter]가 프레임마다 재사용하는 물질별 점 좌표 버퍼 (감사 P1-1).
+///
+/// 페인터 밖(플레이 화면 State)이 소유해 프레임 간 유지된다. 매 페인트에서 제자리로
+/// 채우고 [view]로 [Canvas.drawRawPoints]에 넘겨 **페인트당 힙 할당 0**을 달성한다.
+/// 버퍼는 하이워터마크로만 성장하고 축소하지 않는다(재할당 churn 제거).
+class WorldPointBuffers {
+  static final Float32List _emptyF32 = Float32List(0);
+
+  final List<Float32List> _buf; // 물질 id별 (x,y 쌍 연속) 좌표
+  final Int32List _count; // 이번 프레임 물질별 점 개수
+  final Int32List _cursor; // 채우기 커서(플로트 인덱스)
+
+  WorldPointBuffers() : this._(kMaterialTable.length);
+
+  WorldPointBuffers._(int n)
+      : _buf = List<Float32List>.filled(n, _emptyF32, growable: false),
+        _count = Int32List(n),
+        _cursor = Int32List(n);
+
+  /// 그리드를 순회해 물질별 점 좌표를 제자리 채운다. 할당은 버퍼가 하이워터마크를
+  /// 넘을 때만(성장) 발생하고, 정상 상태에선 0이다. 이후 [count]/[view]로 그린다.
+  void rebuild(Uint8List cells, int gridWidth, int gridHeight, GridViewport vp) {
+    final n = _count.length;
+    _count.fillRange(0, n, 0);
+    // 1패스: 물질별 개수 집계.
+    for (var i = 0; i < cells.length; i++) {
+      final id = cells[i];
+      if (id != 0) _count[id]++;
+    }
+    // 용량 확보 — 하이워터마크(모자랄 때만 성장).
+    for (var id = 1; id < n; id++) {
+      final need = _count[id] * 2;
+      if (_buf[id].length < need) _buf[id] = Float32List(need);
+    }
+    // 2패스: 제자리 채움. 행별 y·중첩 인덱스로 나눗셈/나머지 없이 순회.
+    _cursor.fillRange(0, n, 0);
+    final ox = vp.offsetX;
+    final oy = vp.offsetY;
+    final s = vp.scale.toDouble();
+    var i = 0;
+    for (var gy = 0; gy < gridHeight; gy++) {
+      final rowY = oy + (gy + 0.5) * s;
+      for (var gx = 0; gx < gridWidth; gx++, i++) {
+        final id = cells[i];
+        if (id == 0) continue;
+        final buf = _buf[id];
+        var c = _cursor[id];
+        buf[c++] = ox + (gx + 0.5) * s;
+        buf[c++] = rowY;
+        _cursor[id] = c;
+      }
+    }
+  }
+
+  /// 물질 id의 이번 프레임 점 개수.
+  int count(int id) => _count[id];
+
+  /// 물질 id의 채워진 좌표만 보는 뷰(복사 없음) — drawRawPoints 입력.
+  Float32List view(int id) =>
+      Float32List.sublistView(_buf[id], 0, _count[id] * 2);
+}
+
 /// 그리드를 직접 순회해 **둥근 잉크 방울**로 그리는 페인터 (사용자 디렉션 2026-07-19).
 ///
 /// 동적 물질(입자·액체·기체)은 원형 점 — "잉크 방울" 픽션 정합. 정적 잉크·벽
 /// (staticSolid)은 각진 사각 유지 — 그은 선·지형의 명료함. 물질별 drawRawPoints
 /// 단일 콜이라 이미지 디코드 경로(WorldImageSource)보다 프레임 비용이 낮다.
 /// EMPTY는 그리지 않아 레벨 배경(Scaffold)이 비친다.
+///
+/// 좌표 버퍼는 [WorldPointBuffers](State 소유)를 재사용해 페인트당 할당이 없다(감사 P1-1).
 class WorldPointsPainter extends CustomPainter {
   final Uint8List cells;
   final int gridWidth;
   final int gridHeight;
+  final WorldPointBuffers buffers;
 
   WorldPointsPainter({
     required this.cells,
     required this.gridWidth,
     required this.gridHeight,
+    required this.buffers,
     required Listenable repaint,
   }) : super(repaint: repaint);
 
@@ -175,25 +241,13 @@ class WorldPointsPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final vp = GridViewport.fit(size, gridWidth, gridHeight);
     final s = vp.scale.toDouble();
-    final buckets = List<List<double>?>.filled(kMaterialTable.length, null);
-    for (var i = 0; i < cells.length; i++) {
-      final id = cells[i];
-      if (id == 0) continue; // EMPTY
-      final b = buckets[id] ??= <double>[];
-      final gx = i % gridWidth;
-      final gy = i ~/ gridWidth;
-      b
-        ..add(vp.offsetX + (gx + 0.5) * s)
-        ..add(vp.offsetY + (gy + 0.5) * s);
-    }
-    for (var id = 1; id < buckets.length; id++) {
-      final b = buckets[id];
-      if (b == null) continue;
+    buffers.rebuild(cells, gridWidth, gridHeight, vp);
+    for (var id = 1; id < kMaterialTable.length; id++) {
+      if (buffers.count(id) == 0) continue;
       final isStatic = categoryOf(id) == MaterialCategory.staticSolid;
       final paint = (isStatic ? _square : _round)[id]
         ..strokeWidth = isStatic ? s : s * _roundOverlap;
-      canvas.drawRawPoints(
-          ui.PointMode.points, Float32List.fromList(b), paint);
+      canvas.drawRawPoints(ui.PointMode.points, buffers.view(id), paint);
     }
   }
 
@@ -201,5 +255,6 @@ class WorldPointsPainter extends CustomPainter {
   bool shouldRepaint(WorldPointsPainter old) =>
       old.cells != cells ||
       old.gridWidth != gridWidth ||
-      old.gridHeight != gridHeight;
+      old.gridHeight != gridHeight ||
+      old.buffers != buffers;
 }

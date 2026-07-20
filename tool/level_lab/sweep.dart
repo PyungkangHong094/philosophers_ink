@@ -29,8 +29,11 @@ class _Task {
   final int stall;
   final int maxStrokes;
   final bool probe;
+
+  /// 스윕 실행 시점 git HEAD SHA (프로비넌스 스탬프용, 없으면 null). 메인에서 1회 계산해 전달.
+  final String? gitSha;
   const _Task(this.path, this.seed, this.rollouts, this.refine, this.tickCap,
-      this.stall, this.maxStrokes, this.probe);
+      this.stall, this.maxStrokes, this.probe, this.gitSha);
 }
 
 Future<Map<String, dynamic>> _solveInIsolate(_Task t) => Isolate.run(() {
@@ -43,8 +46,11 @@ Future<Map<String, dynamic>> _solveInIsolate(_Task t) => Isolate.run(() {
         stallTicks: t.stall,
         maxStrokes: t.maxStrokes,
       );
+      // solveLevel이 아카이브 기록 가드로 이미 위양성을 걸러 반환한다(verify_failed 포함).
       final json = solveLevel(level, cfg).toJson();
       if (t.probe) json['probes'] = runProbes(level, cfg);
+      // 프로비넌스: 이 레벨 내용 해시로 소비 시점 stale 검출이 가능하게 한다.
+      stampProvenance(json, t.path, gitSha: t.gitSha);
       return json;
     });
 
@@ -77,9 +83,10 @@ Future<void> main(List<String> argv) async {
       .clamp(1, paths.length);
 
   final probe = args.has('probe');
+  final gitSha = currentGitSha(); // 스윕 1회당 한 번 — 프로비넌스 스탬프에 박는다.
   final tasks = [
     for (final p in paths)
-      _Task(p, seed, rollouts, refine, tickCap, stall, maxStrokes, probe)
+      _Task(p, seed, rollouts, refine, tickCap, stall, maxStrokes, probe, gitSha)
   ];
 
   stderr.writeln('레벨 랩 sweep: ${paths.length}레벨 · '
@@ -132,9 +139,19 @@ Future<void> main(List<String> argv) async {
   for (final r in results) {
     print(_tableRow(r));
   }
+  // 기록 가드가 버린 위양성 집계 — 탐색-검증 불일치 신호.
+  final verifyDropped = results.fold<int>(
+      0, (a, r) => a + ((r['verify_failed'] as int?) ?? 0));
+  final droppedLevels = results
+      .where((r) => ((r['verify_failed'] as int?) ?? 0) > 0)
+      .map((r) => 'L${r['level']}(${r['verify_failed']})')
+      .join(', ');
+
   print('');
   print('게이트: solvable $solvable/${results.length} · '
       '총 ${(sw.elapsedMilliseconds / 1000).toStringAsFixed(1)}s · out=$outDir');
+  print('기록 가드: 위양성 $verifyDropped개 제외'
+      '${verifyDropped > 0 ? " ($droppedLevels)" : ""}');
   if (solvable < results.length) {
     final miss = results
         .where((r) => r['solvable'] != true)

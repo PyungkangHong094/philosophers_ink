@@ -14,7 +14,7 @@
     ],
     "optimal_ink": null,
     "solutions_verified": 2,
-    "hint_stroke": null
+    "hint_stroke": [ { "ink": "frost", "x0": 60, "y0": 16, "x1": 52, "y1": 20 } ]
   },
   "background": "#8E2A20",
   "emitters": [

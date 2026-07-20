@@ -8,7 +8,7 @@
     "tags": ["heat", "ice", "water", "phase"],
     "optimal_ink": null,
     "solutions_verified": 2,
-    "hint_stroke": null
+    "hint_stroke": [ { "ink": "heat", "x0": 66, "y0": 230, "x1": 66, "y1": 230 } ]
   },
   "background": "#E8D9A6",
   "emitters": [

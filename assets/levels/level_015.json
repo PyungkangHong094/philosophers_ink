@@ -15,7 +15,7 @@
     ],
     "optimal_ink": null,
     "solutions_verified": 2,
-    "hint_stroke": null
+    "hint_stroke": [ { "ink": "chalk", "x0": 16, "y0": 106, "x1": 95, "y1": 177 } ]
   },
   "background": "#E9E5DB",
   "emitters": [

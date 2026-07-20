@@ -24,5 +24,5 @@
   ],
   "gimmicks": [],
   "ink_budget": { "chalk": 300, "heat": 0, "frost": 300 },
-  "star_thresholds": { "two_star": 2, "three_star": 1 }
+  "star_thresholds": { "two_star": 78, "three_star": 63 }
 }

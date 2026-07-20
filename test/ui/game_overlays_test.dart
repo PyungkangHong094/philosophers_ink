@@ -5,6 +5,7 @@ library;
 import 'package:flutter/material.dart' hide Material;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:philosophers_ink/audio/audio_service.dart';
+import 'package:philosophers_ink/gameplay/level_session.dart' show LevelFailure;
 import 'package:philosophers_ink/level/level_model.dart';
 import 'package:philosophers_ink/meta/level_catalog.dart';
 import 'package:philosophers_ink/meta/onboarding.dart';
@@ -76,18 +77,42 @@ void main() {
     });
   });
 
-  testWidgets('실패 오버레이 — 다시 하기 / 홈으로', (tester) async {
+  testWidgets('실패 오버레이(오염) — 다시 하기 / 홈으로 + 오염 문구', (tester) async {
     var home = 0;
     await tester.pumpWidget(_overlayHost(
-      FailOverlay(eyebrow: 'NIGREDO · LV 1', onRetry: () {}, onHome: () => home++),
+      FailOverlay(
+          eyebrow: 'NIGREDO · LV 1',
+          failure: LevelFailure.contamination,
+          onRetry: () {},
+          onHome: () => home++),
     ));
     await tester.pump();
+    // 오염 사유 문구 (Q1-2 사유별 분기 계약).
+    expect(find.text('오염'), findsOneWidget);
+    expect(find.text('순수가 깨졌어요. 다시 정제해야 해요.'), findsOneWidget);
     expect(find.text('다시 하기'.toUpperCase()), findsOneWidget);
     expect(find.text('홈으로'.toUpperCase()), findsOneWidget);
     expect(tester.getSize(find.text('홈으로'.toUpperCase())).width,
         greaterThan(0));
     await tester.tap(find.text('홈으로'.toUpperCase()));
     expect(home, 1);
+  });
+
+  testWidgets('실패 오버레이(타임아웃) — 사유별 문구 분기(시간 초과)', (tester) async {
+    await tester.pumpWidget(_overlayHost(
+      FailOverlay(
+          eyebrow: 'NIGREDO · LV 1',
+          failure: LevelFailure.timeout,
+          onRetry: () {},
+          onHome: () {}),
+    ));
+    await tester.pump();
+    // 타임아웃엔 '오염'이 아니라 '시간 초과' 문구여야 한다 (Q1-2: 타임아웃에 오염 오답 금지).
+    expect(find.text('시간 초과'), findsOneWidget);
+    expect(find.text('시간이 다 됐어요. 다시 시도해요.'), findsOneWidget);
+    expect(find.text('오염'), findsNothing);
+    expect(find.text('다시 하기'.toUpperCase()), findsOneWidget);
+    expect(find.text('홈으로'.toUpperCase()), findsOneWidget);
   });
 
   testWidgets('일시정지 오버레이 — 다시 하기 / 홈으로 (평이한 문구)', (tester) async {

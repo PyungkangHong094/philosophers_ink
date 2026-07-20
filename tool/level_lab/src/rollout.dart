@@ -66,6 +66,13 @@ class RolloutConfig {
   });
 }
 
+/// 아카이브 무결성 검증 전용 롤아웃 설정 — **소비자(bake_hints)의 검증과 반드시 동일**해야
+/// 스윕이 기록한 해와 베이크가 받아들이는 해가 일치한다. 관대한 틱 상한(느린 확산도 놓치지
+/// 않음) + stall 무한 + forbidInFlask=false(게임과 동일하게 모든 스트로크 적용).
+/// 스윕 기록 가드와 bake_hints가 이 상수를 공유한다.
+const RolloutConfig kVerifyRolloutConfig =
+    RolloutConfig(tickCap: 3600, stallTicks: 3600, forbidInFlask: false);
+
 /// [session]에 [cand]를 주입해 롤아웃한다. 세션은 호출자가 재사용(내부에서 reset).
 RolloutResult rollout(
   HeadlessSession session,

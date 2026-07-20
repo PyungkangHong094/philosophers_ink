@@ -2,7 +2,8 @@
 /// `meta.hint_stroke`에 폴리라인으로 굽는다 (GDD 12장 리워드 힌트, 13장 오픈이슈 3 해소).
 ///
 ///   dart run tool/level_lab/bake_hints.dart          # 챕터 1(001~010) 베이크
-///   dart run tool/level_lab/bake_hints.dart --dry-run # 검증만, 파일 미수정
+///   dart run tool/level_lab/bake_hints.dart --ch234   # 챕터 2~4(012~077) 베이크
+///   dart run tool/level_lab/bake_hints.dart --dry-run # 검증만, 파일 미수정 (--ch234와 조합 가능)
 ///
 /// 포맷 계약: `hint_stroke`는 힌트 스트로크 객체 배열 `[{ "ink","x0","y0","x1","y1" }]`
 /// (모델 HintStroke, 잉크 종류 포함). GDD 12장 "정답 스트로크 **1개**를 고스트 라인으로"에
@@ -30,19 +31,41 @@ import 'src/candidate.dart';
 import 'src/level_io.dart';
 import 'src/rollout.dart';
 
-/// 검증 롤아웃 틱 상한 — 느린 확산 레벨도 클리어를 놓치지 않게 넉넉히
-/// (solver.dart probeCap과 동일 취지). stall 중단 없이 이 상한까지 돈다.
-const int _verifyTickCap = 3600;
+// 검증 롤아웃 설정은 src/rollout.dart의 [kVerifyRolloutConfig]를 공유한다 — 스윕 기록
+// 가드와 베이크 검증이 반드시 같은 설정을 써야 "스윕이 남긴 해 == 베이크가 받는 해".
 
 /// 베이크 대상 챕터 1 레벨 번호.
 const List<int> _chapterOneLevels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
+/// OPERATIO(작업) 레벨 — 11의 배수. 힌트 비활성(시험의 존엄, LEVELS.md) → 항상 null 유지.
+const List<int> _operatioLevels = [11, 22, 33, 44, 55, 66, 77];
+
+/// 사람 검증 보류 레벨 — 솔버 한계(해 미발견 또는 min_ink=4류 퇴화 해로 신뢰 불가).
+/// 억지 힌트를 굽지 않고 "사람 실플레이 후 베이크" 목록으로 분리한다.
+/// (011은 작업 레벨이라 원래 null.)
+const List<int> _humanHoldLevels = [43, 47, 48, 50, 54, 65];
+
 void main(List<String> argv) {
   final dryRun = argv.contains('--dry-run');
+  final ch234 = argv.contains('--ch234');
   final rows = <_BakeRow>[];
 
-  for (final id in _chapterOneLevels) {
-    rows.add(_bakeLevel(id, dryRun: dryRun));
+  if (ch234) {
+    for (var id = 12; id <= 77; id++) {
+      if (_operatioLevels.contains(id)) {
+        rows.add(_BakeRow(id, 'skip(operatio)'));
+        continue;
+      }
+      if (_humanHoldLevels.contains(id)) {
+        rows.add(_BakeRow(id, 'skip(human-hold)'));
+        continue;
+      }
+      rows.add(_bakeLevel(id, dryRun: dryRun));
+    }
+  } else {
+    for (final id in _chapterOneLevels) {
+      rows.add(_bakeLevel(id, dryRun: dryRun));
+    }
   }
 
   _printReport(rows, dryRun: dryRun);
@@ -82,6 +105,17 @@ _BakeRow _bakeLevel(int id, {required bool dryRun}) {
   }
 
   final archive = jsonDecode(outFile.readAsStringSync()) as Map<String, dynamic>;
+
+  // --- stale 거부 (2026-07-20 포렌식 대응): 프로비넌스 레벨 해시가 현재 레벨 내용과
+  // 다르면 이 아카이브는 스윕 이후 바뀐 레벨의 것이라 신뢰 불가 → 굽지 않는다. mtime은
+  // 신뢰 불가임이 증명됐으므로 내용 해시로 판단한다. 프로비넌스가 없는 구 아카이브는
+  // 통과시키되(하위호환) 어차피 아래 재생 검증이 위양성을 걸러낸다.
+  final prov = archive['provenance'] as Map?;
+  final provHash = prov?['level_hash'];
+  if (provHash is String && provHash != levelContentHash(assetPath)) {
+    return _BakeRow(id, 'null(stale)');
+  }
+
   final sols = (archive['solutions'] as List?) ?? const [];
   if (sols.isEmpty) {
     // 솔버 미해결(solvable:false) → 힌트 없음.
@@ -97,15 +131,7 @@ _BakeRow _bakeLevel(int id, {required bool dryRun}) {
   // --- 거짓말 안 하는 힌트 보증: 원본 해 전체(탭 포함)를 재생해 실제 클리어 검증 ---
   final level = loadLevelFile(assetPath);
   final session = HeadlessSession(level);
-  final r = rollout(
-    session,
-    best,
-    const RolloutConfig(
-      tickCap: _verifyTickCap,
-      stallTicks: _verifyTickCap,
-      forbidInFlask: false,
-    ),
-  );
+  final r = rollout(session, best, kVerifyRolloutConfig);
 
   if (!r.solved) {
     // 원본 해가 현재 물리에서 클리어 안 됨(아카이브 노후 등) → 힌트 null 유지.

@@ -60,4 +60,9 @@ class SettingsController extends ChangeNotifier {
   void hapticSelection() {
     if (_haptics) HapticFeedback.selectionClick();
   }
+
+  /// 플라스크 완성 등 달성 순간의 중간 세기 진동 (GDD 8.4.7 — 설정 오프 시 무진동).
+  void hapticMedium() {
+    if (_haptics) HapticFeedback.mediumImpact();
+  }
 }

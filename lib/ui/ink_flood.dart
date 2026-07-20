@@ -29,10 +29,11 @@ Route<T> inkFloodRoute<T>({
     transitionsBuilder: (context, animation, secondary, child) {
       if (reducedMotion) return child;
       final curved = CurvedAnimation(parent: animation, curve: InkMotion.flood);
-      // 메니스커스 링 색 = 플러드색을 흰색 쪽으로 살짝 당긴 밝은 변주.
+      // 메니스커스 링 색 = 플러드색을 양피지(웜 화이트) 쪽으로 살짝 당긴 밝은 변주.
+      // 순백 대신 parchment 토큰으로 당겨 셸 웜 톤 유지(순백 금지 규율).
       final edge = floodColor == null
           ? null
-          : Color.lerp(floodColor, const Color(0xFFFFFFFF), 0.35);
+          : Color.lerp(floodColor, InkColor.parchment, 0.35);
       return AnimatedBuilder(
         animation: curved,
         builder: (context, _) => Stack(

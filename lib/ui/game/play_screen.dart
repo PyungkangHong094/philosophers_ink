@@ -30,6 +30,7 @@ import '../settings_controller.dart';
 import '../tokens.dart';
 import 'clear_overlay.dart';
 import 'exhaust_nudge.dart';
+import 'gimmick_overlay_painter.dart';
 import 'hud_format.dart';
 import 'ink_palette_bar.dart';
 import 'pause_overlay.dart';
@@ -47,7 +48,10 @@ enum _Phase { playing, cleared, failed }
 class _Outcome {
   final _Phase phase;
   final int stars;
-  const _Outcome(this.phase, {this.stars = 0});
+
+  /// 실패 사유 (phase == failed일 때만 의미). shell이 문구를 분기한다 (감사 Q1-2).
+  final LevelFailure? failure;
+  const _Outcome(this.phase, {this.stars = 0, this.failure});
 }
 
 class PlayScreen extends StatefulWidget {
@@ -77,7 +81,7 @@ class PlayScreen extends StatefulWidget {
 }
 
 class _PlayScreenState extends State<PlayScreen>
-    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   late LevelSession _session;
   late final GameLoop _loop;
   late final Ticker _ticker;
@@ -85,6 +89,33 @@ class _PlayScreenState extends State<PlayScreen>
   final ValueNotifier<_Outcome> _outcome =
       ValueNotifier<_Outcome>(const _Outcome(_Phase.playing));
   final ValueNotifier<int> _frameTick = ValueNotifier<int>(0);
+
+  /// 남은 시간(초) — 카운트다운 HUD 전용 파생 notifier. 표시 초가 바뀔 때만 갱신해
+  /// 60Hz 리빌드를 1Hz로 좁힌다 (감사 P3-1 + Q1-2).
+  final ValueNotifier<int> _countdownSeconds = ValueNotifier<int>(0);
+  int _lastShownSeconds = -1;
+
+  /// 플라스크 상태(카운트·오염) 변화 시에만 플라스크 HUD를 repaint (감사 P2-1).
+  final ValueNotifier<int> _flaskTick = ValueNotifier<int>(0);
+  int _flaskSignature = 0;
+
+  /// 임박 강조 임계(초). 이하로 남으면 카운트다운을 경고색으로 (골드 아님 — 희소성 보존).
+  static const int _imminentSeconds = 10;
+
+  /// 착수 햅틱 스로틀 — 연속 착수 시 과진동 방지 (오디오 flaskThrottle와 같은 취지).
+  DateTime _lastSettleHaptic = DateTime.fromMillisecondsSinceEpoch(0);
+  static const int _settleHapticThrottleMs = 70;
+
+  /// 플라스크 완성 펄스 컨트롤러 + 대상 인덱스 (Q1-3). 목표 도달 순간 1회 골드 링.
+  late final AnimationController _pulseCtrl;
+  int? _pulseFlaskIndex;
+
+  /// 각 플라스크가 이미 완성됐는지 — 완성 "순간"을 1회만 감지하기 위한 래치.
+  List<bool> _flaskWasComplete = const [];
+
+  /// 이번 프레임의 reduced motion 값 (build에서 갱신). 완성 펄스 발화는 이 값을 존중한다
+  /// — 콜백(틱 중)에서 context 없이도 설정+시스템 disableAnimations를 함께 반영.
+  bool _reduced = false;
 
   bool _paused = false;
   bool _recorded = false;
@@ -96,6 +127,9 @@ class _PlayScreenState extends State<PlayScreen>
 
   /// 플라스크 라벨 TextPainter 캐시 — 라벨 문자열이 바뀔 때만 재생성 (감사 P3-2).
   final _FlaskLabelCache _flaskLabels = _FlaskLabelCache();
+
+  /// 둥근 점 렌더의 물질별 좌표 버퍼 — 페인터가 재사용해 페인트당 할당 0 (감사 P1-1).
+  final WorldPointBuffers _pointBuffers = WorldPointBuffers();
 
   // ---- 온보딩 (GDD 7.2) ----
   bool _goalVisible = true;
@@ -162,16 +196,34 @@ class _PlayScreenState extends State<PlayScreen>
       widget.entry.level,
       onSettle: (e) {
         final flasks = _session.flasks.flasks;
-        final goal = (e.flaskIndex >= 0 && e.flaskIndex < flasks.length)
-            ? flasks[e.flaskIndex].spec.goal
-            : 0;
-        final count = (e.flaskIndex >= 0 && e.flaskIndex < flasks.length)
-            ? flasks[e.flaskIndex].count
-            : 0;
+        final inRange = e.flaskIndex >= 0 && e.flaskIndex < flasks.length;
+        final goal = inRange ? flasks[e.flaskIndex].spec.goal : 0;
+        final count = inRange ? flasks[e.flaskIndex].count : 0;
         final progress = goal > 0 ? count / goal : 0.0;
         widget.audio.flaskFill(e.phase, progress: progress);
+        // 착수 햅틱 (Q1-3) — 스로틀. 설정 오프 시 무진동(hapticLight가 게이트).
+        final now = DateTime.now();
+        if (now.difference(_lastSettleHaptic).inMilliseconds >=
+            _settleHapticThrottleMs) {
+          _lastSettleHaptic = now;
+          widget.settings.hapticLight();
+        }
+        // 플라스크 완성 "순간" 감지 → 완성 펄스 + medium 햅틱 (1회, Q1-3).
+        if (inRange &&
+            e.flaskIndex < _flaskWasComplete.length &&
+            flasks[e.flaskIndex].isComplete &&
+            !_flaskWasComplete[e.flaskIndex]) {
+          _flaskWasComplete[e.flaskIndex] = true;
+          _onFlaskCompleted(e.flaskIndex);
+        }
       },
     );
+    _flaskWasComplete = List<bool>.filled(_session.flasks.flasks.length, false);
+    _pulseCtrl = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 460));
+    _lastShownSeconds =
+        (_session.remainingTicks / SimConstants.tickRateHz).ceil();
+    _countdownSeconds.value = _lastShownSeconds;
     // 상전이 이벤트 → 결빙 crackle·증발 puff·반응 sizzle (LevelSession 패스스루, 관찰만 —
     // 결정성 무영향). 전이 결과 물질(materialTo)로 종류를 구분: ICE 결빙, STEAM 증발, STONE 반응.
     // (WATER로의 전이 = 녹음/응결은 전용 SFX 없음 → null.)
@@ -265,6 +317,9 @@ class _PlayScreenState extends State<PlayScreen>
     _session.dispose(); // InkController(ChangeNotifier) 등 세션 소유 자원 해제 (감사 P2-2).
     _outcome.dispose();
     _frameTick.dispose();
+    _flaskTick.dispose();
+    _countdownSeconds.dispose();
+    _pulseCtrl.dispose();
     _flaskLabels.dispose();
     super.dispose();
   }
@@ -292,6 +347,20 @@ class _PlayScreenState extends State<PlayScreen>
     _loop.advance(elapsed);
     _frameTick.value++;
 
+    // 플라스크 HUD는 카운트·오염이 바뀔 때만 repaint (감사 P2-1). 시그니처 비교.
+    final sig = _flaskSignatureNow();
+    if (sig != _flaskSignature) {
+      _flaskSignature = sig;
+      _flaskTick.value++;
+    }
+
+    // 카운트다운 1Hz 갱신 (감사 P3-1 + Q1-2) — 표시 초가 바뀔 때만.
+    final secs = (_session.remainingTicks / SimConstants.tickRateHz).ceil();
+    if (secs != _lastShownSeconds) {
+      _lastShownSeconds = secs;
+      _countdownSeconds.value = secs;
+    }
+
     // 물질 앰비언트/파티클 그레인 — 활성 밀도로 짧은 그레인을 확률 발사 (샘플 스로틀, GDD 9.2).
     // 기본 OFF: 저역 웅웅거림("우웅") 실플레이 피드백 — 이벤트 SFX만 유지 (sound_tokens 참조).
     if (GrainPlay.ambientLayersDefaultEnabled &&
@@ -302,7 +371,9 @@ class _PlayScreenState extends State<PlayScreen>
     }
 
     if (_session.isFailed) {
-      _outcome.value = const _Outcome(_Phase.failed);
+      // 실패 사유(오염/타임아웃)를 실어 shell이 문구를 분기한다 (감사 Q1-2).
+      _outcome.value =
+          _Outcome(_Phase.failed, failure: _session.failureReason);
       widget.audio.fail();
     } else if (_session.isCleared) {
       final stars = _session.result.stars;
@@ -325,6 +396,27 @@ class _PlayScreenState extends State<PlayScreen>
     _recorded = true;
     widget.progress
         .record(widget.entry.id, cleared: true, stars: stars);
+  }
+
+  /// 플라스크 HUD repaint 트리거용 시그니처 — 카운트·오염이 바뀔 때만 값이 변한다 (감사 P2-1).
+  /// 채움 게이지는 count로 실시간 반영되고, 매 프레임 무조건 repaint(구 shouldRepaint=>true)는
+  /// 제거된다. 순수 정수 폴드라 할당 0.
+  int _flaskSignatureNow() {
+    var h = 0;
+    for (final f in _session.flasks.flasks) {
+      h = 0x1fffffff & (h * 31 + f.count);
+      h = 0x1fffffff & (h * 31 + (f.isFailed ? 1 : 0));
+    }
+    return h;
+  }
+
+  /// 플라스크 완성 순간 1회 (Q1-3): medium 햅틱 + 완성 펄스(골드 링). reduced motion이면
+  /// 펄스는 생략하고 햅틱만(설정 오프 시 hapticMedium 내부 게이트로 무진동).
+  void _onFlaskCompleted(int index) {
+    widget.settings.hapticMedium();
+    if (_reduced) return;
+    _pulseFlaskIndex = index;
+    _pulseCtrl.forward(from: 0);
   }
 
   bool get _canDraw => _simRunning;
@@ -445,6 +537,16 @@ class _PlayScreenState extends State<PlayScreen>
     _recorded = false;
     _paused = false;
     _hintVisible = false; // 재시작 시 고스트 힌트 숨김.
+    // 완성 래치·펄스 초기화 — 재시작 후에도 완성 순간 햅틱/펄스가 다시 발화하도록 (Q1-3).
+    _flaskWasComplete = List<bool>.filled(_session.flasks.flasks.length, false);
+    _pulseCtrl.reset();
+    _pulseFlaskIndex = null;
+    // _flaskSignature는 그대로 둔다 — 리셋된 카운트(0)와 값이 달라 다음 틱에 _flaskTick이
+    // 발화해 플라스크 HUD가 0/목표로 즉시 갱신된다.
+    // 카운트다운은 즉시 제한시간으로 복귀 — 다음 틱을 기다리지 않고 동기 리셋(initState와 동일).
+    _lastShownSeconds =
+        (_session.remainingTicks / SimConstants.tickRateHz).ceil();
+    _countdownSeconds.value = _lastShownSeconds;
     // 잉크 소진 넛지 해제 (재시작으로 잉크 복원).
     _exhaustTimer?.cancel();
     _exhaustScheduled = false;
@@ -467,6 +569,8 @@ class _PlayScreenState extends State<PlayScreen>
     final bottomPad = MediaQuery.paddingOf(context).bottom;
     final reduced = widget.settings.reducedMotion ||
         MediaQuery.of(context).disableAnimations;
+    // 완성 펄스는 틱 콜백(context 없음)에서 발화하므로 이번 프레임 값을 캐시한다.
+    _reduced = reduced;
 
     return Scaffold(
       backgroundColor: Color(widget.entry.level.background),
@@ -475,6 +579,21 @@ class _PlayScreenState extends State<PlayScreen>
       body: Stack(
         fit: StackFit.expand,
         children: [
+          // 기믹·방출구 정적 표식 (배경과 물질 사이, GDD 6·8.1 / 감사 Q1-1). 포탈·변성 게이트·
+          // 온도 존·방출구는 sim에서 비물질 셀 집합이라 화면에 안 그려져 플레이어가 순간이동/
+          // 상전이/방출을 못 읽는다 — 레벨 좌표만으로 정적 1회 표식을 그린다. sim 상태를
+          // 구독하지 않아 결정성·성능 무영향, 레벨 불변이라 RepaintBoundary로 재래스터 차단.
+          // 골드 미사용(셸 규칙 무관 인게임 채도 — 배경 명도 대비 헤일로로 식별 보장).
+          Positioned.fill(
+            child: IgnorePointer(
+              child: RepaintBoundary(
+                child: CustomPaint(
+                  size: Size.infinite,
+                  painter: GimmickOverlayPainter(widget.entry.level),
+                ),
+              ),
+            ),
+          ),
           // 시뮬 캔버스.
           Positioned.fill(
             child: LayoutBuilder(
@@ -491,6 +610,7 @@ class _PlayScreenState extends State<PlayScreen>
                       cells: _session.game.grid.cells,
                       gridWidth: SimConstants.gridWidth,
                       gridHeight: SimConstants.gridHeight,
+                      buffers: _pointBuffers,
                       repaint: _frameTick,
                     ),
                   ),
@@ -498,13 +618,28 @@ class _PlayScreenState extends State<PlayScreen>
               },
             ),
           ),
-          // 플라스크 목표 오버레이.
+          // 플라스크 목표 오버레이. 카운트·오염이 바뀔 때만 repaint (감사 P2-1) — 매 프레임
+          // 아님. _flaskTick(시그니처 변화 시 1틱)이 repaint를 구동하고 RepaintBoundary로
+          // 분리해 이웃 레이어 리페인트에 휩쓸리지 않는다.
           Positioned.fill(
             child: IgnorePointer(
-              child: ValueListenableBuilder<int>(
-                valueListenable: _frameTick,
-                builder: (context, _, child) => CustomPaint(
-                    painter: _FlaskHudPainter(_session, _flaskLabels)),
+              child: RepaintBoundary(
+                child: CustomPaint(
+                  painter: _FlaskHudPainter(
+                      _session, _flaskLabels, repaint: _flaskTick),
+                ),
+              ),
+            ),
+          ),
+          // 플라스크 완성 펄스 — 목표 도달 순간 1회 골드 링(달성, 셸 원칙2). pulse 애니메이션
+          // 진행 중에만 repaint(reduced motion이면 발화 안 함). 비커 위에 얹는다.
+          Positioned.fill(
+            child: IgnorePointer(
+              child: RepaintBoundary(
+                child: CustomPaint(
+                  painter: _FlaskPulsePainter(
+                      _session, _pulseCtrl, () => _pulseFlaskIndex),
+                ),
               ),
             ),
           ),
@@ -579,28 +714,36 @@ class _PlayScreenState extends State<PlayScreen>
                   ],
                 ),
                 const SizedBox(height: InkSpace.sm),
-                // 초시계 (시뮬 틱 기반 — 일시정지·백그라운드 자동 정지, 재시작 리셋).
+                // 남은 시간 카운트다운 (시뮬 틱 기반 — 일시정지·백그라운드 자동 정지, 재시작 리셋).
+                // 1Hz 갱신(감사 P3-1): 표시 초가 바뀔 때만 리빌드. ≤10초는 경고색으로 임박을
+                // 알린다 (골드 아님 — 골드 희소성 보존, InkColor.warn 주홍).
                 ValueListenableBuilder<int>(
-                  valueListenable: _frameTick,
-                  builder: (context, _, child) => Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: InkSpace.sm, vertical: InkSpace.xs),
-                    decoration: BoxDecoration(
-                      color: InkColor.black2.withValues(alpha: 0.85),
-                      border: Border.all(color: InkColor.hairline),
-                      borderRadius: BorderRadius.circular(InkSpace.radius),
-                    ),
-                    child: Semantics(
-                      label: '경과 시간',
-                      child: Text(
-                        formatElapsed(_session.game.tickCount),
-                        style: InkText.caption.copyWith(
-                          color: InkColor.parchment,
-                          fontFeatures: InkText.tabular,
+                  valueListenable: _countdownSeconds,
+                  builder: (context, secs, child) {
+                    final imminent = secs <= _imminentSeconds;
+                    return Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: InkSpace.sm, vertical: InkSpace.xs),
+                      decoration: BoxDecoration(
+                        color: InkColor.black2.withValues(alpha: 0.85),
+                        border: Border.all(
+                            color:
+                                imminent ? InkColor.warn : InkColor.hairline),
+                        borderRadius: BorderRadius.circular(InkSpace.radius),
+                      ),
+                      child: Semantics(
+                        label: '남은 시간',
+                        child: Text(
+                          formatClock(secs),
+                          style: InkText.caption.copyWith(
+                            color:
+                                imminent ? InkColor.warn : InkColor.parchment,
+                            fontFeatures: InkText.tabular,
+                          ),
                         ),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 ),
                 const SizedBox(height: InkSpace.sm),
                 InkPaletteBar(
@@ -681,7 +824,11 @@ class _PlayScreenState extends State<PlayScreen>
               }
               if (o.phase == _Phase.failed) {
                 return FailOverlay(
-                    eyebrow: _eyebrow, onRetry: _retry, onHome: _exit);
+                    eyebrow: _eyebrow,
+                    // 사유 유실 시 오염으로 폴백(순수 위반이 기본 실패 모드).
+                    failure: o.failure ?? LevelFailure.contamination,
+                    onRetry: _retry,
+                    onHome: _exit);
               }
               return const SizedBox.shrink();
             },
@@ -842,9 +989,21 @@ class _HintGhostPainter extends CustomPainter {
 class _FlaskHudPainter extends CustomPainter {
   final LevelSession session;
   final _FlaskLabelCache labels;
-  _FlaskHudPainter(this.session, this.labels);
+  _FlaskHudPainter(this.session, this.labels, {required Listenable repaint})
+      : super(repaint: repaint);
 
   static const double _wall = 2.0; // 벽 두께 (단일 소스)
+
+  // 정적 Paint 재사용 — paint당 신규 할당 제거 (감사 P2-1). 색 가변인 것은 draw 직전 ..color.
+  // 페인트는 UI 스레드 단일 실행이라 인스턴스 공유·변이가 안전하다.
+  static final Paint _wallPaint = Paint()
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = _wall
+    ..strokeJoin = StrokeJoin.round
+    ..color = InkColor.gold;
+  static final Paint _fillPaint = Paint();
+  static final Paint _waterLinePaint = Paint()..strokeWidth = 1.5;
+  static final Paint _dotPaint = Paint();
 
   static String _stateChar(FlaskState s) => switch (s) {
         FlaskState.solid => '고',
@@ -856,11 +1015,6 @@ class _FlaskHudPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final vp = GridViewport.fit(
         size, SimConstants.gridWidth, SimConstants.gridHeight);
-    final wall = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = _wall
-      ..strokeJoin = StrokeJoin.round
-      ..color = InkColor.gold;
 
     final flasks = session.flasks.flasks;
     for (var i = 0; i < flasks.length; i++) {
@@ -901,19 +1055,17 @@ class _FlaskHudPainter extends CustomPainter {
         canvas.clipPath(beaker);
         canvas.drawRect(
           Rect.fromLTRB(l, waterY, r, b),
-          Paint()..color = fillColor.withValues(alpha: 0.28),
+          _fillPaint..color = fillColor.withValues(alpha: 0.28),
         );
         canvas.drawLine(
           Offset(l, waterY),
           Offset(r, waterY),
-          Paint()
-            ..color = fillColor.withValues(alpha: 0.9)
-            ..strokeWidth = 1.5,
+          _waterLinePaint..color = fillColor.withValues(alpha: 0.9),
         );
         canvas.restore();
       }
 
-      canvas.drawPath(beaker, wall);
+      canvas.drawPath(beaker, _wallPaint);
 
       // 립 위: 물질 점 + 카운트/목표 + 상태 글자(+ 순수 !).
       final label = flask.isFailed
@@ -930,7 +1082,7 @@ class _FlaskHudPainter extends CustomPainter {
         canvas.drawCircle(
           Offset(l + 4, labelY + tp.height / 2),
           3,
-          Paint()..color = dotColor,
+          _dotPaint..color = dotColor,
         );
         labelX = l + 12;
       }
@@ -938,6 +1090,57 @@ class _FlaskHudPainter extends CustomPainter {
     }
   }
 
+  // repaint는 _flaskTick(카운트·오염 시그니처 변화)이 구동한다 (감사 P2-1). 위젯이 새
+  // 페인터로 재생성되는 경우(setState)만 여기서 판정 — 세션 인스턴스는 화면 생애 동안
+  // 불변이라 통상 false. 매 프레임 repaint하던 구 shouldRepaint=>true를 대체한다.
   @override
-  bool shouldRepaint(_FlaskHudPainter oldDelegate) => true;
+  bool shouldRepaint(_FlaskHudPainter old) =>
+      old.session != session || old.labels != labels;
+}
+
+/// 플라스크 완성 펄스 (Q1-3) — 완성 순간 대상 비커를 감싸는 골드 링이 1.0→1.35 확장하며
+/// 페이드아웃. 달성 = 골드(셸 원칙2, 인게임 HUD의 승인된 골드 사용). [pulse]가 idle(값 0/1)이면
+/// 아무것도 그리지 않아 상시 비용 0 — 애니메이션 중에만 repaint([pulse]가 구동).
+class _FlaskPulsePainter extends CustomPainter {
+  final LevelSession session;
+  final Animation<double> pulse;
+  final int? Function() indexOf;
+  _FlaskPulsePainter(this.session, this.pulse, this.indexOf)
+      : super(repaint: pulse);
+
+  static final Paint _ring = Paint()
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = 2.5
+    ..strokeJoin = StrokeJoin.round;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final t = pulse.value;
+    if (t <= 0 || t >= 1) return; // idle — 그릴 것 없음.
+    final idx = indexOf();
+    final flasks = session.flasks.flasks;
+    if (idx == null || idx < 0 || idx >= flasks.length) return;
+    final s = flasks[idx].spec;
+    final vp = GridViewport.fit(
+        size, SimConstants.gridWidth, SimConstants.gridHeight);
+    final rect = Rect.fromLTWH(
+      vp.offsetX + s.x * vp.scale,
+      vp.offsetY + s.y * vp.scale,
+      s.w * vp.scale.toDouble(),
+      s.h * vp.scale.toDouble(),
+    );
+    final grow = 1.0 + 0.35 * Curves.easeOut.transform(t); // 확장 오버슛.
+    final ring = Rect.fromCenter(
+      center: rect.center,
+      width: rect.width * grow,
+      height: rect.height * grow,
+    );
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(ring, const Radius.circular(4)),
+      _ring..color = InkColor.goldHi.withValues(alpha: (1.0 - t) * 0.9),
+    );
+  }
+
+  @override
+  bool shouldRepaint(_FlaskPulsePainter old) => true;
 }
