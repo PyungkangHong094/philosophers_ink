@@ -86,17 +86,40 @@ class _TitleScreenState extends State<TitleScreen>
             child: Column(
               children: [
               const Spacer(flex: 2),
-              // 골드 플라스크 (유일한 골드 요소).
+              // 골드 로고 (만년필 펜촉 + 플라스크 + 잉크 S — 유일한 골드 요소).
+              // 4초 호흡: 은은한 골드 글로우 + 미세 스케일. reduced motion 시 정지.
               SizedBox(
-                width: 160,
-                height: 200,
+                width: 200,
+                height: 240,
                 child: AnimatedBuilder(
                   animation: _breath,
-                  builder: (context, _) => CustomPaint(
-                    painter: _FlaskPainter(
-                      phase: reduced ? 0.25 : _breath.value,
-                      animate: !reduced,
-                    ),
+                  builder: (context, child) {
+                    // _breath.value 0~1 → 0~1~0 삼각파로 부드러운 왕복.
+                    final t = reduced
+                        ? 0.4
+                        : (1 - (2 * _breath.value - 1).abs());
+                    final glow = 8.0 + t * 20.0;
+                    final scale = 1.0 + t * 0.02;
+                    return Transform.scale(
+                      scale: scale,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: InkColor.gold.withValues(alpha: 0.12 + t * 0.18),
+                              blurRadius: glow,
+                              spreadRadius: glow * 0.25,
+                            ),
+                          ],
+                        ),
+                        child: child,
+                      ),
+                    );
+                  },
+                  child: Image.asset(
+                    'assets/icon/logo.png',
+                    fit: BoxFit.contain,
+                    filterQuality: FilterQuality.medium,
                   ),
                 ),
               ),
@@ -139,73 +162,4 @@ class _StartPulse extends StatelessWidget {
       child: label,
     );
   }
-}
-
-/// 골드 플라스크 라인아트 + 내부 상승 입자 + 글로우 호흡.
-class _FlaskPainter extends CustomPainter {
-  final double phase; // 0~1 (호흡·입자 위상)
-  final bool animate;
-  _FlaskPainter({required this.phase, required this.animate});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final w = size.width;
-    final h = size.height;
-    final cx = w / 2;
-
-    // 플라스크 실루엣 경로 (목 + 둥근 몸통).
-    final neckW = w * 0.18;
-    final neckTop = h * 0.06;
-    final neckBottom = h * 0.34;
-    final bodyR = w * 0.36;
-    final bodyCy = h * 0.66;
-
-    final path = Path()
-      ..moveTo(cx - neckW / 2, neckTop)
-      ..lineTo(cx - neckW / 2, neckBottom)
-      ..arcToPoint(Offset(cx + neckW / 2, neckBottom),
-          radius: Radius.circular(bodyR), largeArc: true, clockwise: false)
-      ..lineTo(cx + neckW / 2, neckTop);
-
-    // 글로우 (호흡 사인파).
-    final glow = 0.5 + 0.5 * math.sin(phase * 2 * math.pi);
-    final glowPaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 3
-      ..color = InkColor.goldHi.withValues(alpha: 0.25 + 0.35 * glow)
-      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 6 + 6 * glow);
-    canvas.drawCircle(Offset(cx, bodyCy), bodyR, glowPaint);
-
-    // 플라스크 라인.
-    final line = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.5
-      ..strokeJoin = StrokeJoin.round
-      ..color = InkColor.gold;
-    canvas.drawCircle(Offset(cx, bodyCy), bodyR, line);
-    canvas.drawPath(path, line);
-
-    // 목 마개.
-    canvas.drawLine(
-      Offset(cx - neckW / 2 - 4, neckTop),
-      Offset(cx + neckW / 2 + 4, neckTop),
-      line,
-    );
-
-    // 내부 상승 입자 (7개, 불규칙 딜레이).
-    final dot = Paint()..color = InkColor.goldHi;
-    for (var i = 0; i < 7; i++) {
-      final seed = (i * 0.137) % 1.0;
-      final t = ((phase + seed) % 1.0);
-      final py = bodyCy + bodyR * 0.7 - t * bodyR * 1.3;
-      final px = cx + math.sin((t + seed) * 6.28) * bodyR * 0.35;
-      final r = 1.5 + 1.5 * (1 - t);
-      dot.color = InkColor.goldHi.withValues(alpha: (1 - t) * 0.8);
-      canvas.drawCircle(Offset(px, py), r, dot);
-    }
-  }
-
-  @override
-  bool shouldRepaint(_FlaskPainter old) =>
-      old.phase != phase || old.animate != animate;
 }
