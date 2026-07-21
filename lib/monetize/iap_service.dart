@@ -1,8 +1,8 @@
-/// 인앱 구매 서비스 (GDD 12) — 광고 제거 단품 + 구매 복원.
+/// 인앱 구매 서비스 (GDD 12) — 힌트 광고 면제 단품 + 구매 복원.
 ///
 /// [IapService]는 인터페이스, [StubIapService]는 개발/시뮬레이터/테스트용(스토어 미연결
 /// 우아한 실패), [StoreIapService]는 in_app_purchase 실구현이다. 구매/복원 확정은
-/// [onRemoveAdsOwned] 콜백으로 알린다 — 영속·광고 게이팅은 상위([Monetization])가 처리한다.
+/// [onAdFreeHintsOwned] 콜백으로 알린다 — 영속·광고 게이팅은 상위([Monetization])가 처리한다.
 library;
 
 import 'dart:async';
@@ -36,13 +36,13 @@ enum IapOutcome {
 abstract class IapService {
   bool get isStub;
 
-  /// 광고 제거 소유 확정 콜백(구매·복원). 상위가 영속 + 광고 비활성 처리.
-  void Function()? onRemoveAdsOwned;
+  /// 힌트 광고 면제 소유 확정 콜백(구매·복원). 상위가 영속 처리.
+  void Function()? onAdFreeHintsOwned;
 
   Future<void> init();
 
-  /// 광고 제거 단품 구매.
-  Future<IapOutcome> buyRemoveAds();
+  /// 힌트 광고 면제 단품 구매.
+  Future<IapOutcome> buyAdFreeHints();
 
   /// 구매 복원.
   Future<IapOutcome> restore();
@@ -61,13 +61,13 @@ class StubIapService implements IapService {
   bool get isStub => true;
 
   @override
-  void Function()? onRemoveAdsOwned;
+  void Function()? onAdFreeHintsOwned;
 
   @override
   Future<void> init() async {}
 
   @override
-  Future<IapOutcome> buyRemoveAds() async => IapOutcome.storeUnavailable;
+  Future<IapOutcome> buyAdFreeHints() async => IapOutcome.storeUnavailable;
 
   @override
   Future<IapOutcome> restore() async => IapOutcome.storeUnavailable;
@@ -90,7 +90,7 @@ class StoreIapService implements IapService {
   bool get isStub => false;
 
   @override
-  void Function()? onRemoveAdsOwned;
+  void Function()? onAdFreeHintsOwned;
 
   @override
   Future<void> init() async {
@@ -112,8 +112,8 @@ class StoreIapService implements IapService {
       switch (p.status) {
         case PurchaseStatus.purchased:
         case PurchaseStatus.restored:
-          if (p.productID == IapProducts.removeAds) {
-            onRemoveAdsOwned?.call();
+          if (p.productID == IapProducts.adFreeHints) {
+            onAdFreeHintsOwned?.call();
             _sawOwnershipInRestore = true;
             _complete(p.status == PurchaseStatus.restored
                 ? IapOutcome.restored
@@ -138,13 +138,13 @@ class StoreIapService implements IapService {
   }
 
   @override
-  Future<IapOutcome> buyRemoveAds() async {
+  Future<IapOutcome> buyAdFreeHints() async {
     if (!_available) return IapOutcome.storeUnavailable;
     try {
       final resp =
           await _iap.queryProductDetails(IapProducts.all);
       final pd = resp.productDetails
-          .where((d) => d.id == IapProducts.removeAds)
+          .where((d) => d.id == IapProducts.adFreeHints)
           .cast<ProductDetails?>()
           .firstWhere((_) => true, orElse: () => null);
       if (pd == null) return IapOutcome.error;

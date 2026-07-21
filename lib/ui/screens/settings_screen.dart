@@ -112,14 +112,14 @@ class SettingsScreen extends StatelessWidget {
   }
 }
 
-/// 수익화 섹션 (GDD 12) — 광고 제거 구매 + 구매 복원. 스토어 미연결 시 우아한 실패.
+/// 수익화 섹션 (GDD 12) — 힌트 광고 면제 구매 + 구매 복원. 스토어 미연결 시 우아한 실패.
 /// 구매 완료면 구매 행을 상태 표시로 바꾼다. 골드 요소 없음(무채).
 class _MonetizationSection extends StatelessWidget {
   final Monetization monetization;
   const _MonetizationSection({required this.monetization});
 
   static String _message(IapOutcome o) => switch (o) {
-        IapOutcome.purchased => '광고를 제거했어요',
+        IapOutcome.purchased => '이제 힌트를 광고 없이 볼 수 있어요',
         IapOutcome.restored => '구매를 복원했어요',
         IapOutcome.nothingToRestore => '복원할 구매 내역이 없어요',
         IapOutcome.storeUnavailable => '스토어에 연결할 수 없어요',
@@ -145,18 +145,18 @@ class _MonetizationSection extends StatelessWidget {
       animation: monetization,
       builder: (context, _) => Column(
         children: [
-          if (monetization.adsRemoved)
+          if (monetization.adFreeHints)
             const _InfoRow(
-              label: '광고 제거',
-              caption: '구매 완료 · 전면광고 없이 플레이',
+              label: '힌트 광고 없이 보기',
+              caption: '구매 완료 · 힌트를 광고 없이 바로 보기',
               status: '완료',
             )
           else
             _ActionRow(
-              label: '광고 제거',
-              caption: '전면광고 없이 플레이하기',
+              label: '힌트 광고 없이 보기',
+              caption: '광고 시청 없이 힌트를 바로 열기',
               actionLabel: '구매',
-              onTap: () => _run(context, monetization.purchaseRemoveAds),
+              onTap: () => _run(context, monetization.purchaseAdFreeHints),
             ),
           _ActionRow(
             label: '구매 복원',

@@ -77,7 +77,7 @@ class ProgressStore {
     _prefs.setString(_onboardingKey, jsonEncode(s.toJsonList()));
   }
 
-  /// 광고 제거 단품 소유 여부 (IAP 영속 — GDD 12). 기본 false.
+  /// 힌트 광고 면제 단품 소유 여부 (IAP 영속 — GDD 12, 스토리지 키는 v1 호환 유지). 기본 false.
   bool loadAdsRemoved() => _prefs.getBool(_adsRemovedKey) ?? false;
 
   void saveAdsRemoved(bool value) {
