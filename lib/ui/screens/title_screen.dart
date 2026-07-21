@@ -87,41 +87,22 @@ class _TitleScreenState extends State<TitleScreen>
               children: [
               const Spacer(flex: 2),
               // 골드 로고 (만년필 펜촉 + 플라스크 + 잉크 S — 유일한 골드 요소).
-              // 4초 호흡: 은은한 골드 글로우 + 미세 스케일. reduced motion 시 정지.
+              // 투명 배경 마크. reduced motion 시 완전 정적, 그 외 극미세 스케일 호흡만
+              // (사각 글로우 점멸은 제거 — 실플레이 피드백 "붉은 번쩍임").
               SizedBox(
                 width: 200,
                 height: 240,
-                child: AnimatedBuilder(
-                  animation: _breath,
-                  builder: (context, child) {
-                    // _breath.value 0~1 → 0~1~0 삼각파로 부드러운 왕복.
-                    final t = reduced
-                        ? 0.4
-                        : (1 - (2 * _breath.value - 1).abs());
-                    final glow = 8.0 + t * 20.0;
-                    final scale = 1.0 + t * 0.02;
-                    return Transform.scale(
-                      scale: scale,
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: InkColor.gold.withValues(alpha: 0.12 + t * 0.18),
-                              blurRadius: glow,
-                              spreadRadius: glow * 0.25,
-                            ),
-                          ],
-                        ),
-                        child: child,
+                child: reduced
+                    ? const _LogoMark()
+                    : AnimatedBuilder(
+                        animation: _breath,
+                        builder: (context, child) {
+                          final t = 1 - (2 * _breath.value - 1).abs();
+                          return Transform.scale(
+                              scale: 1.0 + t * 0.015, child: child);
+                        },
+                        child: const _LogoMark(),
                       ),
-                    );
-                  },
-                  child: Image.asset(
-                    'assets/icon/logo.png',
-                    fit: BoxFit.contain,
-                    filterQuality: FilterQuality.medium,
-                  ),
-                ),
               ),
               const SizedBox(height: InkSpace.xl),
               // 로고 라틴 2행.
@@ -162,4 +143,17 @@ class _StartPulse extends StatelessWidget {
       child: label,
     );
   }
+}
+
+/// 타이틀 로고 마크 (투명 배경 PNG). 배경 사각·글로우 없이 로고만 — 트루 블랙 위에
+/// 깨끗하게 얹힌다.
+class _LogoMark extends StatelessWidget {
+  const _LogoMark();
+
+  @override
+  Widget build(BuildContext context) => Image.asset(
+        'assets/icon/logo_mark.png',
+        fit: BoxFit.contain,
+        filterQuality: FilterQuality.medium,
+      );
 }
