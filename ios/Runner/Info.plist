@@ -69,7 +69,7 @@
 		<!-- AdMob 앱 ID (GDD 12). 현재 Google 공식 테스트 앱 ID —
 	     출시 전 실제 AdMob 앱 ID로 교체(lib/monetize/monetize_constants.dart AdUnits.iosAppId 와 일치). -->
 		<key>GADApplicationIdentifier</key>
-		<string>ca-app-pub-3940256099942544~1458002511</string>
+		<string>ca-app-pub-5350763104629231~6895015710</string>
 		<!-- SKAdNetwork 전환 추적 식별자 — Google 것을 기본 포함. 출시 전 파트너 네트워크
 	     식별자를 필요에 따라 확장(https://developers.google.com/admob/ios/ios14). -->
 		<key>SKAdNetworkItems</key>

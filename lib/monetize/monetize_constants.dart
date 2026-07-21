@@ -28,24 +28,25 @@ abstract final class AdsPolicy {
 abstract final class AdUnits {
   // 앱 ID — AndroidManifest meta-data / iOS Info.plist GADApplicationIdentifier 와
   // 반드시 일치시켜야 한다(네이티브 매니페스트에도 동일 값 배선됨).
-  // TODO(release): 실제 AdMob 앱 ID로 교체.
+  // 실 AdMob 앱 ID (2026-07-22 발급).
   static const String androidAppId =
-      'ca-app-pub-3940256099942544~3347511713';
-  static const String iosAppId = 'ca-app-pub-3940256099942544~1458002511';
+      'ca-app-pub-5350763104629231~2588225189';
+  static const String iosAppId = 'ca-app-pub-5350763104629231~6895015710';
 
   // 전면광고 단위.
-  // TODO(release): 실제 전면광고 단위 ID로 교체.
+  // TODO(release): AdMob 콘솔에서 전면광고 단위를 아직 만들지 않았다 — 현재 Google 공개
+  //   테스트 단위. 실 앱 ID와 테스트 광고 단위 조합은 허용되나, 출시 전 실 전면광고 단위를
+  //   생성해 교체해야 한다(테스트 단위 채로 출시하면 그 게재위치는 수익 0).
   static const String androidInterstitial =
       'ca-app-pub-3940256099942544/1033173712';
   static const String iosInterstitial =
       'ca-app-pub-3940256099942544/4411468910';
 
-  // 리워드 광고 단위(힌트).
-  // TODO(release): 실제 리워드 광고 단위 ID로 교체.
+  // 리워드 광고 단위(힌트) — 실 AdMob 단위 (2026-07-22 발급).
   static const String androidRewarded =
-      'ca-app-pub-3940256099942544/5224354917';
+      'ca-app-pub-5350763104629231/6778751637';
   static const String iosRewarded =
-      'ca-app-pub-3940256099942544/1712485313';
+      'ca-app-pub-5350763104629231/7900261619';
 }
 
 /// IAP 상품 ID (GDD 12 — 광고 제거 단품).
